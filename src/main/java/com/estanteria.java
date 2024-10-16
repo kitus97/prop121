@@ -24,6 +24,33 @@ public class Estanteria {
     public ArrayList<Set<String>> getDistribution() {
         return distribution;
     }
+
+    /*Pre: s es el nombre de una caracteristica valida y t <= distribution.size()
+    */
+    public void setRestriction(String s, int t){
+        distribution.get(t).add(s);
+    }
+
+    public void deleteRestrictions(int t){
+        distribution.get(t).clear();
+    }
+
+    /*Pre: t > 0;
+    */
+    public void resizeEstanteria(int t){
+        if(distribution.size() < t){
+            for(int i = distribution.size(); i < t; ++i){
+                distribution.add(new HashSet<String>());
+            }
+        }
+        else{
+            for(int i = distribution.size() - 1; i >= t; --i){
+                distribution.remove(i);
+            }
+
+        }
+
+    }
         
 
 }
