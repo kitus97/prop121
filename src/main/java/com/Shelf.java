@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Estanteria {
+public class Shelf{
 
     private String name;
     private ArrayList<Set<String>> distribution;
 
 
-    public Estanteria(String n, int t) {
+    public Shelf(String n, int t) {
         name = n;
         distribution = new ArrayList<Set<String>>();
         for (int i = 0; i < t; ++i) {
@@ -37,7 +37,7 @@ public class Estanteria {
 
     /*Pre: t > 0;
     */
-    public void resizeEstanteria(int t){
+    public void resizeShelf(int t){
         if(distribution.size() < t){
             for(int i = distribution.size(); i < t; ++i){
                 distribution.add(new HashSet<String>());
