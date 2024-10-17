@@ -9,7 +9,7 @@ public class Solution {
     int idShelf;
     double mark;
     boolean valid;
-    ArrayList<String> distribution = new ArrayList<>();
+    ArrayList<Pair<id,String>> distribution = new ArrayList<>();
 
     public Solution(String solutionName, int idCatalog, int idShelf, double mark, boolean valid, ArrayList<String> distribution) {
         this.solutionName = solutionName;
@@ -67,23 +67,7 @@ public class Solution {
     public void setDistribution(ArrayList<String> distribution) {
         this.distribution = distribution;
     }
-
-    public void getSolution() {
-        System.out.println("Name: " + solutionName +"\n");
-        System.out.println("Id catalog: " + idCatalog + "\n");
-        System.out.println("Id shelf: " + idShelf + "\n");
-        System.out.println("Mark: " + mark + "\n");
-        System.out.println("Valid: " + valid + "\n");
-    }
-
-    public void showSolution() {
-        getSolution();
-        for (int i = 0 ; i < distribution.size() ; i++) {
-            System.out.println("distribution:\n");
-            System.out.println("Space " + i + ": " +  distribution.get(i)+ "\n");
-        }
-    }
-
+    /*
     public ArrayList<String> changeDistribution(int idx1, int idx2) {
         String s1 = distribution.get(idx1);
         String s2 = distribution.get(idx2);
@@ -91,4 +75,5 @@ public class Solution {
         distribution.set(idx2, s1);
         return distribution;
     }
+    */
 }
