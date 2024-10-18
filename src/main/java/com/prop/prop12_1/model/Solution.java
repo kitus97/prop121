@@ -1,4 +1,4 @@
-package com.prop.prop12_1.Model;
+package com.prop.prop12_1.model;
 
 import java.util.ArrayList;
 
