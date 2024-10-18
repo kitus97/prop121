@@ -3,6 +3,10 @@ package com.prop.prop12_1.model;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Created by marc.rams.estrada
+ */
+
 public class Characteristics {
 
     private int id;
