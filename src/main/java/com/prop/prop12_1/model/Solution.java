@@ -9,7 +9,7 @@ public class Solution {
     int idShelf;
     double mark;
     boolean valid;
-    ArrayList<Pair<id,String>> distribution = new ArrayList<>();
+    ArrayList<Pair<int,String>> distribution = new ArrayList<>();
 
     public Solution(String solutionName, int idCatalog, int idShelf, double mark, boolean valid, ArrayList<String> distribution) {
         this.solutionName = solutionName;
