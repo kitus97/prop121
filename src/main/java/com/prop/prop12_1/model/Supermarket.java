@@ -50,8 +50,13 @@ public class Supermarket {
 
     }
 
-    public void addShelf(Shelf s){
-        shelves.put(s.getName(), s);
+
+    public boolean addShelf(Shelf s){
+        if(shelves.containsKey(s.getName())){
+            return false;
+        }
+        else shelves.put(s.getName(), s);
+        return true;
     }
 
     /*Devuelve un boolean indicando si se ha eliminado o no la estanteria con nombre s*/

@@ -28,7 +28,7 @@ public class Shelf{
     }
 
     /*Pre: s es el nombre de una caracteristica valida y t <= distribution.size()
-    */
+     */
     public void setRestriction(String s, int t){
         distribution.get(t).add(s);
     }
@@ -38,7 +38,7 @@ public class Shelf{
     }
 
     /*Pre: t > 0;
-    */
+     */
     public void resizeShelf(int t){
         if(distribution.size() < t){
             for(int i = distribution.size(); i < t; ++i){
@@ -53,6 +53,6 @@ public class Shelf{
         }
 
     }
-        
+
 
 }
