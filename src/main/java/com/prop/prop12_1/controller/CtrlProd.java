@@ -5,6 +5,7 @@ import com.prop.prop12_1.model.Product;
 
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class CtrlProd {
@@ -23,23 +24,24 @@ public class CtrlProd {
         this.mapProductsId = new HashMap<>();
     }
 
-    public void addCharacteristic(String name) {
-        //Passar per parametre nom, no instancia
-
-        if (findCharac(name) == null) {
-            Characteristics c = new Characteristics(characteristics.size(), name);
+    public void addCharacteristic(String characteristicName) {
+        if (findCharac(characteristicName) == null) {
+            Characteristics c = new Characteristics(characteristics.size(), characteristicName);
             this.characteristics.add(c);
         }
     }
 
-    public void removeCharacteristic(Characteristics characteristic) {
-        if (!this.characteristics.remove(characteristic)) {
-            //characteristics didnt exist
+    public void removeCharacteristic(String characteristicName) {
+        Characteristics c = findCharac(characteristicName);
+        if (findCharac(characteristicName) != null) {
+            this.characteristics.remove(c);
+        } else {
+            //exception
         }
     }
 
-    public Map<String,Double> checkProductSimilarities(Product p1) {
-        int id = mapProductsName.get(p1.getName());
+    public Map<String,Double> checkProductSimilarities(String productName) {
+        int id = mapProductsName.get(productName);
         Map <String, Double> similarities = new HashMap<>();
 
         int size = similarityTable.get(id).size();
@@ -50,9 +52,16 @@ public class CtrlProd {
         return similarities;
     }
 
-    public Double checkProductsSimilarity(String p1, String p2) {
-        int id1 = mapProductsName.get(p1);
-        int id2 = mapProductsName.get(p2);
+    public void modifySimilarity(String nameProduct1, String nameProduct2, Double newValue) {
+        int id1 = mapProductsName.get(nameProduct1);
+        int id2 = mapProductsName.get(nameProduct2);
+
+        this.similarityTable.get(id1).set(id2, newValue);
+    }
+
+    public Double checkProductsSimilarity(String productName1, String productName2) {
+        int id1 = mapProductsName.get(productName1);
+        int id2 = mapProductsName.get(productName2);
 
         return similarityTable.get(id1).get(id2);
     }
@@ -97,6 +106,11 @@ public class CtrlProd {
                 c.removeAssociatedProduct(p);
             }
         }
+    }
+
+    public ArrayList<String> listCharacteristics() {
+        return characteristics.stream().map(Characteristics::getName)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private  boolean productExists(String prod) {
