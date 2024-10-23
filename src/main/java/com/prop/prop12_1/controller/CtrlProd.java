@@ -33,7 +33,7 @@ public class CtrlProd {
 
     public void removeCharacteristic(String characteristicName) {
         Characteristics c = findCharacteristic(characteristicName);
-        if (findCharacteristic(characteristicName) != null) {
+        if (c != null) {
             this.characteristics.remove(c);
         } else {
             //exception
@@ -86,46 +86,30 @@ public class CtrlProd {
 
     }
     //Pre: We assume that a new product has been added and this function is called right after
-    public Boolean setSimilarities(double[] similarities) {
+    public Boolean setSimilarities(Double[] similarities) {
 
         if (similarities.length == 0) {
-            ArrayList<Double> newLine = new ArrayList<>();
-            for (int i = 0; i < products.size(); i++) {
-                newLine.add(0.0);
-            }
+            ArrayList<Double> newLine = new ArrayList<>(Collections.nCopies(products.size(), 0.0));
             similarityTable.add(newLine);
             for(ArrayList<Double> line : similarityTable) {
-                while (line.size() < products.size()) {
+                if (line.size() < products.size()) {
                     line.add(0.0);
                 }
             }
         }
         else {
-            ArrayList<Double> newLine = new ArrayList<>();
-            for (int i = 0; i < products.size(); i++) {
-                if (i != similarities.length-1) {
-                    newLine.add(similarities[i]);
-                }
-                else {
-                    newLine.add(0.0);
-                }
-            }
+            ArrayList<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
+            newLine.add(0.0);
             similarityTable.add(newLine);
             int j = 0;
             for(ArrayList<Double> line : similarityTable) {
-                while (line.size() < products.size()) {
-                    if (j != similarities.length-1) {
-                        newLine.add(similarities[j]);
-                    }
-                    else {
-                        line.add(0.0);
-                    }
-                    j++;
+                if (line.size() < products.size() && j < similarities.length) {
+                        line.add(similarities[j]);
                 }
+                j++;
             }
         }
         return true;
-
 
     }
 
@@ -168,7 +152,6 @@ public class CtrlProd {
     }
 
     private  boolean productExists(String productName) {
-        // Utilizamos un stream para buscar de manera eficiente
         return products.stream()
                 .anyMatch(product -> product.getName().equals(productName));
     }
