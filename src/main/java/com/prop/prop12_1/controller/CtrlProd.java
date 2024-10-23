@@ -25,15 +25,15 @@ public class CtrlProd {
     }
 
     public void addCharacteristic(String characteristicName) {
-        if (findCharac(characteristicName) == null) {
+        if (findCharacteristic(characteristicName) == null) {
             Characteristics c = new Characteristics(characteristics.size(), characteristicName);
             this.characteristics.add(c);
         }
     }
 
     public void removeCharacteristic(String characteristicName) {
-        Characteristics c = findCharac(characteristicName);
-        if (findCharac(characteristicName) != null) {
+        Characteristics c = findCharacteristic(characteristicName);
+        if (findCharacteristic(characteristicName) != null) {
             this.characteristics.remove(c);
         } else {
             //exception
@@ -57,6 +57,7 @@ public class CtrlProd {
         int id2 = mapProductsName.get(nameProduct2);
 
         this.similarityTable.get(id1).set(id2, newValue);
+        this.similarityTable.get(id2).set(id1, newValue);
     }
 
     public Double checkProductsSimilarity(String productName1, String productName2) {
@@ -66,46 +67,99 @@ public class CtrlProd {
         return similarityTable.get(id1).get(id2);
     }
 
-    public void addProduct(String prod) {
+    public Boolean addProduct(String productName) {
 
-        if (findProd(prod) == null) {
+        if (findProduct(productName) == null) {
 
-            Product p = new Product(prod);
+            Product p = new Product(productName);
             products.add(p);
+            int tam = products.size();
+            mapProductsName.put(productName,tam-1);
+            mapProductsId.put(tam-1,productName);
+
+            return true;
+
         }
         else {
-            //expection
+            return false;
         }
 
     }
+    //Pre: We assume that a new product has been added and this function is called right after
+    public Boolean setSimilarities(double[] similarities) {
 
-    public void addCharacteristictProduct(String charac, String prod) {
-        Characteristics c = findCharac(charac);
+        if (similarities.length == 0) {
+            ArrayList<Double> newLine = new ArrayList<>();
+            for (int i = 0; i < products.size(); i++) {
+                newLine.add(0.0);
+            }
+            similarityTable.add(newLine);
+            for(ArrayList<Double> line : similarityTable) {
+                while (line.size() < products.size()) {
+                    line.add(0.0);
+                }
+            }
+        }
+        else {
+            ArrayList<Double> newLine = new ArrayList<>();
+            for (int i = 0; i < products.size(); i++) {
+                if (i != similarities.length-1) {
+                    newLine.add(similarities[i]);
+                }
+                else {
+                    newLine.add(0.0);
+                }
+            }
+            similarityTable.add(newLine);
+            int j = 0;
+            for(ArrayList<Double> line : similarityTable) {
+                while (line.size() < products.size()) {
+                    if (j != similarities.length-1) {
+                        newLine.add(similarities[j]);
+                    }
+                    else {
+                        line.add(0.0);
+                    }
+                    j++;
+                }
+            }
+        }
+        return true;
+
+
+    }
+
+    public Boolean addCharacteristictProduct(String characteristicName, String productName) {
+        Characteristics c = findCharacteristic(characteristicName);
         if ((c != null)) {
-            Product p = findProd(prod);
+            Product p = findProduct(productName);
             if (p != null) {
                 p.addCharacterisics(c);
                 c.addAssociatedProduct(p);
+                return true;
 
             }
             else {
-
+                return false;
             }
         }
         else {
-
+            return null;
         }
     }
 
-    public void removeCharacteristictProduct(String charac, String prod) {
-        Characteristics c = findCharac(charac);
+    public Boolean removeCharacteristictProduct(String characteristicName, String productName) {
+        Characteristics c = findCharacteristic(characteristicName);
         if (c != null) {
-            Product p = findProd(prod);
+            Product p = findProduct(productName);
             if (p != null) {
                 p.removeCharacterisics(c);
                 c.removeAssociatedProduct(p);
+                return true;
             }
+            else return null;
         }
+        else return false;
     }
 
     public ArrayList<String> listCharacteristics() {
@@ -119,23 +173,27 @@ public class CtrlProd {
                 .anyMatch(product -> product.getName().equals(prod));
     }
 
-    private  boolean characteristicExists(String charac) {
+    private boolean characteristicExists(String characteristicName) {
         return characteristics.stream()
-                .anyMatch(characteristic -> characteristic.getName().equals(charac));
+                .anyMatch(characteristic -> characteristic.getName().equals(characteristicName));
     }
 
-    private Product findProd(String prod) {
+    private Product findProduct(String productName) {
         return products.stream().
-                filter(product -> product.getName().equals(prod)).findFirst().orElse(null);
+                filter(product -> product.getName().equals(productName)).findFirst().orElse(null);
     }
 
-    private Characteristics findCharac(String charac) {
+    private Characteristics findCharacteristic(String characteristicName) {
         return characteristics.stream().
-                filter(characteristic -> characteristic.getName().equals(charac)).findFirst().orElse(null);
+                filter(characteristic -> characteristic.getName().equals(characteristicName)).findFirst().orElse(null);
     }
 
     public Set<Product> getProducts() {
         return products;
+    }
+
+    public ArrayList<String> listProducts() {
+        return products.stream().map(Product::getName).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void setProducts(Set<Product> products) {
