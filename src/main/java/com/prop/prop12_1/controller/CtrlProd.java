@@ -167,10 +167,10 @@ public class CtrlProd {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private  boolean productExists(String prod) {
+    private  boolean productExists(String productName) {
         // Utilizamos un stream para buscar de manera eficiente
         return products.stream()
-                .anyMatch(product -> product.getName().equals(prod));
+                .anyMatch(product -> product.getName().equals(productName));
     }
 
     private boolean characteristicExists(String characteristicName) {
