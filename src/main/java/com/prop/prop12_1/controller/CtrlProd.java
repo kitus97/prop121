@@ -109,6 +109,15 @@ public class CtrlProd {
 
     }
 
+    public ArrayList<ArrayList<Double>> generateSimilarityTable() {
+        ArrayList<ArrayList<Double>> generatedSimilarities = new ArrayList<ArrayList<Double>>(products.size());
+        for (int i = 0; i < products.size(); i++) {
+            Set<Characteristics> s1 = new HashSet<>();
+            s1 = products.get(mapProductsId.get(i)).getCharacterisics();
+        }
+
+    }
+
     public Boolean addCharacteristicProduct(String characteristicName, String productName) {
         Characteristics c = findCharacteristic(characteristicName);
         if ((c != null)) {
@@ -184,4 +193,7 @@ public class CtrlProd {
         this.characteristics = characteristics;
     }
 
+    public ArrayList<ArrayList<Double>> getSimilarityTable() {
+        return similarityTable;
+    }
 }
