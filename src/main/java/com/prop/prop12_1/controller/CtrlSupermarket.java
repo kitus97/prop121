@@ -40,10 +40,10 @@ public class CtrlSupermarket {
         return ret;
     }
 
-    /*Pre: s exists*/
-    public boolean removeShelf(String s, String sh){
-        Supermarket m = supermarkets.get(s);
-        return m.deleteShelf(sh);
+    /*Pre: supermarket exists*/
+    public boolean removeShelf(String supermarket, String shelf){
+        Supermarket m = supermarkets.get(supermarket);
+        return m.deleteShelf(shelf);
     }
 
     /*Pre: s exists*/
@@ -71,6 +71,32 @@ public class CtrlSupermarket {
             return m.getShelf(sh).getName();
         }
         else return null;
+    }
+
+    /*restriction es el nombre de una caracteristica existente, se comprueba quee existe en el ctrl domini*/
+    public boolean addRestriction(String supermarket, String restriction, String shelf, int index){
+        Supermarket m = supermarkets.get(supermarket);
+        //falta tratar errores
+        Shelf sh = m.getShelf(shelf);
+
+        sh.setRestriction(restriction, index);
+        return true;
+
+    }
+
+    public boolean removeRestriction(String supermarket, String shelf, int index){
+        Supermarket m = supermarkets.get(supermarket);
+        //tratar errores
+        Shelf sh = m.getShelf(shelf);
+        sh.deleteRestrictions(index);
+        return true;
+    }
+
+    public boolean resizeShelf(String supermarket, String shelf, int size){
+        Supermarket m = supermarkets.get(supermarket);
+        Shelf sh = m.getShelf(shelf);
+        sh.resizeShelf(size);
+        return true;
     }
 
 
