@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 
 public class CtrlProd {
 
-    private Set<Product> products;
-    private Set<Characteristics> characteristics;
+    private Map<String, Product> products;
+    private Map<String, Characteristics> characteristics;
     private ArrayList<ArrayList<Double>> similarityTable;
     Map<String,Integer> mapProductsName;
     Map<Integer,String> mapProductsId;
 
     public CtrlProd() {
-        this.products = new HashSet<>();
-        this.characteristics = new HashSet<>();
+        this.products = new HashMap<>();
+        this.characteristics = new HashMap<>();
         this.similarityTable = new ArrayList<>();
         this.mapProductsName = new HashMap<>();
         this.mapProductsId = new HashMap<>();
@@ -26,16 +26,14 @@ public class CtrlProd {
 
     public void addCharacteristic(String characteristicName) {
         if (findCharacteristic(characteristicName) == null) {
-            Characteristics c = new Characteristics(characteristics.size(), characteristicName);
-            this.characteristics.add(c);
+            Characteristics characteristic = new Characteristics(this.characteristics.size(), characteristicName);
+            this.characteristics.put(characteristicName, characteristic);
         }
     }
 
     public void removeCharacteristic(String characteristicName) {
-        Characteristics c = findCharacteristic(characteristicName);
-        if (c != null) {
-            this.characteristics.remove(c);
-        } else {
+        Characteristics deletedCharacteristic = this.characteristics.remove(characteristicName);
+        if (deletedCharacteristic == null) {
             //exception
         }
     }
@@ -70,15 +68,13 @@ public class CtrlProd {
     public Boolean addProduct(String productName) {
 
         if (findProduct(productName) == null) {
-
-            Product p = new Product(productName);
-            products.add(p);
-            int tam = products.size();
-            mapProductsName.put(productName,tam-1);
-            mapProductsId.put(tam-1,productName);
+            Product newProduct = new Product(productName);
+            products.put(productName, newProduct);
+            int size = products.size();
+            mapProductsName.put(productName,size-1);
+            mapProductsId.put(size-1,productName);
 
             return true;
-
         }
         else {
             return false;
@@ -113,7 +109,7 @@ public class CtrlProd {
 
     }
 
-    public Boolean addCharacteristictProduct(String characteristicName, String productName) {
+    public Boolean addCharacteristicProduct(String characteristicName, String productName) {
         Characteristics c = findCharacteristic(characteristicName);
         if ((c != null)) {
             Product p = findProduct(productName);
@@ -132,7 +128,7 @@ public class CtrlProd {
         }
     }
 
-    public Boolean removeCharacteristictProduct(String characteristicName, String productName) {
+    public Boolean removeCharacteristicProduct(String characteristicName, String productName) {
         Characteristics c = findCharacteristic(characteristicName);
         if (c != null) {
             Product p = findProduct(productName);
@@ -147,47 +143,44 @@ public class CtrlProd {
     }
 
     public ArrayList<String> listCharacteristics() {
-        return characteristics.stream().map(Characteristics::getName)
-                .collect(Collectors.toCollection(ArrayList::new));
+        return characteristics.values().stream().map(Characteristics::getName)
+                                .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private  boolean productExists(String productName) {
-        return products.stream()
-                .anyMatch(product -> product.getName().equals(productName));
+    private Boolean productExists(String productName) {
+        return products.containsKey(productName);
     }
 
-    private boolean characteristicExists(String characteristicName) {
-        return characteristics.stream()
-                .anyMatch(characteristic -> characteristic.getName().equals(characteristicName));
+    private Boolean characteristicExists(String characteristicName) {
+        return characteristics.containsKey(characteristicName);
     }
 
     private Product findProduct(String productName) {
-        return products.stream().
-                filter(product -> product.getName().equals(productName)).findFirst().orElse(null);
+        return products.get(productName);
     }
 
     private Characteristics findCharacteristic(String characteristicName) {
-        return characteristics.stream().
-                filter(characteristic -> characteristic.getName().equals(characteristicName)).findFirst().orElse(null);
+        return characteristics.get(characteristicName);
     }
 
-    public Set<Product> getProducts() {
-        return products;
+    public List<Product> getProducts() {
+        return new ArrayList<>(products.values());
     }
 
     public ArrayList<String> listProducts() {
-        return products.stream().map(Product::getName).collect(Collectors.toCollection(ArrayList::new));
+        return products.values().stream().map(Product::getName)
+                            .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(Map<String, Product> products) {
         this.products = products;
     }
 
-    public Set<Characteristics> getCharacteristics() {
+    public Map<String, Characteristics> getCharacteristics() {
         return characteristics;
     }
 
-    public void setCharacteristics(Set<Characteristics> characteristics) {
+    public void setCharacteristics(Map<String, Characteristics> characteristics) {
         this.characteristics = characteristics;
     }
 
