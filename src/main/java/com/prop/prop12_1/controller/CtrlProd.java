@@ -84,14 +84,21 @@ public class CtrlProd {
     //Pre: We assume that a new product has been added and this function is called right after
     public Boolean setSimilarities(Double[] similarities) {
 
-        if (similarities.length == 0) {
-            ArrayList<Double> newLine = new ArrayList<>(Collections.nCopies(products.size(), 0.0));
-            similarityTable.add(newLine);
-            for(ArrayList<Double> line : similarityTable) {
-                if (line.size() < products.size()) {
-                    line.add(0.0);
-                }
+        if (similarities == null) {
+            int idx1 = products.size()-1;
+            Set<Object> characteristics1 = products.get(mapProductsId.get(idx1)).getCharacterisics();
+            ArrayList<Double> newRow = new ArrayList<>();
+            for (int i =0 ; i < idx1; i++) {
+                Set<Object> characteristics2 = products.get(mapProductsId.get(i)).getCharacterisics();
+                double similarity = calculateSimilarity(characteristics1,characteristics2);
+                newRow.add(similarity);
+                similarityTable.get(i).add(similarity);
+
+
             }
+            newRow.add(1.0);
+            similarityTable.add(newRow);
+
         }
         else {
             ArrayList<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
@@ -109,12 +116,30 @@ public class CtrlProd {
 
     }
 
+    private double calculateSimilarity(Set<Object> characteristics1, Set<Object> characteristics2) {
+        Set<Object> intersection = new HashSet<>(characteristics1);
+        intersection.retainAll(characteristics2);
+        Set<Object> union = new HashSet<>(characteristics1);
+        union.addAll(characteristics2);
+
+        return union.isEmpty() ?  0 : (double) intersection.size() / union.size();
+    }
+
     public ArrayList<ArrayList<Double>> generateSimilarityTable() {
-        ArrayList<ArrayList<Double>> generatedSimilarities = new ArrayList<ArrayList<Double>>(products.size());
-        for (int i = 0; i < products.size(); i++) {
-            Set<Characteristics> s1 = new HashSet<>();
-            s1 = products.get(mapProductsId.get(i)).getCharacterisics();
+        int size = products.size();
+        ArrayList<ArrayList<Double>> generatedSimilarities = new ArrayList<>(size);
+        for (Map.Entry<String, Product> entry : products.entrySet()) {
+            for (Map.Entry<String, Product> entry2 : products.entrySet()) {
+                int idx1 = mapProductsName.get(entry.getKey());
+                int idx2 = mapProductsName.get(entry2.getKey());
+
+                Set<Object> characteristics1 = entry.getValue().getCharacterisics();
+                Set<Object> characteristics2 = entry2.getValue().getCharacterisics();
+                double similarity = calculateSimilarity(characteristics1,characteristics2);
+                generatedSimilarities.get(idx1).add(idx2, similarity);
+            }
         }
+        return generatedSimilarities;
 
     }
 
