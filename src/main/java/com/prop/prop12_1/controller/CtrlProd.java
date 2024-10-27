@@ -7,6 +7,7 @@ import com.prop.prop12_1.exceptions.ProductNotFoundException;
 import com.prop.prop12_1.model.Characteristics;
 import com.prop.prop12_1.model.Product;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -118,6 +119,9 @@ public class CtrlProd {
                     line.add(0.0);
                 }
             }
+            newRow.add(1.0);
+            similarityTable.add(newRow);
+
         }
         else {
             ArrayList<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
@@ -132,6 +136,33 @@ public class CtrlProd {
             }
         }
         return true;
+
+    }
+
+    private double calculateSimilarity(Set<Object> characteristics1, Set<Object> characteristics2) {
+        Set<Object> intersection = new HashSet<>(characteristics1);
+        intersection.retainAll(characteristics2);
+        Set<Object> union = new HashSet<>(characteristics1);
+        union.addAll(characteristics2);
+
+        return union.isEmpty() ?  0 : (double) intersection.size() / union.size();
+    }
+
+    public ArrayList<ArrayList<Double>> generateSimilarityTable() {
+        int size = products.size();
+        ArrayList<ArrayList<Double>> generatedSimilarities = new ArrayList<>(size);
+        for (Map.Entry<String, Product> entry : products.entrySet()) {
+            for (Map.Entry<String, Product> entry2 : products.entrySet()) {
+                int idx1 = mapProductsName.get(entry.getKey());
+                int idx2 = mapProductsName.get(entry2.getKey());
+
+                Set<Object> characteristics1 = entry.getValue().getCharacterisics();
+                Set<Object> characteristics2 = entry2.getValue().getCharacterisics();
+                double similarity = calculateSimilarity(characteristics1,characteristics2);
+                generatedSimilarities.get(idx1).add(idx2, similarity);
+            }
+        }
+        return generatedSimilarities;
 
     }
 
