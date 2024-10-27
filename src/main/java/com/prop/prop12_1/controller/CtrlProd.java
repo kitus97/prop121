@@ -1,9 +1,12 @@
 package com.prop.prop12_1.controller;
 
+import com.prop.prop12_1.exceptions.CharacteristicNotFoundException;
+import com.prop.prop12_1.exceptions.CharacteristicAlreadyAddedException;
+import com.prop.prop12_1.exceptions.ProductAlreadyAddedException;
+import com.prop.prop12_1.exceptions.ProductNotFoundException;
 import com.prop.prop12_1.model.Characteristics;
 import com.prop.prop12_1.model.Product;
 
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,18 +31,25 @@ public class CtrlProd {
         if (findCharacteristic(characteristicName) == null) {
             Characteristics characteristic = new Characteristics(this.characteristics.size(), characteristicName);
             this.characteristics.put(characteristicName, characteristic);
+        } else {
+            throw new CharacteristicAlreadyAddedException("Charateristic with name '" + characteristicName + "' was already added");
         }
     }
 
     public void removeCharacteristic(String characteristicName) {
         Characteristics deletedCharacteristic = this.characteristics.remove(characteristicName);
         if (deletedCharacteristic == null) {
-            //exception
+            throw new CharacteristicNotFoundException("Characteristic with name '" + characteristicName + "' was not found");
         }
     }
 
     public Map<String,Double> checkProductSimilarities(String productName) {
-        int id = mapProductsName.get(productName);
+        int id = mapProductsName.getOrDefault(productName, -1);
+
+        if (id == -1) {
+            throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
+        }
+
         Map <String, Double> similarities = new HashMap<>();
 
         int size = similarityTable.get(id).size();
@@ -50,22 +60,40 @@ public class CtrlProd {
         return similarities;
     }
 
-    public void modifySimilarity(String nameProduct1, String nameProduct2, Double newValue) {
-        int id1 = mapProductsName.get(nameProduct1);
-        int id2 = mapProductsName.get(nameProduct2);
+    public void modifySimilarity(String productName1, String productName2, Double newValue) {
+        int id1 = mapProductsName.getOrDefault(productName1,-1);
+        int id2 = mapProductsName.getOrDefault(productName2,-1);
+        
+        if (id1 == -1 && id2 == -1) {
+            throw new ProductNotFoundException("Products with name '" + productName1 + "' and '"
+                                                                        + productName2 + "' were not found");
+        } else if (id1 == -1) {
+            throw new ProductNotFoundException("Product with name '" + productName1 + "' was not found");
+        } else if (id2 == -1) {
+            throw new ProductNotFoundException("Product with name'" + productName2 + " was not found");
+        }
 
         this.similarityTable.get(id1).set(id2, newValue);
         this.similarityTable.get(id2).set(id1, newValue);
     }
 
     public Double checkProductsSimilarity(String productName1, String productName2) {
-        int id1 = mapProductsName.get(productName1);
-        int id2 = mapProductsName.get(productName2);
+        int id1 = mapProductsName.getOrDefault(productName1,-1);
+        int id2 = mapProductsName.getOrDefault(productName2,-1);
+
+        if (id1 == -1 && id2 == -1) {
+            throw new ProductNotFoundException("Products with name '" + productName1 + "' and '"
+                    + productName2 + "' were not found");
+        } else if (id1 == -1) {
+            throw new ProductNotFoundException("Product with name '" + productName1 + "' was not found");
+        } else if (id2 == -1) {
+            throw new ProductNotFoundException("Product with name'" + productName2 + " was not found");
+        }
 
         return similarityTable.get(id1).get(id2);
     }
 
-    public Boolean addProduct(String productName) {
+    public void addProduct(String productName) {
 
         if (findProduct(productName) == null) {
             Product newProduct = new Product(productName);
@@ -73,11 +101,9 @@ public class CtrlProd {
             int size = products.size();
             mapProductsName.put(productName,size-1);
             mapProductsId.put(size-1,productName);
-
-            return true;
         }
         else {
-            return false;
+            throw new ProductAlreadyAddedException("Product with name '" + productName + "' was already added");
         }
 
     }
@@ -109,37 +135,38 @@ public class CtrlProd {
 
     }
 
-    public Boolean addCharacteristicProduct(String characteristicName, String productName) {
+    public void addCharacteristicProduct(String characteristicName, String productName) {
         Characteristics c = findCharacteristic(characteristicName);
         if ((c != null)) {
             Product p = findProduct(productName);
             if (p != null) {
                 p.addCharacterisics(c);
                 c.addAssociatedProduct(p);
-                return true;
-
             }
             else {
-                return false;
+                throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
             }
         }
         else {
-            return null;
+            throw new CharacteristicNotFoundException("Characteristic with name '" + characteristicName + "' was not found");
         }
     }
 
-    public Boolean removeCharacteristicProduct(String characteristicName, String productName) {
+    public void removeCharacteristicProduct(String characteristicName, String productName) {
         Characteristics c = findCharacteristic(characteristicName);
         if (c != null) {
             Product p = findProduct(productName);
             if (p != null) {
                 p.removeCharacterisics(c);
                 c.removeAssociatedProduct(p);
-                return true;
             }
-            else return null;
+            else {
+                throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
+            }
         }
-        else return false;
+        else {
+            throw new CharacteristicNotFoundException("Characteristic with name '" + characteristicName + "' was not found");
+        }
     }
 
     public ArrayList<String> listCharacteristics() {
@@ -184,4 +211,27 @@ public class CtrlProd {
         this.characteristics = characteristics;
     }
 
+    public ArrayList<ArrayList<Double>> getSimilarityTable() {
+        return similarityTable;
+    }
+
+    public void setSimilarityTable(ArrayList<ArrayList<Double>> similarityTable) {
+        this.similarityTable = similarityTable;
+    }
+
+    public Map<String, Integer> getMapProductsName() {
+        return mapProductsName;
+    }
+
+    public void setMapProductsName(Map<String, Integer> mapProductsName) {
+        this.mapProductsName = mapProductsName;
+    }
+
+    public Map<Integer, String> getMapProductsId() {
+        return mapProductsId;
+    }
+
+    public void setMapProductsId(Map<Integer, String> mapProductsId) {
+        this.mapProductsId = mapProductsId;
+    }
 }
