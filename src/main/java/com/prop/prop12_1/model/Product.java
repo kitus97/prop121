@@ -5,11 +5,11 @@ import java.util.Set;
 
 public class Product {
     private String name;
-    private Set<Object> characterisics;
+    private Set<Characteristics> characteristics;
 
     public Product(String name) {
         this.name = name;
-        characterisics = new HashSet<Object>();
+        characteristics = new HashSet<Characteristics>();
     }
 
     public String getName() {
@@ -20,20 +20,20 @@ public class Product {
         this.name = name;
     }
 
-    public Set<Object> getCharacterisics() {
-        return characterisics;
+    public Set<Characteristics> getCharacteristics() {
+        return characteristics;
     }
 
-    public void setCharacterisics(Set<Object> characterisics) {
-        this.characterisics = characterisics;
+    public void setCharacteristics(Set<Characteristics> characteristics) {
+        this.characteristics = characteristics;
     }
 
-    public void addCharacterisics(Object characteristic) {
-        characterisics.add(characteristic);
+    public void addCharacteristic(Characteristics characteristic) {
+        characteristics.add(characteristic);
     }
 
-    public void removeCharacterisics(Object characteristic) {
-        characterisics.remove(characteristic);
+    public void removeCharacteristic(Characteristics characteristic) {
+        characteristics.remove(characteristic);
     }
 }
 

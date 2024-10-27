@@ -6,15 +6,14 @@ import com.prop.prop12_1.exceptions.ProductAlreadyAddedException;
 import com.prop.prop12_1.exceptions.ProductNotFoundException;
 import com.prop.prop12_1.model.Characteristics;
 import com.prop.prop12_1.model.Product;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -50,6 +49,7 @@ public class TestCtrlProd {
         String characteristicName = "Test";
 
         assertDoesNotThrow(() -> ctrlProd.addCharacteristic(characteristicName));
+        assertEquals(1, ctrlProd.getCharacteristics().size());
     }
 
     @Test
@@ -104,6 +104,47 @@ public class TestCtrlProd {
         String productName = "Test";
 
         assertThrows(ProductNotFoundException.class, () -> ctrlProd.checkProductSimilarities(productName));
+    }
+
+    @Test
+    public void generateSimilarityTableCorrect() {
+
+        Map<String, Product> products = new HashMap<>();
+
+        Product product1 = mock(Product.class);
+        Product product2 = mock(Product.class);
+
+        Characteristics characteristic1 = new Characteristics();
+        Characteristics characteristic2 = new Characteristics();
+
+        Set<Characteristics> characteristics1 = new HashSet<>();
+        characteristics1.add(characteristic1);
+        characteristics1.add(characteristic2);
+
+        Set<Characteristics> characteristics2 = new HashSet<>();
+        characteristics2.add(characteristic1);
+
+        when(product1.getCharacteristics()).thenReturn(characteristics1);
+        when(product2.getCharacteristics()).thenReturn(characteristics2);
+        when(mapProductsName.get("Test1")).thenReturn(0);
+        when(mapProductsName.get("Test2")).thenReturn(1);
+
+        products.put("Test1", product1);
+        products.put("Test2", product2);
+        ctrlProd.setProducts(products);
+        ctrlProd.setMapProductsName(mapProductsName);
+
+        ArrayList<ArrayList<Double>> expectedResult = new ArrayList<>();
+        ArrayList<Double> similarity1 = new ArrayList<>();
+        similarity1.add(1.0);
+        similarity1.add(0.5);
+        ArrayList<Double> similarity2 = new ArrayList<>();
+        similarity2.add(0.5);
+        similarity2.add(1.0);
+        expectedResult.add(similarity1);
+        expectedResult.add(similarity2);
+
+        assertEquals(expectedResult, ctrlProd.generateSimilarityTable());
     }
 
 }
