@@ -18,6 +18,9 @@ repositories {
 }
 
 dependencies {
+	implementation("com.google.guava:guava:33.3.1-jre")
+	implementation ("org.apache.commons:commons-lang3:3.17.0")
+	implementation ("org.apache.commons:commons-configuration2:2.11.0")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

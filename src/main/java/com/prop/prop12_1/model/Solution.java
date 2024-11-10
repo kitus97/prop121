@@ -1,17 +1,18 @@
 package com.prop.prop12_1.model;
 
+import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 
 public class Solution {
 
-    String solutionName;
-    int idCatalog;
-    int idShelf;
-    double mark;
-    boolean valid;
-    ArrayList<Pair<int,String>> distribution = new ArrayList<>();
+    private String solutionName;
+    private Integer idCatalog;
+    private Integer idShelf;
+    private Double mark;
+    private Boolean valid;
+    private ArrayList<Pair<Integer,String>> distribution = new ArrayList<>();
 
-    public Solution(String solutionName, int idCatalog, int idShelf, double mark, boolean valid, ArrayList<String> distribution) {
+    public Solution(String solutionName, int idCatalog, int idShelf, double mark, boolean valid, ArrayList<Pair<Integer,String>> distribution) {
         this.solutionName = solutionName;
         this.idCatalog = idCatalog;
         this.idShelf = idShelf;
@@ -20,7 +21,7 @@ public class Solution {
         this.distribution = distribution;
     }
 
-    public ArrayList<String> getDistribution() {
+    public ArrayList<Pair<Integer,String>> getDistribution() {
         return distribution;
     }
 
@@ -64,7 +65,7 @@ public class Solution {
         this.valid = valid;
     }
 
-    public void setDistribution(ArrayList<String> distribution) {
+    public void setDistribution(ArrayList<Pair<Integer,String>> distribution) {
         this.distribution = distribution;
     }
     /*
