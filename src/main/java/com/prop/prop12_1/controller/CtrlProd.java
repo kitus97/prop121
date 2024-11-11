@@ -32,7 +32,7 @@ public class CtrlProd {
             Characteristics characteristic = new Characteristics(this.characteristics.size(), characteristicName);
             this.characteristics.put(characteristicName, characteristic);
         } else {
-            throw new CharacteristicAlreadyAddedException("Charateristic with name '" + characteristicName + "' was already added");
+            throw new CharacteristicAlreadyAddedException("Characteristic with name '" + characteristicName + "' was already added");
         }
     }
 
@@ -170,6 +170,40 @@ public class CtrlProd {
 
     }
 
+    public void addRestrictionProduct(String restrictionName, String productName) {
+        Characteristics c = findCharacteristic(restrictionName);
+        if ((c != null)) {
+            Product p = findProduct(productName);
+            if (p != null) {
+                p.addRestriction(c);
+                c.addAssociatedProduct(p);
+            }
+            else {
+                throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
+            }
+        }
+        else {
+            throw new CharacteristicNotFoundException("Restriction with name '" + restrictionName + "' was not found");
+        }
+    }
+
+    public void removeRestrictionProduct(String restrictionName, String productName) {
+        Characteristics c = findCharacteristic(restrictionName);
+        if (c != null) {
+            Product p = findProduct(productName);
+            if (p != null) {
+                p.removeCharacteristic(c);
+                c.removeAssociatedProduct(p);
+            }
+            else {
+                throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
+            }
+        }
+        else {
+            throw new CharacteristicNotFoundException("Restriction with name '" + restrictionName + "' was not found");
+        }
+    }
+
     public void addCharacteristicProduct(String characteristicName, String productName) {
         Characteristics c = findCharacteristic(characteristicName);
         if ((c != null)) {
@@ -248,6 +282,36 @@ public class CtrlProd {
 
     public ArrayList<ArrayList<Double>> getSimilarityTable() {
         return similarityTable;
+    }
+
+    public Set<String> getRestrictionsProducts(String productName) {
+        Set<String> nameRestrictions =  new HashSet<>();
+        Product p = findProduct(productName);
+        if (p != null) {
+            Set<Characteristics> characteristics1 = p.getRestrictions();
+            for (Characteristics characteristics : characteristics1) {
+                nameRestrictions.add(characteristics.getName());
+            }
+            return nameRestrictions;
+        }
+        else {
+            throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
+        }
+    }
+
+    public Set<String> getCharacteristicsProducts(String productName) {
+        Set<String> nameCharacteristics =  new HashSet<>();
+        Product p = findProduct(productName);
+        if (p != null) {
+            Set<Characteristics> characteristics1 = p.getRestrictions();
+            for (Characteristics characteristics : characteristics1) {
+                nameCharacteristics.add(characteristics.getName());
+            }
+            return nameCharacteristics;
+        }
+        else {
+            throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
+        }
     }
 
     public void setSimilarityTable(ArrayList<ArrayList<Double>> similarityTable) {
