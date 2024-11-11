@@ -3,7 +3,6 @@ package com.prop.prop12_1.controller;
 import com.prop.prop12_1.model.Characteristics;
 import com.prop.prop12_1.model.Product;
 
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -114,7 +113,7 @@ public class CtrlProd {
         if ((c != null)) {
             Product p = findProduct(productName);
             if (p != null) {
-                p.addCharacterisics(c);
+                p.addCharacteristic(c);
                 c.addAssociatedProduct(p);
                 return true;
 
@@ -133,7 +132,7 @@ public class CtrlProd {
         if (c != null) {
             Product p = findProduct(productName);
             if (p != null) {
-                p.removeCharacterisics(c);
+                p.removeCharacteristic(c);
                 c.removeAssociatedProduct(p);
                 return true;
             }

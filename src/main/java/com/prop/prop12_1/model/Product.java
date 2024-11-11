@@ -4,12 +4,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Product {
+    private Integer id;
     private String name;
-    private Set<Object> characterisics;
+    private Set<Object> characteristics;
 
     public Product(String name) {
         this.name = name;
-        characterisics = new HashSet<Object>();
+        characteristics = new HashSet<Object>();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -20,20 +29,20 @@ public class Product {
         this.name = name;
     }
 
-    public Set<Object> getCharacterisics() {
-        return characterisics;
+    public Set<Object> getCharacteristics() {
+        return characteristics;
     }
 
-    public void setCharacterisics(Set<Object> characterisics) {
-        this.characterisics = characterisics;
+    public void setCharacteristics(Set<Object> characteristics) {
+        this.characteristics = characteristics;
     }
 
-    public void addCharacterisics(Object characteristic) {
-        characterisics.add(characteristic);
+    public void addCharacteristic(Object characteristic) {
+        characteristics.add(characteristic);
     }
 
-    public void removeCharacterisics(Object characteristic) {
-        characterisics.remove(characteristic);
+    public void removeCharacteristic(Object characteristic) {
+        characteristics.remove(characteristic);
     }
 }
 
