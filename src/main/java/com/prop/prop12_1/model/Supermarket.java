@@ -2,10 +2,17 @@ package com.prop.prop12_1.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
+import com.prop.prop12_1.controller.CtrlAlgorithm;
+import com.prop.prop12_1.exceptions.ShelfAlreadyAddedException;
+import com.prop.prop12_1.exceptions.SolutionAlreadyAddedException;
+import org.apache.commons.lang3.tuple.Pair;
+import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
 public class Supermarket {
     private HashMap<String, Shelf> shelves;
-    private HashMap<String, Object> catalogs; //<catalog>
+    private HashMap<String, Catalogue> catalogs; //<catalog>
     private String name;
     private HashMap<String, Object> solutions; //<solution>
 
@@ -45,18 +52,28 @@ public class Supermarket {
         return solutions.get(s);
     }
 
-    /*shelf, catalog, heuristic , id algorithm*/
-    public void generateSolution(String sh, String c, String h, int alg){
+
+    public void generateSolution(String name, String shelf, String catalog, boolean heuristic, int algorithm){
+        Shelf sh = shelves.get(shelf);
+        Catalogue cat = catalogs.get(catalog);
+
+        ArrayList<Set<String>> distribution = sh.getDistribution();;
+        ArrayList<Pair<Integer, Set<String>>> products = cat.getProductsArray();
+
+        if(solutions.containsKey(name)) throw new SolutionAlreadyAddedException("Name: " + name + " is already used as a solution name.");
+
+        else {
+            solutions.put(name, new CtrlAlgorithm().getSolution(distribution, products, algorithm, heuristic));
+        }
 
     }
 
 
-    public boolean addShelf(Shelf s){
+    public void addShelf(Shelf s){
         if(shelves.containsKey(s.getName())){
-            return false;
+            throw new ShelfAlreadyAddedException("Name: " + s.getName() + " is already used as a shelf name.");
         }
         else shelves.put(s.getName(), s);
-        return true;
     }
 
     /*Devuelve un boolean indicando si se ha eliminado o no la estanteria con nombre s*/

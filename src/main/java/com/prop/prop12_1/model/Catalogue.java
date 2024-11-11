@@ -1,7 +1,9 @@
 package com.prop.prop12_1.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class Catalogue {
     private String name;
@@ -22,6 +24,14 @@ public class Catalogue {
 
     public Set<Product> getProducts() {
         return products;
+    }
+
+    public ArrayList<Pair<Integer, Set<String>>> getProductsArray() {
+        ArrayList<Pair<Integer, Set<String>>> ret= new ArrayList<Pair<Integer, Set<String>>>();
+        for(Product p : products) {
+            ret.add(new Pair<p.getId(), p.getRestrictions());
+        }
+        return ret;
     }
 
     public void setProducts(Set<Product> products) {
