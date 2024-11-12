@@ -103,4 +103,11 @@ public class State {
     public static void setSimilarityTable(ArrayList<ArrayList<Double>> similarityTable) {
         State.similarityTable = similarityTable;
     }
+    public static double getSimilarity(int product1, int product2) {
+        if (similarityTable == null || product1 < 0 || product2 < 0 ||
+                product1 >= similarityTable.size() || product2 >= similarityTable.size()) {
+            throw new IllegalArgumentException("Invalid product indices or uninitialized similarityTable");
+        }
+        return similarityTable.get(product1).get(product2);
+    }
 }
