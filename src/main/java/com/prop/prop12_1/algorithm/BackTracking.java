@@ -37,7 +37,6 @@ public class BackTracking {
         backTracking(0, initialSolution, new ArrayList<>(products));
 
         if (bestDistribution == null) {
-            System.out.println("No se encontró ninguna distribución válida.");
             bestDistribution = new ArrayList<>();
             for (int i = 0; i < shelf.size(); i++) {
                 bestDistribution.add(null);
