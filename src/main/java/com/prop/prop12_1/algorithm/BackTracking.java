@@ -50,7 +50,6 @@ public class BackTracking {
 
     private void backTracking(int index, ArrayList<Pair<Integer, Set<String>>> currentSolution, ArrayList<Pair<Integer, Set<String>>> remainingProducts) {
         if (System.currentTimeMillis() - startTime > timeLimit) {
-            System.out.println("Tiempo límite alcanzado.");
             return;
         }
         if (index == shelf.size()) {
