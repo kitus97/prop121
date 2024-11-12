@@ -13,31 +13,31 @@ import java.util.stream.Collectors;
 
 public class CtrlProd {
 
-    private Map<String, Product> products;
-    private Map<String, Characteristics> characteristics;
-    private ArrayList<ArrayList<Double>> similarityTable;
-    Map<String,Integer> mapProductsName;
-    Map<Integer,String> mapProductsId;
+    private static Map<String, Product> products;
+    private static Map<String, Characteristics> characteristics;
+    private static ArrayList<ArrayList<Double>> similarityTable;
+    static Map<String,Integer> mapProductsName;
+    static Map<Integer,String> mapProductsId;
 
     public CtrlProd() {
-        this.products = new HashMap<>();
-        this.characteristics = new HashMap<>();
-        this.similarityTable = new ArrayList<>();
-        this.mapProductsName = new HashMap<>();
-        this.mapProductsId = new HashMap<>();
+        products = new HashMap<>();
+        characteristics = new HashMap<>();
+        similarityTable = new ArrayList<>();
+        mapProductsName = new HashMap<>();
+        mapProductsId = new HashMap<>();
     }
 
     public void addCharacteristic(String characteristicName) {
         if (findCharacteristic(characteristicName) == null) {
-            Characteristics characteristic = new Characteristics(this.characteristics.size(), characteristicName);
-            this.characteristics.put(characteristicName, characteristic);
+            Characteristics characteristic = new Characteristics(characteristics.size(), characteristicName);
+            characteristics.put(characteristicName, characteristic);
         } else {
             throw new CharacteristicAlreadyAddedException("Characteristic with name '" + characteristicName + "' was already added");
         }
     }
 
     public void removeCharacteristic(String characteristicName) {
-        Characteristics deletedCharacteristic = this.characteristics.remove(characteristicName);
+        Characteristics deletedCharacteristic = characteristics.remove(characteristicName);
         if (deletedCharacteristic == null) {
             throw new CharacteristicNotFoundException("Characteristic with name '" + characteristicName + "' was not found");
         }
@@ -73,8 +73,8 @@ public class CtrlProd {
             throw new ProductNotFoundException("Product with name'" + productName2 + " was not found");
         }
 
-        this.similarityTable.get(id1).set(id2, newValue);
-        this.similarityTable.get(id2).set(id1, newValue);
+        similarityTable.get(id1).set(id2, newValue);
+        similarityTable.get(id2).set(id1, newValue);
     }
 
     public Double checkProductsSimilarity(String productName1, String productName2) {
@@ -108,7 +108,7 @@ public class CtrlProd {
 
     }
 
-    //Pre: We assume that a new product has been added and this function is called right after
+    //Pre: We assume that a new product has been added and CtrlProd function is called right after
     public Boolean setSimilarities(Double[] similarities) {
 
         if (similarities == null) {
@@ -269,7 +269,7 @@ public class CtrlProd {
     }
 
     public void setProducts(Map<String, Product> products) {
-        this.products = products;
+        CtrlProd.products = products;
     }
 
     public Map<String, Characteristics> getCharacteristics() {
@@ -277,7 +277,7 @@ public class CtrlProd {
     }
 
     public void setCharacteristics(Map<String, Characteristics> characteristics) {
-        this.characteristics = characteristics;
+        CtrlProd.characteristics = characteristics;
     }
 
     public ArrayList<ArrayList<Double>> getSimilarityTable() {
@@ -314,8 +314,8 @@ public class CtrlProd {
         }
     }
 
-    public void setSimilarityTable(ArrayList<ArrayList<Double>> similarityTable) {
-        this.similarityTable = similarityTable;
+    public void setSimilarityTable(ArrayList<ArrayList<Double>> arraySimilarityTable) {
+        similarityTable = arraySimilarityTable;
     }
 
     public Map<String, Integer> getMapProductsName() {
@@ -323,7 +323,7 @@ public class CtrlProd {
     }
 
     public void setMapProductsName(Map<String, Integer> mapProductsName) {
-        this.mapProductsName = mapProductsName;
+        CtrlProd.mapProductsName = mapProductsName;
     }
 
     public Map<Integer, String> getMapProductsId() {
@@ -331,6 +331,6 @@ public class CtrlProd {
     }
 
     public void setMapProductsId(Map<Integer, String> mapProductsId) {
-        this.mapProductsId = mapProductsId;
+        CtrlProd.mapProductsId = mapProductsId;
     }
 }
