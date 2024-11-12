@@ -1,10 +1,13 @@
 package com.prop.prop12_1.controller;
 
+import com.prop.prop12_1.model.Characteristics;
+import com.prop.prop12_1.model.Product;
 import com.prop.prop12_1.model.Shelf;
 import com.prop.prop12_1.model.Supermarket;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 public class CtrlDomain {
     private CtrlSupermarket ctrlSupermarket;
@@ -13,6 +16,7 @@ public class CtrlDomain {
     public CtrlDomain() {
         ctrlSupermarket = new CtrlSupermarket();
         ctrlProd = new CtrlProd();
+        ctrlAlg = new CtrlAlgorithm();
     }
 
     public boolean addSupermarket(String n) {
@@ -39,10 +43,14 @@ public class CtrlDomain {
         return ctrlSupermarket.getShelf(s, sh);
     }
 
+    //revisar metode
     public boolean addRestriction(String supermarket, String restriction, String shelf, int index){
-        /*if (existeix caracteristica){
+
+        boolean exists = ctrlProd.getCharacteristic(restriction);
+        if (exists){
             ctrlSupermarket.addRestriction(supermarket, restriction, shelf, index);
-        }*/
+            return true;
+        }
 
         return false;
     }
@@ -104,17 +112,44 @@ public class CtrlDomain {
     }
 
     public ArrayList<String> listCharacteristicsProduct(String productName) {
-        //return ctrlProd.listCharacteristicsProduct(productName);
-        return null;
+        return ctrlProd.listCharacteristicsProduct(productName);
     }
 
-    //addProductCatalogue(String supermarket, String catalogueName, String ProductName){}
-    //removeProductCatalogue(String supermarket, String catalogueName, String ProductName)
-    //listProdsCatalogue(String supermarket, String catalogueName)
-    //addCatalogue(String supermarket, String catalogueName)
-    //removeCatalogue(String supermarket, String catalogueName)
+    public void addProductCatalogue(String supermarket, String catalogueName, String ProductName){
+        Product p = ctrlProd.getProduct(ProductName);
+        ctrlSupermarket.addProduct(supermarket, catalogueName, p);
+    }
 
-    //generateSolution, listSolution, checkSolution,,, todo lo relacionado con solucion
+    public void removeProductCatalogue(String supermarket, String catalogueName, String ProductName){
+        ctrlSupermarket.removeProduct(supermarket, catalogueName, ProductName);
+    }
+
+    public ArrayList<String> listProdsCatalogue(String supermarket, String catalogueName){
+        return ctrlSupermarket.listProdsCatalogue(supermarket, catalogueName);
+    }
+
+    public void addCatalogue(String supermarket, String catalogueName){
+        ctrlSupermarket.addCatalogue(supermarket, catalogueName);
+    }
+
+    public void removeCatalogue(String supermarket, String catalogueName){
+        ctrlSupermarket.removeCatalogue(supermarket, catalogueName);
+    }
+
+    public boolean generateSolution(String supermarket, String catalogueName, String shelf, int algorithm, boolean generatedSimilarity){
+        ArrayList<Set<String>> sh = ctrlSupermarket.getDistribution(supermarket,shelf);
+        ArrayList<Pair<Integer, Set<String>>> pr = ctrlSupermarket.getProds(supermarket, catalogueName);
+        ArrayList<Pair<Integer, Set<String>>> sol = ctrlAlg.getSolution(sh, pr, algorithm, generatedSimilarity);
+        return true;
+    }
+
+    public ArrayList<String> listSolutions(String supermarket){
+        return ctrlSupermarket.listSolutions(supermarket);
+    }
+
+    public void checkSolution(String supermarket, Strinf solName){
+        ctrlSupermarket.getSolution(supermarket, solName);
+    }
 
 
 
