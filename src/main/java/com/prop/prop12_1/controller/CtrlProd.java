@@ -9,21 +9,20 @@ import com.prop.prop12_1.model.Product;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 public class CtrlProd {
 
     private static Map<String, Product> products;
     private static Map<String, Characteristics> characteristics;
-    private static ArrayList<ArrayList<Double>> similarityTable;
-    static Map<String,Integer> mapProductsName;
-    static Map<Integer,String> mapProductsId;
+    private static List<List<Double>> similarityTable;
+    private static Map<Integer,String> mapProductsId;
 
     public CtrlProd() {
         products = new HashMap<>();
         characteristics = new HashMap<>();
         similarityTable = new ArrayList<>();
-        mapProductsName = new HashMap<>();
         mapProductsId = new HashMap<>();
     }
 
@@ -44,62 +43,62 @@ public class CtrlProd {
     }
 
     public Map<String,Double> checkProductSimilarities(String productName) {
-        int id = mapProductsName.getOrDefault(productName, -1);
+        Product product = products.get(productName);
 
-        if (id == -1) {
+        if (product == null) {
             throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
         }
 
         Map <String, Double> similarities = new HashMap<>();
 
-        int size = similarityTable.get(id).size();
-        for (int i = 0; i < size; i++) {
-            similarities.put(mapProductsId.get(i), similarityTable.get(id).get(i));
-        }
+        IntStream.range(0, similarityTable.get(product.getId()).size())
+                .forEach(i -> similarities.put(mapProductsId.get(i), similarityTable.get(product.getId()).get(i)));
+
 
         return similarities;
     }
 
     public void modifySimilarity(String productName1, String productName2, Double newValue) {
-        int id1 = mapProductsName.getOrDefault(productName1,-1);
-        int id2 = mapProductsName.getOrDefault(productName2,-1);
+
+        Product product1 = products.get(productName1);
+        Product product2 = products.get(productName2);
         
-        if (id1 == -1 && id2 == -1) {
+        if (product1 == null && product2 == null) {
             throw new ProductNotFoundException("Products with name '" + productName1 + "' and '"
                                                                         + productName2 + "' were not found");
-        } else if (id1 == -1) {
+        } else if (product1 == null) {
             throw new ProductNotFoundException("Product with name '" + productName1 + "' was not found");
-        } else if (id2 == -1) {
+        } else if (product2 == null) {
             throw new ProductNotFoundException("Product with name'" + productName2 + " was not found");
         }
 
-        similarityTable.get(id1).set(id2, newValue);
-        similarityTable.get(id2).set(id1, newValue);
+        similarityTable.get(product1.getId()).set(product2.getId(), newValue);
+        similarityTable.get(product2.getId()).set(product1.getId(), newValue);
     }
 
     public Double checkProductsSimilarity(String productName1, String productName2) {
-        int id1 = mapProductsName.getOrDefault(productName1,-1);
-        int id2 = mapProductsName.getOrDefault(productName2,-1);
 
-        if (id1 == -1 && id2 == -1) {
+        Product product1 = products.get(productName1);
+        Product product2 = products.get(productName2);
+
+        if (product1 == null && product2 == null) {
             throw new ProductNotFoundException("Products with name '" + productName1 + "' and '"
                     + productName2 + "' were not found");
-        } else if (id1 == -1) {
+        } else if (product1 == null) {
             throw new ProductNotFoundException("Product with name '" + productName1 + "' was not found");
-        } else if (id2 == -1) {
+        } else if (product2 == null) {
             throw new ProductNotFoundException("Product with name'" + productName2 + " was not found");
         }
 
-        return similarityTable.get(id1).get(id2);
+        return similarityTable.get(product1.getId()).get(product2.getId());
     }
 
     public void addProduct(String productName) {
 
         if (findProduct(productName) == null) {
-            Product newProduct = new Product(productName);
+            Product newProduct = new Product(products.size(), productName);
             products.put(productName, newProduct);
             int size = products.size();
-            mapProductsName.put(productName,size-1);
             mapProductsId.put(size-1,productName);
         }
         else {
@@ -114,25 +113,22 @@ public class CtrlProd {
         if (similarities == null) {
             int idx1 = products.size()-1;
             Set<Characteristics> characteristics1 = products.get(mapProductsId.get(idx1)).getCharacteristics();
-            ArrayList<Double> newRow = new ArrayList<>();
+            List<Double> newRow = new ArrayList<>();
             for (int i =0 ; i < idx1; i++) {
                 Set<Characteristics> characteristics2 = products.get(mapProductsId.get(i)).getCharacteristics();
                 double similarity = calculateSimilarity(characteristics1,characteristics2);
                 newRow.add(similarity);
                 similarityTable.get(i).add(similarity);
-
-
             }
             newRow.add(1.0);
             similarityTable.add(newRow);
-
         }
         else {
-            ArrayList<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
+            List<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
             newLine.add(0.0);
             similarityTable.add(newLine);
             int j = 0;
-            for(ArrayList<Double> line : similarityTable) {
+            for(List<Double> line : similarityTable) {
                 if (line.size() < products.size() && j < similarities.length) {
                     line.add(similarities[j]);
                 }
@@ -152,22 +148,34 @@ public class CtrlProd {
         return union.isEmpty() ?  0 : (double) intersection.size() / union.size();
     }
 
-    public ArrayList<ArrayList<Double>> generateSimilarityTable() {
-        int size = products.size();
-        ArrayList<ArrayList<Double>> generatedSimilarities = new ArrayList<>(size);
-        for (Map.Entry<String, Product> entry : products.entrySet()) {
-            for (Map.Entry<String, Product> entry2 : products.entrySet()) {
-                int idx1 = mapProductsName.get(entry.getKey());
-                int idx2 = mapProductsName.get(entry2.getKey());
+    public List<List<Double>> generateSimilarityTable() {
+        int productsSize = products.size();
+        List<List<Double>> generatedSimilarities = new ArrayList<>();
 
-                Set<Characteristics> characteristics1 = entry.getValue().getCharacteristics();
-                Set<Characteristics> characteristics2 = entry2.getValue().getCharacteristics();
+        for (int i = 0; i < productsSize; i++) {
+            List<Double> row = new ArrayList<>(productsSize);
+            for (int j = 0; j < productsSize; j++) {
+                row.add(0.0);
+            }
+            generatedSimilarities.add(row);
+        }
+
+        List<Product> productsList = new ArrayList<>(products.values());
+
+        for (int i = 0; i < productsSize; i++) {
+            Product product1 = productsList.get(i);
+            Set<Characteristics> characteristics1 = product1.getCharacteristics();
+            for (int j = i; j < productsSize; j++) {
+                Product product2 = productsList.get(j);
+                Set<Characteristics> characteristics2 = product2.getCharacteristics();
+
                 double similarity = calculateSimilarity(characteristics1,characteristics2);
-                generatedSimilarities.get(idx1).add(idx2, similarity);
+                generatedSimilarities.get(product1.getId()).set(product2.getId(), similarity);
+                generatedSimilarities.get(product2.getId()).set(product1.getId(), similarity);
             }
         }
-        return generatedSimilarities;
 
+        return generatedSimilarities;
     }
 
     public void addRestrictionProduct(String restrictionName, String productName) {
@@ -238,7 +246,7 @@ public class CtrlProd {
         }
     }
 
-    public ArrayList<String> listCharacteristics() {
+    public List<String> listCharacteristics() {
         return characteristics.values().stream().map(Characteristics::getName)
                                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -263,7 +271,7 @@ public class CtrlProd {
         return new ArrayList<>(products.values());
     }
 
-    public ArrayList<String> listProducts() {
+    public List<String> listProducts() {
         return products.values().stream().map(Product::getName)
                             .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -280,7 +288,7 @@ public class CtrlProd {
         CtrlProd.characteristics = characteristics;
     }
 
-    public ArrayList<ArrayList<Double>> getSimilarityTable() {
+    public List<List<Double>> getSimilarityTable() {
         return similarityTable;
     }
 
@@ -288,11 +296,9 @@ public class CtrlProd {
         Set<String> nameRestrictions =  new HashSet<>();
         Product p = findProduct(productName);
         if (p != null) {
-            Set<Characteristics> characteristics1 = p.getRestrictions();
-            for (Characteristics characteristics : characteristics1) {
-                nameRestrictions.add(characteristics.getName());
-            }
-            return nameRestrictions;
+            return p.getRestrictions().stream()
+                    .map(Characteristics::getName)
+                    .collect(Collectors.toSet());
         }
         else {
             throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -303,27 +309,17 @@ public class CtrlProd {
         Set<String> nameCharacteristics =  new HashSet<>();
         Product p = findProduct(productName);
         if (p != null) {
-            Set<Characteristics> characteristics1 = p.getRestrictions();
-            for (Characteristics characteristics : characteristics1) {
-                nameCharacteristics.add(characteristics.getName());
-            }
-            return nameCharacteristics;
+            return p.getCharacteristics().stream()
+                    .map(Characteristics::getName)
+                    .collect(Collectors.toSet());
         }
         else {
             throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
         }
     }
 
-    public void setSimilarityTable(ArrayList<ArrayList<Double>> arraySimilarityTable) {
+    public void setSimilarityTable(List<List<Double>> arraySimilarityTable) {
         similarityTable = arraySimilarityTable;
-    }
-
-    public Map<String, Integer> getMapProductsName() {
-        return mapProductsName;
-    }
-
-    public void setMapProductsName(Map<String, Integer> mapProductsName) {
-        CtrlProd.mapProductsName = mapProductsName;
     }
 
     public Map<Integer, String> getMapProductsId() {
