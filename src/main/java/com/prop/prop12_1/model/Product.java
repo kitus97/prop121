@@ -4,12 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Product {
+    private Integer id;
     private String name;
-    private Set<Object> characterisics;
+    private Set<Characteristics> characteristics;
+    private Set<Characteristics> restrictions;
 
-    public Product(String name) {
+    public Product(Integer id, String name) {
+        this.id = id;
         this.name = name;
-        characterisics = new HashSet<Object>();
+        characteristics = new HashSet<Characteristics>();
+        restrictions = new HashSet<Characteristics>();
     }
 
     public String getName() {
@@ -20,20 +24,44 @@ public class Product {
         this.name = name;
     }
 
-    public Set<Object> getCharacterisics() {
-        return characterisics;
+    public Set<Characteristics> getCharacteristics() {
+        return characteristics;
     }
 
-    public void setCharacterisics(Set<Object> characterisics) {
-        this.characterisics = characterisics;
+    public void setCharacteristics(Set<Characteristics> characteristics) {
+        this.characteristics = characteristics;
     }
 
-    public void addCharacterisics(Object characteristic) {
-        characterisics.add(characteristic);
+    public void addCharacteristic(Characteristics characteristic) {
+        characteristics.add(characteristic);
     }
 
-    public void removeCharacterisics(Object characteristic) {
-        characterisics.remove(characteristic);
+    public void removeCharacteristic(Characteristics characteristic) {
+        characteristics.remove(characteristic);
+    }
+
+    public Set<Characteristics> getRestrictions() {
+        return restrictions;
+    }
+
+    public void setRestrictions(Set<Characteristics> restrictions) {
+        this.restrictions = restrictions;
+    }
+
+    public void addRestriction(Characteristics characteristic) {
+        restrictions.add(characteristic);
+    }
+
+    public void removeRestriction(Characteristics characteristic) {
+        restrictions.remove(characteristic);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
 
