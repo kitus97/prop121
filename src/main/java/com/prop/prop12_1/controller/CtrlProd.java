@@ -251,18 +251,6 @@ public class CtrlProd {
                                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private Boolean productExists(String productName) {
-        return products.containsKey(productName);
-    }
-
-    private Boolean characteristicExists(String characteristicName) {
-        return characteristics.containsKey(characteristicName);
-    }
-
-    private Product findProduct(String productName) {
-        return products.get(productName);
-    }
-
     private Characteristics findCharacteristic(String characteristicName) {
         return characteristics.get(characteristicName);
     }
@@ -286,6 +274,10 @@ public class CtrlProd {
 
     public void setCharacteristics(Map<String, Characteristics> characteristics) {
         CtrlProd.characteristics = characteristics;
+    }
+
+    public Product findProduct(String productName) {
+        return products.get(productName);
     }
 
     public List<List<Double>> getSimilarityTable() {
