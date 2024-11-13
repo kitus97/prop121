@@ -251,7 +251,7 @@ public class CtrlProd {
                                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private Characteristics findCharacteristic(String characteristicName) {
+    public Characteristics findCharacteristic(String characteristicName) {
         return characteristics.get(characteristicName);
     }
 
