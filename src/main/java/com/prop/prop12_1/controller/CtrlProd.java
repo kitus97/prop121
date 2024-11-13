@@ -142,11 +142,6 @@ public class CtrlProd {
         else return false;
     }
 
-    public ArrayList<String> listCharacteristics() {
-        return characteristics.values().stream().map(Characteristics::getName)
-                                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
     private Boolean productExists(String productName) {
         return products.containsKey(productName);
     }
@@ -155,7 +150,7 @@ public class CtrlProd {
         return characteristics.containsKey(characteristicName);
     }
 
-    private Product findProduct(String productName) {
+    public Product findProduct(String productName) {
         return products.get(productName);
     }
 
@@ -167,9 +162,16 @@ public class CtrlProd {
         return new ArrayList<>(products.values());
     }
 
-    public ArrayList<String> listProducts() {
-        return products.values().stream().map(Product::getName)
-                            .collect(Collectors.toCollection(ArrayList::new));
+    public List<String> listCharacteristics() {
+        return characteristics.values().stream()
+                                       .map(Characteristics::toString)
+                                       .collect(Collectors.toList());
+    }
+
+    public List<String> listProducts() {
+        return products.values().stream()
+                                .map(Product::getName)
+                                .collect(Collectors.toList());
     }
 
     public void setProducts(Map<String, Product> products) {

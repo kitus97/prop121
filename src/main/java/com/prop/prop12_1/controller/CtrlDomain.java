@@ -1,43 +1,49 @@
 package com.prop.prop12_1.controller;
 
+import com.prop.prop12_1.model.Characteristics;
+import com.prop.prop12_1.model.Product;
 import com.prop.prop12_1.model.Shelf;
 import com.prop.prop12_1.model.Supermarket;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+@Component
 public class CtrlDomain {
-    private CtrlSupermarket ctrlSupermarket;
+   // private CtrlSupermarket ctrlSupermarket;
     private CtrlProd ctrlProd;
 
     public CtrlDomain() {
-        ctrlSupermarket = new CtrlSupermarket();
+       // ctrlSupermarket = new CtrlSupermarket();
         ctrlProd = new CtrlProd();
     }
 
-    public boolean addSupermarket(String n) {
-        return ctrlSupermarket.addSupermarket(n);
-    }
-
-    public boolean removeSupermarket(String n) {
-        return ctrlSupermarket.removeSupermarket(n);
-    }
-
-    public boolean addShelf(String s, String sh, int size){
-        return ctrlSupermarket.createShelf(s, sh, size);
-    }
-
-    public boolean removeShelf(String s, String sh){
-        return ctrlSupermarket.removeShelf(s, sh);
-    }
-
-    public ArrayList<String> getShelves(String s){
-        return ctrlSupermarket.getShelves(s);
-    }
-
-    public String getShelf(String s, String sh){
-        return ctrlSupermarket.getShelf(s, sh);
-    }
+//    public boolean addSupermarket(String n) {
+//        return ctrlSupermarket.addSupermarket(n);
+//    }
+//
+//    public boolean removeSupermarket(String n) {
+//        return ctrlSupermarket.removeSupermarket(n);
+//    }
+//
+//    public boolean addShelf(String s, String sh, int size){
+//        return ctrlSupermarket.createShelf(s, sh, size);
+//    }
+//
+//    public boolean removeShelf(String s, String sh){
+//        return ctrlSupermarket.removeShelf(s, sh);
+//    }
+//
+//    public ArrayList<String> getShelves(String s){
+//        return ctrlSupermarket.getShelves(s);
+//    }
+//
+//    public String getShelf(String s, String sh){
+//        return ctrlSupermarket.getShelf(s, sh);
+//    }
 
     public boolean addRestriction(String supermarket, String restriction, String shelf, int index){
         /*if (existeix caracteristica){
@@ -47,15 +53,15 @@ public class CtrlDomain {
         return false;
     }
 
-    public boolean removeRestriction(String supermarket, String shelf, int index){
-        ctrlSupermarket.removeRestriction(supermarket, shelf, index);
-        // mirarlo
-        return false;
-    }
+//    public boolean removeRestriction(String supermarket, String shelf, int index){
+//        ctrlSupermarket.removeRestriction(supermarket, shelf, index);
+//        // mirarlo
+//        return false;
+//    }
 
-    public boolean resizeShelf(String supermarket, String shelf, int size){
-        return ctrlSupermarket.resizeShelf(supermarket, shelf, size);
-    }
+//    public boolean resizeShelf(String supermarket, String shelf, int size){
+//        return ctrlSupermarket.resizeShelf(supermarket, shelf, size);
+//    }
 
     public void addCharacteristic(String characteristicName){
         ctrlProd.addCharacteristic(characteristicName);
@@ -95,12 +101,16 @@ public class CtrlDomain {
         //soluciones no validas
     }
 
-    public ArrayList<String> listCharacteristics() {
+    public List<String> listCharacteristics() {
         return ctrlProd.listCharacteristics();
     }
 
-    public ArrayList<String> listProducts() {
+    public List<String> listProducts() {
         return ctrlProd.listProducts();
+    }
+
+    public Product getProduct(String productName) {
+        return ctrlProd.findProduct(productName);
     }
 
     public ArrayList<String> listCharacteristicsProduct(String productName) {
