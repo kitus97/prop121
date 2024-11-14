@@ -18,16 +18,12 @@ import java.util.stream.IntStream;
 
 public class CtrlProd {
 
-    private static Map<String, Product> products;
-    private static Map<String, Characteristics> characteristics;
-    private static List<List<Double>> similarityTable;
-    private static Map<Integer,String> mapProductsId;
+    private static Map<String, Product> products = new HashMap<>();;
+    private static Map<String, Characteristics> characteristics = new HashMap<>();;
+    private static List<List<Double>> similarityTable = new ArrayList<>();
+    private static Map<Integer,String> mapProductsId = new HashMap<>();
 
     public CtrlProd() {
-        products = new HashMap<>();
-        characteristics = new HashMap<>();
-        similarityTable = new ArrayList<>();
-        mapProductsId = new HashMap<>();
     }
 
     public void addCharacteristic(String characteristicName) {
@@ -290,8 +286,8 @@ public class CtrlProd {
         return characteristics.get(characteristicName);
     }
 
-    public List<Product> getProducts() {
-        return new ArrayList<>(products.values());
+    public Map<String, Product> getProducts() {
+        return products;
     }
 
     public List<String> listCharacteristics() {
@@ -355,6 +351,7 @@ public class CtrlProd {
     public void setSimilarityTable(List<List<Double>> arraySimilarityTable) {
         similarityTable = arraySimilarityTable;
     }
+
 
     public Map<Integer, String> getMapProductsId() {
         return mapProductsId;
