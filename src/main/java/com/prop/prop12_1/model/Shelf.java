@@ -50,8 +50,8 @@ public class Shelf{
                     distribution.add(new HashSet<String>());
                 }
             } else {
-                for (int i = distribution.size() - 1; i >= t; --i) {
-                    distribution.remove(i);
+                if (distribution.size() > t) {
+                    distribution.subList(t, distribution.size()).clear();
                 }
 
             }
@@ -59,5 +59,11 @@ public class Shelf{
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "Shelf{" +
+                "name='" + name + '\'' +
+                ", distribution=" + distribution +
+                '}';
+    }
 }

@@ -1,7 +1,7 @@
 package com.prop.prop12_1.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by marc.rams.estrada
@@ -11,7 +11,7 @@ public class Characteristics {
 
     private int id;
     private String name;
-    private Set<Product> associatedProducts = new HashSet<Product>();
+    private List<Product> associatedProducts = new ArrayList<>();
 
     public Characteristics(int id, String name) {
         this.id = id;
@@ -36,11 +36,11 @@ public class Characteristics {
         this.name = name;
     }
 
-    public Set<Product> getAssociatedProducts() {
+    public List<Product> getAssociatedProducts() {
         return associatedProducts;
     }
 
-    public void setAssociatedProducts(Set<Product> associatedProducts) {
+    public void setAssociatedProducts(List<Product> associatedProducts) {
         this.associatedProducts = associatedProducts;
     }
 
@@ -54,6 +54,8 @@ public class Characteristics {
 
     @Override
     public String toString() {
-        return name;
+        return "Characteristics{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

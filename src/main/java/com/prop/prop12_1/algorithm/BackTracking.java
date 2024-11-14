@@ -31,7 +31,7 @@ public class BackTracking {
         this.startTime = System.currentTimeMillis();
         List<Pair<Integer, Set<String>>> initialSolution = new ArrayList<>();
         for (int i = 0; i < shelf.size(); i++) {
-            initialSolution.add(null);
+            initialSolution.add(Pair.of(null, shelf.get(i)));
         }
 
 
@@ -40,7 +40,7 @@ public class BackTracking {
         if (bestDistribution == null) {
             bestDistribution = new ArrayList<>();
             for (int i = 0; i < shelf.size(); i++) {
-                bestDistribution.add(null);
+                bestDistribution.add(Pair.of(null, shelf.get(i)));
             }
         }
 
@@ -62,10 +62,10 @@ public class BackTracking {
             }
             return;
         }
-        List<String> currentRestrictions = shelf.get(index);
+        Set<String> currentRestrictions = shelf.get(index);
         boolean trobat = false;
         for (int i = 0; i < remainingProducts.size(); i++) {
-            Pair<Integer, List<String>> product = remainingProducts.get(i);
+            Pair<Integer, Set<String>> product = remainingProducts.get(i);
 
             if (currentRestrictions.equals(product.getRight())) {
                 currentSolution.set(index, product);
@@ -73,7 +73,7 @@ public class BackTracking {
                 trobat = true;
                 backTracking(index + 1, currentSolution, remainingProducts);
                 remainingProducts.add(i, product);
-                currentSolution.set(index, null);
+                currentSolution.set(index, Pair.of(null,currentRestrictions));
             }
         }
         if (!trobat) {
@@ -82,7 +82,7 @@ public class BackTracking {
     }
 
     private double computeSimilarity(Pair<Integer, Set<String>> product, List<Pair<Integer, Set<String>>> currentSolution, int index) {
-        if (index > 0 && currentSolution.get(index - 1) != null) {
+        if (index > 0 && currentSolution.get(index - 1).getLeft() != null) {
             int previousProduct = currentSolution.get(index - 1).getLeft();
             int currentProduct = product.getLeft();
             return State.getSimilarity(previousProduct, currentProduct);

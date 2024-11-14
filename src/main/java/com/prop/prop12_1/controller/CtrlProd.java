@@ -112,10 +112,10 @@ public class CtrlProd {
 
         if (similarities == null) {
             int idx1 = products.size()-1;
-            List<Characteristics> characteristics1 = products.get(mapProductsId.get(idx1)).getCharacteristics();
+            Set<Characteristics> characteristics1 = products.get(mapProductsId.get(idx1)).getCharacteristics();
             List<Double> newRow = new ArrayList<>();
             for (int i =0 ; i < idx1; i++) {
-                List<Characteristics> characteristics2 = products.get(mapProductsId.get(i)).getCharacteristics();
+                Set<Characteristics> characteristics2 = products.get(mapProductsId.get(i)).getCharacteristics();
                 double similarity = calculateSimilarity(characteristics1,characteristics2);
                 newRow.add(similarity);
                 similarityTable.get(i).add(similarity);
@@ -139,10 +139,10 @@ public class CtrlProd {
 
     }
 
-    private double calculateSimilarity(List<Characteristics> characteristics1, List<Characteristics> characteristics2) {
-        List<Object> intersection = new ArrayList<>(characteristics1);
+    private double calculateSimilarity(Set<Characteristics> characteristics1, Set<Characteristics> characteristics2) {
+        List<Characteristics> intersection = new ArrayList<>(characteristics1);
         intersection.retainAll(characteristics2);
-        List<Object> union = new ArrayList<>(characteristics1);
+        List<Characteristics> union = new ArrayList<>(characteristics1);
         union.addAll(characteristics2);
 
         return union.isEmpty() ?  0 : (double) intersection.size() / union.size();
@@ -164,10 +164,10 @@ public class CtrlProd {
 
         for (int i = 0; i < productsSize; i++) {
             Product product1 = productsList.get(i);
-            List<Characteristics> characteristics1 = product1.getCharacteristics();
+            Set<Characteristics> characteristics1 = product1.getCharacteristics();
             for (int j = i; j < productsSize; j++) {
                 Product product2 = productsList.get(j);
-                List<Characteristics> characteristics2 = product2.getCharacteristics();
+                Set<Characteristics> characteristics2 = product2.getCharacteristics();
 
                 double similarity = calculateSimilarity(characteristics1,characteristics2);
                 generatedSimilarities.get(product1.getId()).set(product2.getId(), similarity);
@@ -183,7 +183,7 @@ public class CtrlProd {
         if ((c != null)) {
             Product p = findProduct(productName);
             if (p != null) {
-                if(p.getRestrictions().contains(c)) {
+                if(p.getRestrictions().contains(c.getName())) {
                     throw new RestrictionAlreadyAddedToProductException("Restriction with name '" + restrictionName + "' was already added to product");
                 }
                 else {
@@ -206,7 +206,7 @@ public class CtrlProd {
         if (c != null) {
             Product p = findProduct(productName);
             if (p != null) {
-                if (p.getRestrictions().contains(c)) {
+                if (p.getRestrictions().contains(c.getName())) {
                     p.removeCharacteristic(c);
                     c.removeAssociatedProduct(p);
                 }
@@ -314,21 +314,14 @@ public class CtrlProd {
         CtrlProd.characteristics = characteristics;
     }
 
-    public Product findProduct(String productName) {
-        return products.get(productName);
-    }
-
     public List<List<Double>> getSimilarityTable() {
         return similarityTable;
     }
 
-    public List<String> getRestrictionsProducts(String productName) {
-        List<String> nameRestrictions =  new ArrayList<>();
+    public Set<String> getRestrictionsProducts(String productName) {
         Product p = findProduct(productName);
         if (p != null) {
-            return p.getRestrictions().stream()
-                    .map(Characteristics::getName)
-                    .collect(Collectors.toList());
+            return p.getRestrictions();
         }
         else {
             throw new ProductNotFoundException("Product with name '" + productName + "' was not found");

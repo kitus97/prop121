@@ -46,5 +46,11 @@ public class Catalogue {
         if(products.remove(product) == null) throw new NoSuchElementException("The product " + product + " does not exist in the catalogue.");
     }
 
-
+    @Override
+    public String toString() {
+        return "Catalogue{" +
+                "name='" + name + '\'' +
+                ", products=" + products +
+                '}';
+    }
 }

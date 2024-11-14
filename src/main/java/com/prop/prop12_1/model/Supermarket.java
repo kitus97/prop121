@@ -1,13 +1,18 @@
 package com.prop.prop12_1.model;
 
-import java.util.*;
-
 import com.prop.prop12_1.controller.CtrlAlgorithm;
 import com.prop.prop12_1.exceptions.CatalogAlreadyAdded;
 import com.prop.prop12_1.exceptions.ShelfAlreadyAddedException;
 import com.prop.prop12_1.exceptions.SolutionAlreadyAddedException;
 import org.apache.commons.lang3.tuple.Pair;
-import org.yaml.snakeyaml.constructor.DuplicateKeyException;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
 
 public class Supermarket {
     private Map<String, Shelf> shelves;
@@ -129,9 +134,13 @@ public class Supermarket {
         else sh.deleteRestrictions(size);
     }
 
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Supermarket{" +
+                "name='" + name + '\'' +
+                ", shelves=" + shelves +
+                ", catalogs=" + catalogs +
+                ", solutions=" + solutions +
+                '}';
+    }
 }
