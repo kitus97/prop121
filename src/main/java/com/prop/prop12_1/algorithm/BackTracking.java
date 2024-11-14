@@ -3,21 +3,22 @@ package com.prop.prop12_1.algorithm;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class BackTracking {
-    private ArrayList<Set<String>> shelf;
-    private ArrayList<Pair<Integer, Set<String>>> products;
+    private ArrayList<List<String>> shelf;
+    private ArrayList<Pair<Integer, List<String>>> products;
     private double maxScore;
-    private ArrayList<Pair<Integer, Set<String>>> bestDistribution;
+    private ArrayList<Pair<Integer, List<String>>> bestDistribution;
     private long startTime;
     private long timeLimit;
 
     public BackTracking() {}
 
-    public ArrayList<Pair<Integer, Set<String>>> generateSolution(
-            ArrayList<Set<String>> shelf,
-            ArrayList<Pair<Integer, Set<String>>> products,
+    public ArrayList<Pair<Integer, List<String>>> generateSolution(
+            ArrayList<List<String>> shelf,
+            ArrayList<Pair<Integer, List<String>>> products,
             ArrayList<ArrayList<Double>> similarityTable) {
         this.shelf = shelf;
         this.products = products;
@@ -28,7 +29,7 @@ public class BackTracking {
         State.setShelf(shelf);
         State.setSimilarityTable(similarityTable);
         this.startTime = System.currentTimeMillis();
-        ArrayList<Pair<Integer, Set<String>>> initialSolution = new ArrayList<>();
+        ArrayList<Pair<Integer, List<String>>> initialSolution = new ArrayList<>();
         for (int i = 0; i < shelf.size(); i++) {
             initialSolution.add(null);
         }
@@ -47,7 +48,7 @@ public class BackTracking {
         return bestDistribution;
     }
 
-    private void backTracking(int index, ArrayList<Pair<Integer, Set<String>>> currentSolution, ArrayList<Pair<Integer, Set<String>>> remainingProducts) {
+    private void backTracking(int index, ArrayList<Pair<Integer, List<String>>> currentSolution, ArrayList<Pair<Integer, List<String>>> remainingProducts) {
         if (System.currentTimeMillis() - startTime > timeLimit) {
             return;
         }
@@ -61,10 +62,10 @@ public class BackTracking {
             }
             return;
         }
-        Set<String> currentRestrictions = shelf.get(index);
+        List<String> currentRestrictions = shelf.get(index);
         boolean trobat = false;
         for (int i = 0; i < remainingProducts.size(); i++) {
-            Pair<Integer, Set<String>> product = remainingProducts.get(i);
+            Pair<Integer, List<String>> product = remainingProducts.get(i);
 
             if (currentRestrictions.equals(product.getRight())) {
                 currentSolution.set(index, product);
@@ -80,7 +81,7 @@ public class BackTracking {
         }
     }
 
-    private double computeSimilarity(Pair<Integer, Set<String>> product, ArrayList<Pair<Integer, Set<String>>> currentSolution, int index) {
+    private double computeSimilarity(Pair<Integer, List<String>> product, ArrayList<Pair<Integer, List<String>>> currentSolution, int index) {
         if (index > 0 && currentSolution.get(index - 1) != null) {
             int previousProduct = currentSolution.get(index - 1).getLeft();
             int currentProduct = product.getLeft();
