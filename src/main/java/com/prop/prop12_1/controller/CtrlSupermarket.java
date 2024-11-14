@@ -113,6 +113,27 @@ public class CtrlSupermarket {
         }
     }
 
+    public String getSolution(String supermarket, String solution){
+        return supermarkets.get(supermarket).getSolution(solution);
+    }
+
+    public List<String> getSolutions(String supermarket){
+        return supermarkets.get(supermarket).getSolutions();
+    }
+
+    public void deleteCatalog(String supermarket, String catalog){
+        supermarkets.get(supermarket).deleteCatalogue(catalog);
+    }
+
+    public void deleteSolution(String supermarket, String solution){
+        supermarkets.get(supermarket).deleteSolution(solution);
+    }
+
+
+    public void addCatalog(String supermarket, String catalog){
+        supermarkets.get(supermarket).addCatalogue(catalog);
+    }
+
 
 
 

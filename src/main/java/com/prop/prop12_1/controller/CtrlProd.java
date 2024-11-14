@@ -358,4 +358,10 @@ public class CtrlProd {
         return characteristics.stream()
                 .anyMatch(characteristic -> characteristic.getName().equalsIgnoreCase(characteristicName));
     }
+
+    public String getProductName(int id) {
+        return products.get(id).getName();
+    }
+
+
 }

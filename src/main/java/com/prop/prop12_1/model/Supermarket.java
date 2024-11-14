@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 
 public class Supermarket {
@@ -54,18 +55,12 @@ public class Supermarket {
         return catalogs.get(s);
     }
 
-    public List<Object> getSolutions() {
-        return new ArrayList<>(solutions.values());
-    }
-
-    public Object getSolution(String s){
-        return solutions.get(s);
-    }
-
 
     public void generateSolution(String name, String shelf, String catalog, boolean heuristic, int algorithm){
         Shelf sh = shelves.get(shelf);
+        if(sh == null) throw new NoSuchElementException("No such shelf");
         Catalogue cat = catalogs.get(catalog);
+        if(cat == null) throw new NoSuchElementException("No such catalog");
 
         List<Set<String>> distribution = sh.getDistribution();;
         List<Pair<Integer, Set<String>>> products = cat.getProductsArray();
@@ -96,23 +91,26 @@ public class Supermarket {
 
     public void invalidateCatalogSolution(String catalog){
         List<Solution> solutions = associatedCatalogSolutions.get(catalog);
-        for (Solution solution : solutions) {
-            solution.setValid(false);
+        for (int i = 0; i < solutions.size(); i++) {
+            if(solutions.get(i).deleted()) solutions.remove(i);
+            else solutions.get(i).setValid(false);
         }
     }
 
     public void invalidateShelfSolution(String shelf){
         List<Solution> solutions = associatedShelfSolutions.get(shelf);
-        for (Solution solution : solutions) {
-            solution.setValid(false);
+        for (int i = 0; i < solutions.size(); i++) {
+            if(solutions.get(i).deleted()) solutions.remove(i);
+            else solutions.get(i).setValid(false);
         }
 
     }
 
     public void invalidateProductSolution(String product){
         List<Solution> solutions = associatedProductSolutions.get(product);
-        for (Solution solution : solutions) {
-            solution.setValid(false);
+        for (int i = 0; i < solutions.size(); i++) {
+            if(solutions.get(i).deleted()) solutions.remove(i);
+            else solutions.get(i).setValid(false);
         }
     }
 
@@ -186,6 +184,27 @@ public class Supermarket {
     public void deleteCatalogue(String catalog){
         if (catalogs.remove(catalog) == null) throw new NoSuchElementException("No such catalog.");
         else associatedCatalogSolutions.remove(catalog);
+    }
+
+    public void deleteSolution(String solution){
+        Solution s = solutions.get(solution);
+        if(s == null) throw new NoSuchElementException("No such solution.");
+        else {
+            solutions.remove(solution);
+            s.delete();
+        }
+
+    }
+
+    public String getSolution(String solution){
+        if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        else{
+            return solutions.get(solution).toString1();
+        }
+    }
+
+    public List<String> getSolutions(){
+        return solutions.values().stream().map(Solution::toString).collect(Collectors.toList());
     }
 
     @Override
