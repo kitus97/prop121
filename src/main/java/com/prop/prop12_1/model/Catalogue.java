@@ -29,7 +29,7 @@ public class Catalogue {
     public ArrayList<Pair<Integer, Set<String>>> getProductsArray() {
         ArrayList<Pair<Integer, Set<String>>> ret= new ArrayList<Pair<Integer, Set<String>>>();
         for(Product p : products) {
-            ret.add(new Pair<p.getId(), p.getRestrictions());
+            ret.add(Pair.of(p.getId(), p.getRestrictions()));
         }
         return ret;
     }
