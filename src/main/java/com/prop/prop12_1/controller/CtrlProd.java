@@ -16,7 +16,7 @@ public class CtrlProd {
 
     private static Map<String, Product> products;
     private static Map<String, Characteristics> characteristics;
-    private static List<List<Double>> similarityTable;
+    private static ArrayList<ArrayList<Double>> similarityTable;
     private static Map<Integer,String> mapProductsId;
 
     public CtrlProd() {
@@ -113,7 +113,7 @@ public class CtrlProd {
         if (similarities == null) {
             int idx1 = products.size()-1;
             Set<Characteristics> characteristics1 = products.get(mapProductsId.get(idx1)).getCharacteristics();
-            List<Double> newRow = new ArrayList<>();
+            ArrayList<Double> newRow = new ArrayList<>();
             for (int i =0 ; i < idx1; i++) {
                 Set<Characteristics> characteristics2 = products.get(mapProductsId.get(i)).getCharacteristics();
                 double similarity = calculateSimilarity(characteristics1,characteristics2);
@@ -124,7 +124,7 @@ public class CtrlProd {
             similarityTable.add(newRow);
         }
         else {
-            List<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
+            ArrayList<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
             newLine.add(0.0);
             similarityTable.add(newLine);
             int j = 0;
@@ -148,12 +148,12 @@ public class CtrlProd {
         return union.isEmpty() ?  0 : (double) intersection.size() / union.size();
     }
 
-    public List<List<Double>> generateSimilarityTable() {
+    public ArrayList<ArrayList<Double>> generateSimilarityTable() {
         int productsSize = products.size();
-        List<List<Double>> generatedSimilarities = new ArrayList<>();
+        ArrayList<ArrayList<Double>> generatedSimilarities = new ArrayList<>();
 
         for (int i = 0; i < productsSize; i++) {
-            List<Double> row = new ArrayList<>(productsSize);
+            ArrayList<Double> row = new ArrayList<>(productsSize);
             for (int j = 0; j < productsSize; j++) {
                 row.add(0.0);
             }
@@ -280,7 +280,7 @@ public class CtrlProd {
         return products.get(productName);
     }
 
-    public List<List<Double>> getSimilarityTable() {
+    public ArrayList<ArrayList<Double>> getSimilarityTable() {
         return similarityTable;
     }
 
@@ -308,7 +308,7 @@ public class CtrlProd {
         }
     }
 
-    public void setSimilarityTable(List<List<Double>> arraySimilarityTable) {
+    public void setSimilarityTable(ArrayList<ArrayList<Double>> arraySimilarityTable) {
         similarityTable = arraySimilarityTable;
     }
 
