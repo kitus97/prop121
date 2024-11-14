@@ -142,11 +142,11 @@ public class CtrlDomain {
     }
 
     public void addCatalogue(String supermarket, String catalogueName){
-        ctrlSupermarket.addCatalogue(supermarket, catalogueName);
+        ctrlSupermarket.addCatalog(supermarket, catalogueName);
     }
 
-    public boolean removeCatalogue(String supermarket, String catalogueName){
-        return ctrlSupermarket.removeCatalogue(supermarket, catalogueName);
+    public void removeCatalogue(String supermarket, String catalogueName){
+        ctrlSupermarket.deleteCatalog(supermarket, catalogueName);
     }
 
     public void generateSolution(String supermarket, String solName, String shelfName, String catalogueName, int algorithm, boolean generatedSimilarity){
@@ -155,7 +155,7 @@ public class CtrlDomain {
     }
 
     public List<String> listSolutions(String supermarket){
-        return ctrlSupermarket.listSolutions(supermarket);
+        return ctrlSupermarket.getSolutions(supermarket);
     }
 
     public void checkSolution(String supermarket, String solName){
@@ -164,6 +164,10 @@ public class CtrlDomain {
 
     public List<String> listSupermarkets(){
         return ctrlSupermarket.getSupermarkets();
+    }
+
+    public void deleteSolution(String supermarket, String solName){
+        ctrlSupermarket.deleteSolution(supermarket, solName);
     }
 
 
