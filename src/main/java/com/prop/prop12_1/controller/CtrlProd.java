@@ -255,8 +255,8 @@ public class CtrlProd {
         return characteristics.get(characteristicName);
     }
 
-    public List<Product> getProducts() {
-        return new ArrayList<>(products.values());
+    public Map<String, Product> getProducts() {
+        return products;
     }
 
     public List<String> listProducts() {
