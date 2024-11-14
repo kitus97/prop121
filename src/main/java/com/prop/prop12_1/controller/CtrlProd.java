@@ -139,7 +139,7 @@ public class CtrlProd {
 
     }
 
-    private double calculateSimilarity(Set<Characteristics> characteristics1, Set<Characteristics> characteristics2) {
+    public double calculateSimilarity(Set<Characteristics> characteristics1, Set<Characteristics> characteristics2) {
         List<Characteristics> intersection = new ArrayList<>(characteristics1);
         intersection.retainAll(characteristics2);
         List<Characteristics> union = new ArrayList<>(characteristics1);

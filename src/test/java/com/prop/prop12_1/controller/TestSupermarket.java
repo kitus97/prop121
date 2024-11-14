@@ -28,14 +28,14 @@ public class TestSupermarket {
         supermarket = new Supermarket("name");
     }
 
-
+/*
     public void addShelfCorrect(){
         Shelf shelf = new Shelf("name", 1);
         assertDoesNotThrow(() -> supermarket.addShelf(shelf));
         assertEquals(1, supermarket.getShelves().size());
         assertEquals(shelf, supermarket.getShelf("name"));
     }
-
+*/
 
 }
 

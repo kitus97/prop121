@@ -97,14 +97,14 @@ public class Supermarket {
     public void invalidateCatalogSolution(String catalog){
         List<Solution> solutions = associatedCatalogSolutions.get(catalog);
         for (Solution solution : solutions) {
-            solution.setValid(false);
+            //solution.setValid(false);
         }
     }
 
     public void invalidateShelfSolution(String shelf){
         List<Solution> solutions = associatedShelfSolutions.get(shelf);
         for (Solution solution : solutions) {
-            solution.setValid(false);
+            //solution.setValid(false);
         }
 
     }
@@ -112,7 +112,7 @@ public class Supermarket {
     public void invalidateProductSolution(String product){
         List<Solution> solutions = associatedProductSolutions.get(product);
         for (Solution solution : solutions) {
-            solution.setValid(false);
+            //solution.setValid(false);
         }
     }
 
