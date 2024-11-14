@@ -288,9 +288,7 @@ public class CtrlProd {
         Set<String> nameRestrictions =  new HashSet<>();
         Product p = findProduct(productName);
         if (p != null) {
-            return p.getRestrictions().stream()
-                    .map(Characteristics::getName)
-                    .collect(Collectors.toSet());
+            return p.getRestrictions();
         }
         else {
             throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
