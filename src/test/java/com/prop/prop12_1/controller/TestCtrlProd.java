@@ -29,7 +29,7 @@ public class TestCtrlProd {
     private Map<String, Product> products;
 
     @Mock
-    private ArrayList<ArrayList<Double>> similarityTable;
+    private List<List<Double>> similarityTable;
 
     @Mock
     private Map<String, Integer> mapProductsName;
@@ -71,6 +71,7 @@ public class TestCtrlProd {
     @Test
     public void addProductRepeatedName() {
         String productName = "Test";
+
         when(products.get(productName)).thenReturn(mock(Product.class));
         ctrlProd.setProducts(products);
 
@@ -80,7 +81,7 @@ public class TestCtrlProd {
     @Test
     public void checkProductSimilarityCorrect() {
         String productName = "Test";
-        Product product = new Product(productName);
+        Product product = new Product(0,productName);
         ArrayList<Double> similarityList = mock(ArrayList.class);
 
         when(mapProductsName.getOrDefault(productName,-1)).thenReturn(0);
@@ -89,7 +90,7 @@ public class TestCtrlProd {
         when(similarityList.get(0)).thenReturn(0.0);
         when(mapProductsId.get(0)).thenReturn(productName);
 
-        ctrlProd.setMapProductsName(mapProductsName);
+        ctrlProd.setMapProductsId(mapProductsId);
         ctrlProd.setMapProductsId(mapProductsId);
         ctrlProd.setSimilarityTable(similarityTable);
 
@@ -117,11 +118,11 @@ public class TestCtrlProd {
         Characteristics characteristic1 = new Characteristics();
         Characteristics characteristic2 = new Characteristics();
 
-        Set<Characteristics> characteristics1 = new HashSet<>();
+        List<Characteristics> characteristics1 = new ArrayList<>();
         characteristics1.add(characteristic1);
         characteristics1.add(characteristic2);
 
-        Set<Characteristics> characteristics2 = new HashSet<>();
+        List<Characteristics> characteristics2 = new ArrayList<>();
         characteristics2.add(characteristic1);
 
         when(product1.getCharacteristics()).thenReturn(characteristics1);
@@ -132,7 +133,7 @@ public class TestCtrlProd {
         products.put("Test1", product1);
         products.put("Test2", product2);
         ctrlProd.setProducts(products);
-        ctrlProd.setMapProductsName(mapProductsName);
+        ctrlProd.setMapProductsId(mapProductsId);
 
         ArrayList<ArrayList<Double>> expectedResult = new ArrayList<>();
         ArrayList<Double> similarity1 = new ArrayList<>();
