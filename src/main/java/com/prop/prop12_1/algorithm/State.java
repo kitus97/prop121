@@ -8,12 +8,12 @@ import java.util.Set;
 
 public class State {
 
-    static private ArrayList<List<String>> shelf;
-    static private ArrayList<ArrayList<Double>> similarityTable;
-    private ArrayList<Pair<Integer, List<String>>> solution;
-    private ArrayList<Pair<Integer, List<String>>> products;
+    static private List<Set<String>> shelf;
+    static private List<List<Double>> similarityTable;
+    private List<Pair<Integer, Set<String>>> solution;
+    private List<Pair<Integer, Set<String>>> products;
 
-    public State(ArrayList<Pair<Integer, List<String>>> solution, ArrayList<Pair<Integer, List<String>>> products) {
+    public State(List<Pair<Integer, Set<String>>> solution, List<Pair<Integer, Set<String>>> products) {
         this.solution = new ArrayList<>(solution);
         this.products = new ArrayList<>(products);
     }
@@ -92,15 +92,15 @@ public class State {
         solution.set(j, product1);
     }
 
-    public ArrayList<Pair<Integer, List<String>>> getSolution() {
+    public List<Pair<Integer, Set<String>>> getSolution() {
         return solution;
     }
 
-    public static void setShelf(ArrayList<List<String>> shelf) {
+    public static void setShelf(List<Set<String>> shelf) {
         State.shelf = shelf;
     }
 
-    public static void setSimilarityTable(ArrayList<ArrayList<Double>> similarityTable) {
+    public static void setSimilarityTable(List<List<Double>> similarityTable) {
         State.similarityTable = similarityTable;
     }
     public static double getSimilarity(int product1, int product2) {

@@ -2,10 +2,7 @@ package com.prop.prop12_1.algorithm;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class Test {
 
@@ -14,7 +11,7 @@ public class Test {
         Random rand = new Random();
 
         // Crear la estantería con 100 huecos, de los cuales 15 tienen restricciones
-        ArrayList<Set<String>> estanteria = new ArrayList<>();
+        List<Set<String>> estanteria = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             Set<String> restricciones = new HashSet<>();
             if (i < 30) { // Solo los primeros 15 huecos tienen restricciones
@@ -25,7 +22,7 @@ public class Test {
         }
 
         // Crear la lista de 100 productos, cada uno con un ID y características
-        ArrayList<Pair<Integer, Set<String>>> productos = new ArrayList<>();
+        List<Pair<Integer, Set<String>>> productos = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             Set<String> caracteristicas = new HashSet<>();
             if (i < 30) { // Solo los primeros 15 huecos tienen restricciones
@@ -36,7 +33,7 @@ public class Test {
         }
 
         // Crear la matriz de similitud (100x100) con valores aleatorios entre 0 y 1, redondeados a dos decimales
-        ArrayList<ArrayList<Double>> matrizSimilitud = new ArrayList<>();
+        List<List<Double>> matrizSimilitud = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             ArrayList<Double> fila = new ArrayList<>();
             for (int j = 0; j < 30; j++) {
@@ -56,8 +53,8 @@ public class Test {
 
         HillClimbing algoritmo = new HillClimbing();
 
-        ArrayList<Pair<Integer, Set<String>>> solucion = algoritmo.generateSolution(estanteria, productos, matrizSimilitud);
+        Pair<Double, List<Pair<Integer, Set<String>>>> solucion = algoritmo.generateSolution(estanteria, productos, matrizSimilitud);
 
-        System.out.println("Productos (primeros 5 productos): " + solucion.subList(0, 5));
+        System.out.println("Productos (primeros 5 productos): " + solucion.getRight().subList(0, 5));
     }
 }

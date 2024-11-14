@@ -7,19 +7,19 @@ import java.util.List;
 import java.util.Set;
 
 public class BackTracking {
-    private ArrayList<List<String>> shelf;
-    private ArrayList<Pair<Integer, List<String>>> products;
+    private List<Set<String>> shelf;
+    private List<Pair<Integer, Set<String>>> products;
     private double maxScore;
-    private ArrayList<Pair<Integer, List<String>>> bestDistribution;
+    private List<Pair<Integer, Set<String>>> bestDistribution;
     private long startTime;
     private long timeLimit;
 
     public BackTracking() {}
 
-    public ArrayList<Pair<Integer, List<String>>> generateSolution(
-            ArrayList<List<String>> shelf,
-            ArrayList<Pair<Integer, List<String>>> products,
-            ArrayList<ArrayList<Double>> similarityTable) {
+    public Pair<Double, List<Pair<Integer, Set<String>>>> generateSolution(
+            List<Set<String>> shelf,
+            List<Pair<Integer, Set<String>>> products,
+            List<List<Double>> similarityTable) {
         this.shelf = shelf;
         this.products = products;
         this.maxScore = 0.0;
@@ -29,7 +29,7 @@ public class BackTracking {
         State.setShelf(shelf);
         State.setSimilarityTable(similarityTable);
         this.startTime = System.currentTimeMillis();
-        ArrayList<Pair<Integer, List<String>>> initialSolution = new ArrayList<>();
+        List<Pair<Integer, Set<String>>> initialSolution = new ArrayList<>();
         for (int i = 0; i < shelf.size(); i++) {
             initialSolution.add(null);
         }
@@ -45,10 +45,10 @@ public class BackTracking {
         }
 
         System.out.println("Mejor puntuación encontrada: " + maxScore);
-        return bestDistribution;
+        return Pair.of(maxScore, bestDistribution);
     }
 
-    private void backTracking(int index, ArrayList<Pair<Integer, List<String>>> currentSolution, ArrayList<Pair<Integer, List<String>>> remainingProducts) {
+    private void backTracking(int index, List<Pair<Integer, Set<String>>> currentSolution, List<Pair<Integer, Set<String>>> remainingProducts) {
         if (System.currentTimeMillis() - startTime > timeLimit) {
             return;
         }
@@ -81,7 +81,7 @@ public class BackTracking {
         }
     }
 
-    private double computeSimilarity(Pair<Integer, List<String>> product, ArrayList<Pair<Integer, List<String>>> currentSolution, int index) {
+    private double computeSimilarity(Pair<Integer, Set<String>> product, List<Pair<Integer, Set<String>>> currentSolution, int index) {
         if (index > 0 && currentSolution.get(index - 1) != null) {
             int previousProduct = currentSolution.get(index - 1).getLeft();
             int currentProduct = product.getLeft();

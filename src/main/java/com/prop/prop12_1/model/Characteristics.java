@@ -51,4 +51,9 @@ public class Characteristics {
     public void removeAssociatedProduct(Product product) {
         associatedProducts.remove(product);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

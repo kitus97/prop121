@@ -1,24 +1,18 @@
 package com.prop.prop12_1.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Product {
     private Integer id;
     private String name;
-    private Set<Object> characteristics;
+    private List<Characteristics> characteristics;
+    private List<Characteristics> restrictions;
 
-    public Product(String name) {
-        this.name = name;
-        characteristics = new HashSet<Object>();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
+    public Product(Integer id, String name) {
         this.id = id;
+        this.name = name;
+        characteristics = new ArrayList<>();
+        restrictions = new ArrayList<>();
     }
 
     public String getName() {
@@ -29,20 +23,52 @@ public class Product {
         this.name = name;
     }
 
-    public Set<Object> getCharacteristics() {
+    public List<Characteristics> getCharacteristics() {
         return characteristics;
     }
 
-    public void setCharacteristics(Set<Object> characteristics) {
+    public void setCharacteristics(List<Characteristics> characteristics) {
         this.characteristics = characteristics;
     }
 
-    public void addCharacteristic(Object characteristic) {
+    public void addCharacteristic(Characteristics characteristic) {
         characteristics.add(characteristic);
     }
 
-    public void removeCharacteristic(Object characteristic) {
+    public void removeCharacteristic(Characteristics characteristic) {
         characteristics.remove(characteristic);
+    }
+
+    public List<Characteristics> getRestrictions() {
+        return restrictions;
+    }
+
+    public void setRestrictions(List<Characteristics> restrictions) {
+        this.restrictions = restrictions;
+    }
+
+    public void addRestriction(Characteristics characteristic) {
+        restrictions.add(characteristic);
+    }
+
+    public void removeRestriction(Characteristics characteristic) {
+        restrictions.remove(characteristic);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "name='" + name + '\'' +
+                ", characterisics=" + characterisics +
+                '}';
     }
 }
 
