@@ -40,8 +40,12 @@ public class Product {
         characteristics.remove(characteristic);
     }
 
-    public Set<Characteristics> getRestrictions() {
-        return restrictions;
+    public Set<String> getRestrictions() {
+        Set ret = new HashSet<String>();
+        for(Characteristics c : restrictions) {
+            ret.add(c.getName());
+        }
+        return ret;
     }
 
     public void setRestrictions(Set<Characteristics> restrictions) {
