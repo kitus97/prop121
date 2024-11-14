@@ -62,10 +62,10 @@ public class BackTracking {
             }
             return;
         }
-        Set<String> currentRestrictions = shelf.get(index);
+        List<String> currentRestrictions = shelf.get(index);
         boolean trobat = false;
         for (int i = 0; i < remainingProducts.size(); i++) {
-            Pair<Integer, Set<String>> product = remainingProducts.get(i);
+            Pair<Integer, List<String>> product = remainingProducts.get(i);
 
             if (currentRestrictions.equals(product.getRight())) {
                 currentSolution.set(index, product);

@@ -19,8 +19,8 @@ public class State {
     }
 
     private boolean swap(int idx1, int idx2) {
-        Pair<Integer, Set<String>> product1 = solution.get(idx1);
-        Pair<Integer, Set<String>> product2 = solution.get(idx2);
+        Pair<Integer, List<String>> product1 = solution.get(idx1);
+        Pair<Integer, List<String>> product2 = solution.get(idx2);
         if (product1 == null && product2 == null) {
             return false;
         } else if (product1 == null) {
@@ -56,7 +56,7 @@ public class State {
             }
         }
 
-        for (Pair<Integer, Set<String>> product : products) {
+        for (Pair<Integer, List<String>> product : products) {
             for (int j = 0; j < solution.size(); j++) {
                 if (product != null && product.getRight().equals(shelf.get(j))) {
                     State neighbour = new State(solution, products);
@@ -86,7 +86,7 @@ public class State {
         return Math.round(totalSimilarity * 1e5) / 1e5;
     }
 
-    public void changeProducts(Pair<Integer, Set<String>> product1, Pair<Integer, Set<String>> product2, Integer j) {
+    public void changeProducts(Pair<Integer, List<String>> product1, Pair<Integer, List<String>> product2, Integer j) {
         products.remove(product1);
         products.add(product2);
         solution.set(j, product1);

@@ -56,9 +56,9 @@ public class HillClimbing implements Algorithm{
      private State generateInitialState() {
         List<Pair<Integer, Set<String>>> initialSolution = new ArrayList<>();
 
-        for (Set<String> restriction : shelf) {
+        for (List<String> restriction : shelf) {
             boolean assigned = false;
-            for (Pair<Integer, Set<String>> product : products) {
+            for (Pair<Integer, List<String>> product : products) {
                 if (product != null && product.getRight().equals(restriction)) {
                     initialSolution.add(product);
                     products.remove(product);
