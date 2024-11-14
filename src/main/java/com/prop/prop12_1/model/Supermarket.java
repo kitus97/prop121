@@ -207,6 +207,21 @@ public class Supermarket {
         return solutions.values().stream().map(Solution::toString).collect(Collectors.toList());
     }
 
+    public void changeSolutionProducts(int indx1, int indx2, String solution){
+        if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        else solutions.get(solution).changeProducts(indx1, indx2);
+    }
+
+    public void deleteSolutionProduct(String solution, int index){
+        if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        else solutions.get(solution).deleteProduct(index);
+    }
+
+    public void addSolutionProduct(String solution, String product, int index){
+        if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        else solutions.get(solution).addProduct(product, index);
+    }
+
     @Override
     public String toString() {
         return "Supermarket{" +
