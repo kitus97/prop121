@@ -1,19 +1,18 @@
 package com.prop.prop12_1.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Product {
     private Integer id;
     private String name;
-    private Set<Characteristics> characteristics;
-    private Set<Characteristics> restrictions;
+    private List<Characteristics> characteristics;
+    private List<Characteristics> restrictions;
 
     public Product(Integer id, String name) {
         this.id = id;
         this.name = name;
-        characteristics = new HashSet<Characteristics>();
-        restrictions = new HashSet<Characteristics>();
+        characteristics = new ArrayList<>();
+        restrictions = new ArrayList<>();
     }
 
     public String getName() {
@@ -24,11 +23,11 @@ public class Product {
         this.name = name;
     }
 
-    public Set<Characteristics> getCharacteristics() {
+    public List<Characteristics> getCharacteristics() {
         return characteristics;
     }
 
-    public void setCharacteristics(Set<Characteristics> characteristics) {
+    public void setCharacteristics(List<Characteristics> characteristics) {
         this.characteristics = characteristics;
     }
 
@@ -40,15 +39,11 @@ public class Product {
         characteristics.remove(characteristic);
     }
 
-    public Set<String> getRestrictions() {
-        Set ret = new HashSet<String>();
-        for(Characteristics c : restrictions) {
-            ret.add(c.getName());
-        }
-        return ret;
+    public List<Characteristics> getRestrictions() {
+        return restrictions;
     }
 
-    public void setRestrictions(Set<Characteristics> restrictions) {
+    public void setRestrictions(List<Characteristics> restrictions) {
         this.restrictions = restrictions;
     }
 
@@ -66,6 +61,14 @@ public class Product {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "name='" + name + '\'' +
+                ", characterisics=" + characterisics +
+                '}';
     }
 }
 
