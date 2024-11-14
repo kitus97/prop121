@@ -2,26 +2,30 @@ package com.prop.prop12_1.model;
 
 import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class Solution {
 
     private String solutionName;
-    private Integer idCatalog;
-    private Integer idShelf;
+    private String idCatalog;
+    private String idShelf;
+    private String heuristic;
+    private String algorithm;
     private Double mark;
-    private Boolean valid;
-    private ArrayList<Pair<Integer,String>> distribution = new ArrayList<>();
+    private List<Pair<Integer, Set<String>>> distribution;
 
-    public Solution(String solutionName, int idCatalog, int idShelf, double mark, boolean valid, ArrayList<Pair<Integer,String>> distribution) {
+    public Solution(String solutionName, String idCatalog, String idShelf, String heuristic, String algorthm, double mark, List<Pair<Integer,Set<String>>> distribution) {
         this.solutionName = solutionName;
         this.idCatalog = idCatalog;
         this.idShelf = idShelf;
+        this.heuristic = heuristic;
+        this.algorithm = algorthm;
         this.mark = mark;
-        this.valid = valid;
         this.distribution = distribution;
     }
 
-    public ArrayList<Pair<Integer,String>> getDistribution() {
+    public List<Pair<Integer,Set<String>>> getDistribution() {
         return distribution;
     }
 
@@ -29,11 +33,11 @@ public class Solution {
         return mark;
     }
 
-    public int getIdShelf() {
+    public String getIdShelf() {
         return idShelf;
     }
 
-    public int getIdCatalog() {
+    public String getIdCatalog() {
         return idCatalog;
     }
 
@@ -41,31 +45,17 @@ public class Solution {
         return solutionName;
     }
 
-    public boolean isValid() {
-        return valid;
-    }
 
     public void setSolutionName(String solutionName) {
         this.solutionName = solutionName;
-    }
-
-    public void setIdCatalog(int idCatalog) {
-        this.idCatalog = idCatalog;
-    }
-
-    public void setIdShelf(int idShelf) {
-        this.idShelf = idShelf;
     }
 
     public void setMark(double mark) {
         this.mark = mark;
     }
 
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
 
-    public void setDistribution(ArrayList<Pair<Integer,String>> distribution) {
+    public void setDistribution(List<Pair<Integer,Set<String>>> distribution) {
         this.distribution = distribution;
     }
     /*
