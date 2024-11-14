@@ -14,7 +14,7 @@ public class HillClimbing implements Algorithm{
     public HillClimbing() {}
 
     @Override
-    public List<Pair<Integer, Set<String>>> generateSolution(List<Set<String>> shelf, List<Pair<Integer, Set<String>>> products, List<List<Double>> similarityTable) {
+    public Pair <Double, List<Pair<Integer, Set<String>>>> generateSolution(List<Set<String>> shelf, List<Pair<Integer, Set<String>>> products, List<List<Double>> similarityTable) {
         this.shelf = shelf;
         this.products = products;
 
@@ -26,7 +26,7 @@ public class HillClimbing implements Algorithm{
         State finalState = hillClimbingAlgorithm(initialState);
         System.out.println("Solucion final: " + finalState.calculateHeuristic());
 
-        return finalState.getSolution();
+        return Pair.of(finalState.calculateHeuristic(), finalState.getSolution());
     }
 
     private State hillClimbingAlgorithm(State initialState) {

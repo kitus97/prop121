@@ -10,6 +10,6 @@ import java.util.Set;
 
 public interface Algorithm {
 
-    List<Pair<Integer, Set<String>>> generateSolution(List<Set<String>> shelf, List<Pair<Integer, Set<String>>> products,
+    Pair<Double, List<Pair<Integer, Set<String>>>> generateSolution(List<Set<String>> shelf, List<Pair<Integer, Set<String>>> products,
                                                       List<List<Double>> similarityTable);
 }

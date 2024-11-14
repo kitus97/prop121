@@ -16,7 +16,7 @@ public class BackTracking {
 
     public BackTracking() {}
 
-    public List<Pair<Integer, Set<String>>> generateSolution(
+    public Pair<Double, List<Pair<Integer, Set<String>>>> generateSolution(
             List<Set<String>> shelf,
             List<Pair<Integer, Set<String>>> products,
             List<List<Double>> similarityTable) {
@@ -45,7 +45,7 @@ public class BackTracking {
         }
 
         System.out.println("Mejor puntuación encontrada: " + maxScore);
-        return bestDistribution;
+        return Pair.of(maxScore, bestDistribution);
     }
 
     private void backTracking(int index, List<Pair<Integer, Set<String>>> currentSolution, List<Pair<Integer, Set<String>>> remainingProducts) {

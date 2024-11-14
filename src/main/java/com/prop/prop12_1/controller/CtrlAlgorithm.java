@@ -15,7 +15,7 @@ public class CtrlAlgorithm {
     public CtrlAlgorithm(){}
 
 
-    public List<Pair<Integer, Set<String>>> getSolution(List<Set<String>> shelf, List<Pair<Integer, Set<String>>> products, int algorithm, boolean generatedSimilarity){
+    public Pair<Double, List<Pair<Integer, Set<String>>>> getSolution(List<Set<String>> shelf, List<Pair<Integer, Set<String>>> products, int algorithm, boolean generatedSimilarity){
         List<List<Double>> similarityTable;
 
         if(generatedSimilarity){
@@ -27,12 +27,12 @@ public class CtrlAlgorithm {
         }
 
         if(algorithm == 0){
-            List<Pair<Integer, Set<String>>> solution = new HillClimbing().generateSolution(shelf, products, similarityTable);
+            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new HillClimbing().generateSolution(shelf, products, similarityTable);
             return solution;
         }
 
         else if(algorithm == 1){
-            List<Pair<Integer, Set<String>>> solution = new BackTracking().generateSolution(shelf, products, similarityTable);
+            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new BackTracking().generateSolution(shelf, products, similarityTable);
             return solution;
 
         }

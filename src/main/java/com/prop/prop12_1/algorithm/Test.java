@@ -53,8 +53,8 @@ public class Test {
 
         HillClimbing algoritmo = new HillClimbing();
 
-        List<Pair<Integer, Set<String>>> solucion = algoritmo.generateSolution(estanteria, productos, matrizSimilitud);
+        Pair<Double, List<Pair<Integer, Set<String>>>> solucion = algoritmo.generateSolution(estanteria, productos, matrizSimilitud);
 
-        System.out.println("Productos (primeros 5 productos): " + solucion.subList(0, 5));
+        System.out.println("Productos (primeros 5 productos): " + solucion.getRight().subList(0, 5));
     }
 }
