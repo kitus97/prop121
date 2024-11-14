@@ -135,8 +135,7 @@ public class CtrlSupermarket {
     }
 
 
-
-
-
-
+    public List<String> listProdsCatalogue(String supermarket, String catalogueName) {
+        return supermarkets.get(supermarket).listProdsCatalogue(catalogueName);
+    }
 }

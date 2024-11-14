@@ -216,4 +216,8 @@ public class Supermarket {
                 ", solutions=" + solutions +
                 '}';
     }
+
+    public List<String> listProdsCatalogue(String catalogueName) {
+        return catalogs.get(catalogueName).getProductNames();
+    }
 }
