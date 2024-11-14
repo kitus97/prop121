@@ -1,6 +1,9 @@
 package com.prop.prop12_1.model;
 
 import com.prop.prop12_1.controller.CtrlProd;
+import com.prop.prop12_1.exceptions.InvalidProductRestrictionException;
+import com.prop.prop12_1.exceptions.NotInterchangeableException;
+import com.prop.prop12_1.exceptions.ProductNotFoundException;
 import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,11 +100,35 @@ public class Solution {
         return this.solutionName == null;
     }
 
-    public void changeDistribution(int idx1, int idx2) {
+    public void changeProducts(int idx1, int idx2) {
+        if(idx1 >= distribution.size() || idx2 >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
+
         Pair<Product, Set<String>> s1 = distribution.get(idx1);
         Pair<Product, Set<String>> s2 = distribution.get(idx2);
-        distribution.set(idx1, s2);
-        distribution.set(idx2, s1);
+
+        if(s1.getRight().equals(s2.getRight())) {
+            distribution.set(idx1, s2);
+            distribution.set(idx2, s1);
+        }
+        else throw new NotInterchangeableException("The products selected can't be swapped");
+
+    }
+
+    public void deleteProduct(int index){
+        if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
+        Pair<Product, Set<String>> pair = distribution.get(index);
+        distribution.set(index, Pair.of(null, pair.getRight()));
+    }
+
+    public void addProduct(String product, int index){
+        if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
+        Product p = ctrlProd.findProduct(product);
+        if(p == null) throw new ProductNotFoundException("Product not found");
+        Pair<Product, Set<String>> pair = distribution.get(index);
+        if(p.getRestrictions().equals(pair.getRight())) {
+            distribution.set(index, Pair.of(p, pair.getRight()));
+        }
+        else throw new InvalidProductRestrictionException("The product does not meet the required restrictions of the cell");
     }
 
     public void updateMark(){
