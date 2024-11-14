@@ -158,8 +158,8 @@ public class CtrlDomain {
         return ctrlSupermarket.getSolutions(supermarket);
     }
 
-    public void checkSolution(String supermarket, String solName){
-        ctrlSupermarket.getSolution(supermarket, solName);
+    public String checkSolution(String supermarket, String solName){
+        return ctrlSupermarket.getSolution(supermarket, solName);
     }
 
     public List<String> listSupermarkets(){
@@ -168,6 +168,18 @@ public class CtrlDomain {
 
     public void deleteSolution(String supermarket, String solName){
         ctrlSupermarket.deleteSolution(supermarket, solName);
+    }
+
+    public void deleteSolutionProduct(String supermarket, String solution, int index){
+        ctrlSupermarket.deleteSolutionProduct(supermarket, solution, index);
+    }
+
+    public void addSolutionProduct(String supermarket, String solution, String product, int index){
+        ctrlSupermarket.addSolutionProduct(supermarket, solution, product, index);
+    }
+
+    public void changeSolutionProducts(String supermarket, int indx1, int indx2, String solution){
+        ctrlSupermarket.changeSolutionProducts(supermarket, indx1, indx2, solution);
     }
 
 
