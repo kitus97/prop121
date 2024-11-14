@@ -24,6 +24,10 @@ public class Catalogue {
         this.name = name;
     }
 
+    public List<String> getProductNames() {
+        return new ArrayList<>(products.keySet());
+    }
+
     public List<Pair<Integer, Set<String>>> getProductsArray() {
         List<Pair<Integer, Set<String>>> ret= new ArrayList<Pair<Integer, Set<String>>>();
         for(Product p : products.values()) {

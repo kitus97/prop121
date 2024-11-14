@@ -107,6 +107,12 @@ public class CtrlSupermarket {
         supermarkets.get(supermarket).removeProductFromCatalogue(product, catalog);
     }
 
+    public void invalidateProductSolution(String product){
+        for(Supermarket m : supermarkets.values()){
+            m.invalidateProductSolution(product);
+        }
+    }
+
 
 
 

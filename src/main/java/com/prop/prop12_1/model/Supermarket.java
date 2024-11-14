@@ -19,13 +19,18 @@ public class Supermarket {
     private Map<String, Catalogue> catalogs; //<catalog>
     private String name;
     private Map<String, Solution> solutions; //<solution>
-
+    private Map<String, List<Solution>> associatedCatalogSolutions;
+    private Map<String, List<Solution>> associatedProductSolutions;
+    private Map<String, List<Solution>> associatedShelfSolutions;
 
     public Supermarket(String n){
         name = n;
         shelves = new HashMap<>();
         catalogs = new HashMap<>();
         solutions = new HashMap<>();
+        associatedCatalogSolutions = new HashMap<>();
+        associatedProductSolutions = new HashMap<>();
+        associatedShelfSolutions = new HashMap<>();
     }
 
     public String getName() {
@@ -78,9 +83,39 @@ public class Supermarket {
             Solution s = new Solution(name, catalog, shelf, heu, alg, res.getLeft(), res.getRight());
 
             solutions.put(name, s);
+            associatedShelfSolutions.get(shelf).add(s);
+            associatedCatalogSolutions.get(catalog).add(s);
+            List<String> associatedProducts = cat.getProductNames();
+            for(int i = 0; i < associatedProducts.size(); i++){
+                associatedProductSolutions.get(associatedProducts.get(i)).add(s);
+
+            }
         }
 
     }
+
+    public void invalidateCatalogSolution(String catalog){
+        List<Solution> solutions = associatedCatalogSolutions.get(catalog);
+        for (Solution solution : solutions) {
+            solution.setValid(false);
+        }
+    }
+
+    public void invalidateShelfSolution(String shelf){
+        List<Solution> solutions = associatedShelfSolutions.get(shelf);
+        for (Solution solution : solutions) {
+            solution.setValid(false);
+        }
+
+    }
+
+    public void invalidateProductSolution(String product){
+        List<Solution> solutions = associatedProductSolutions.get(product);
+        for (Solution solution : solutions) {
+            solution.setValid(false);
+        }
+    }
+
 
 
     public void addShelf(String shelf, int size){
@@ -96,6 +131,7 @@ public class Supermarket {
     /*Devuelve un boolean indicando si se ha eliminado o no la estanteria con nombre s*/
     public void deleteShelf(String shelf){
         if (shelves.remove(shelf) == null) throw new NoSuchElementException("No such shelf.");
+        else associatedShelfSolutions.remove(shelf);
     }
 
     public void addCatalogue(String catalog){
@@ -106,13 +142,20 @@ public class Supermarket {
     public void addRestriction(String shelf, String restriction, int index){
         Shelf sh = shelves.get(shelf);
         if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
-        else sh.setRestriction(restriction, index);
+        else{
+            sh.setRestriction(restriction, index);
+            invalidateShelfSolution(shelf);
+        }
     }
 
     public void deleteRestrictions(String shelf, int index){
         Shelf sh = shelves.get(shelf);
         if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
-        else sh.deleteRestrictions(index);
+        else{
+            sh.deleteRestrictions(index);
+            invalidateShelfSolution(shelf);
+
+        }
 
     }
 
@@ -125,13 +168,24 @@ public class Supermarket {
     public void removeProductFromCatalogue(String product, String catalog){
         Catalogue cat = catalogs.get(catalog);
         if(cat == null) throw new NoSuchElementException("The catalog " + catalog + " does not exist.");
-        else cat.removeProduct(product);
+        else{
+            cat.removeProduct(product);
+            invalidateCatalogSolution(catalog);
+        }
     }
 
     public void resizeShelf(String shelf, int size){
         Shelf sh = shelves.get(shelf);
         if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
-        else sh.deleteRestrictions(size);
+        else{
+            sh.resizeShelf(size);
+            invalidateShelfSolution(shelf);
+        }
+    }
+
+    public void deleteCatalogue(String catalog){
+        if (catalogs.remove(catalog) == null) throw new NoSuchElementException("No such catalog.");
+        else associatedCatalogSolutions.remove(catalog);
     }
 
     @Override
