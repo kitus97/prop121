@@ -9,15 +9,17 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class CtrlDomain {
-   // private CtrlSupermarket ctrlSupermarket;
+    private CtrlSupermarket ctrlSupermarket;
     private CtrlProd ctrlProd;
+    private CtrlAlgorithm ctrlAlg;
 
     public CtrlDomain() {
-       // ctrlSupermarket = new CtrlSupermarket();
+        ctrlSupermarket = new CtrlSupermarket();
         ctrlProd = new CtrlProd();
         ctrlAlg = new CtrlAlgorithm();
     }
@@ -47,15 +49,14 @@ public class CtrlDomain {
     }
 
     //revisar metode
-    public void addRestriction(String supermarket, String restriction, String shelf, int index){
+    public void addRestrictionToShelf(String supermarket, String restriction, String shelf, int index){
         if (ctrlProd.findCharacteristic(restriction) != null){
             ctrlSupermarket.addRestriction(supermarket, restriction, shelf, index);
         }
     }
 
-    public void removeRestriction(String supermarket, String shelf, int index){
+    public void removeRestrictionsFromShelf(String supermarket, String shelf, int index){
         ctrlSupermarket.removeRestriction(supermarket, shelf, index);
-        // mirar tema validez
     }
 
     public void resizeShelf(String supermarket, String shelf, int size){
@@ -92,12 +93,22 @@ public class CtrlDomain {
 
     public void addCharacteristicProduct(String characteristicName, String productName) {
         ctrlProd.addCharacteristicProduct(characteristicName, productName);
-        //soluciones no validas
+        ctrlSupermarket.invalidateProductSolution(productName);
     }
 
     public void removeCharacteristicProduct(String characteristicName, String productName) {
         ctrlProd.removeCharacteristicProduct(characteristicName, productName);
-        //soluciones no validas
+        ctrlSupermarket.invalidateProductSolution(productName);
+    }
+
+    public void addRestrictionProduct(String restrictionName, String productName) {
+        ctrlProd.addRestrictionProduct(restrictionName, productName);
+        ctrlSupermarket.invalidateProductSolution(productName);
+    }
+
+    public void removeRestrictionProduct(String restrictionName, String productName) {
+        ctrlProd.removeRestrictionProduct(restrictionName, productName);
+        ctrlSupermarket.invalidateProductSolution(productName);
     }
 
     public List<String> listCharacteristics() {
@@ -111,23 +122,29 @@ public class CtrlDomain {
     public List<String> listCharacteristicsProduct(String productName) {
         return ctrlProd.getCharacteristicsProducts(productName);
     }
-    //nuevo
+
+    //enlloc de set list millor?
+    public Set<String> listRestrictionsProduct(String productName) {
+        return ctrlProd.getRestrictionsProducts(productName);
+    }
+
     public void addProductToCatalogue(String supermarket, String catalogueName, String productName){
         ctrlSupermarket.addProductToCatalogue(supermarket, productName, catalogueName);
     }
-    //nuevo
+
     public void removeProductCatalogue(String supermarket, String catalogueName, String productName){
         ctrlSupermarket.removeProductFromCatalogue(supermarket, productName, catalogueName);
+
     }
-    //nuevo
+
     public List<String> listProdsCatalogue(String supermarket, String catalogueName){
         return ctrlSupermarket.listProdsCatalogue(supermarket, catalogueName);
     }
-    //nuevo
+
     public void addCatalogue(String supermarket, String catalogueName){
         ctrlSupermarket.addCatalogue(supermarket, catalogueName);
     }
-    //nuevo
+
     public boolean removeCatalogue(String supermarket, String catalogueName){
         return ctrlSupermarket.removeCatalogue(supermarket, catalogueName);
     }
