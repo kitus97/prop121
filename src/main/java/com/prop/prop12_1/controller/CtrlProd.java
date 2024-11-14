@@ -1,6 +1,10 @@
 package com.prop.prop12_1.controller;
 
 import com.prop.prop12_1.exceptions.CharacteristicNotFoundException;
+import com.prop.prop12_1.exceptions.CharacteristicAlreadyAddedToProductException;
+import com.prop.prop12_1.exceptions.RestrictionNotFoundInProductException;
+import com.prop.prop12_1.exceptions.RestrictionAlreadyAddedToProductException;
+import com.prop.prop12_1.exceptions.CharacteristicNotFoundInProductException;
 import com.prop.prop12_1.exceptions.CharacteristicAlreadyAddedException;
 import com.prop.prop12_1.exceptions.ProductAlreadyAddedException;
 import com.prop.prop12_1.exceptions.ProductNotFoundException;
@@ -112,10 +116,10 @@ public class CtrlProd {
 
         if (similarities == null) {
             int idx1 = products.size()-1;
-            Set<Characteristics> characteristics1 = products.get(mapProductsId.get(idx1)).getCharacteristics();
+            List<Characteristics> characteristics1 = products.get(mapProductsId.get(idx1)).getCharacteristics();
             List<Double> newRow = new ArrayList<>();
             for (int i =0 ; i < idx1; i++) {
-                Set<Characteristics> characteristics2 = products.get(mapProductsId.get(i)).getCharacteristics();
+                List<Characteristics> characteristics2 = products.get(mapProductsId.get(i)).getCharacteristics();
                 double similarity = calculateSimilarity(characteristics1,characteristics2);
                 newRow.add(similarity);
                 similarityTable.get(i).add(similarity);
@@ -139,10 +143,10 @@ public class CtrlProd {
 
     }
 
-    private double calculateSimilarity(Set<Characteristics> characteristics1, Set<Characteristics> characteristics2) {
-        Set<Object> intersection = new HashSet<>(characteristics1);
+    private double calculateSimilarity(List<Characteristics> characteristics1, List<Characteristics> characteristics2) {
+        List<Object> intersection = new ArrayList<>(characteristics1);
         intersection.retainAll(characteristics2);
-        Set<Object> union = new HashSet<>(characteristics1);
+        List<Object> union = new ArrayList<>(characteristics1);
         union.addAll(characteristics2);
 
         return union.isEmpty() ?  0 : (double) intersection.size() / union.size();
@@ -164,10 +168,10 @@ public class CtrlProd {
 
         for (int i = 0; i < productsSize; i++) {
             Product product1 = productsList.get(i);
-            Set<Characteristics> characteristics1 = product1.getCharacteristics();
+            List<Characteristics> characteristics1 = product1.getCharacteristics();
             for (int j = i; j < productsSize; j++) {
                 Product product2 = productsList.get(j);
-                Set<Characteristics> characteristics2 = product2.getCharacteristics();
+                List<Characteristics> characteristics2 = product2.getCharacteristics();
 
                 double similarity = calculateSimilarity(characteristics1,characteristics2);
                 generatedSimilarities.get(product1.getId()).set(product2.getId(), similarity);
@@ -183,8 +187,14 @@ public class CtrlProd {
         if ((c != null)) {
             Product p = findProduct(productName);
             if (p != null) {
-                p.addRestriction(c);
-                c.addAssociatedProduct(p);
+                if(p.getRestrictions().contains(c)) {
+                    throw new RestrictionAlreadyAddedToProductException("Restriction with name '" + restrictionName + "' was already added to product");
+                }
+                else {
+                    p.addRestriction(c);
+                    c.addAssociatedProduct(p);
+                }
+
             }
             else {
                 throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -200,8 +210,14 @@ public class CtrlProd {
         if (c != null) {
             Product p = findProduct(productName);
             if (p != null) {
-                p.removeCharacteristic(c);
-                c.removeAssociatedProduct(p);
+                if (p.getRestrictions().contains(c)) {
+                    p.removeCharacteristic(c);
+                    c.removeAssociatedProduct(p);
+                }
+                else {
+                    throw new RestrictionNotFoundInProductException("Restriction with name '" + restrictionName + "' was not found in product");
+                }
+
             }
             else {
                 throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -217,8 +233,14 @@ public class CtrlProd {
         if ((c != null)) {
             Product p = findProduct(productName);
             if (p != null) {
-                p.addCharacteristic(c);
-                c.addAssociatedProduct(p);
+                if (p.getCharacteristics().contains(c)) {
+                    throw new CharacteristicAlreadyAddedToProductException("Characteristic with name '" + characteristicName + "' was already added");
+                }
+                else {
+                    p.addCharacteristic(c);
+                    c.addAssociatedProduct(p);
+                }
+
             }
             else {
                 throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -234,8 +256,14 @@ public class CtrlProd {
         if (c != null) {
             Product p = findProduct(productName);
             if (p != null) {
-                p.removeCharacteristic(c);
-                c.removeAssociatedProduct(p);
+                if (p.getCharacteristics().contains(c)) {
+                    p.removeCharacteristic(c);
+                    c.removeAssociatedProduct(p);
+                }
+                else {
+                    throw new CharacteristicNotFoundInProductException("Characteristic with name '" + characteristicName + "' was not found in product");
+                }
+
             }
             else {
                 throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -298,26 +326,26 @@ public class CtrlProd {
         return similarityTable;
     }
 
-    public Set<String> getRestrictionsProducts(String productName) {
-        Set<String> nameRestrictions =  new HashSet<>();
+    public List<String> getRestrictionsProducts(String productName) {
+        List<String> nameRestrictions =  new ArrayList<>();
         Product p = findProduct(productName);
         if (p != null) {
             return p.getRestrictions().stream()
                     .map(Characteristics::getName)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         }
         else {
             throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
         }
     }
 
-    public Set<String> getCharacteristicsProducts(String productName) {
-        Set<String> nameCharacteristics =  new HashSet<>();
+    public List<String> getCharacteristicsProducts(String productName) {
+        List<String> nameCharacteristics =  new ArrayList<>();
         Product p = findProduct(productName);
         if (p != null) {
             return p.getCharacteristics().stream()
                     .map(Characteristics::getName)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         }
         else {
             throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -334,5 +362,10 @@ public class CtrlProd {
 
     public void setMapProductsId(Map<Integer, String> mapProductsId) {
         CtrlProd.mapProductsId = mapProductsId;
+    }
+
+    public static boolean findCharacteristicByName(List<Characteristics> characteristics, String characteristicName) {
+        return characteristics.stream()
+                .anyMatch(characteristic -> characteristic.getName().equalsIgnoreCase(characteristicName));
     }
 }
