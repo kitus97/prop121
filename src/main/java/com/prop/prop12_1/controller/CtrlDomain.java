@@ -4,17 +4,20 @@ import com.prop.prop12_1.model.Characteristics;
 import com.prop.prop12_1.model.Product;
 import com.prop.prop12_1.model.Shelf;
 import com.prop.prop12_1.model.Supermarket;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
+@Component
 public class CtrlDomain {
-    private CtrlSupermarket ctrlSupermarket;
+   // private CtrlSupermarket ctrlSupermarket;
     private CtrlProd ctrlProd;
 
     public CtrlDomain() {
-        ctrlSupermarket = new CtrlSupermarket();
+       // ctrlSupermarket = new CtrlSupermarket();
         ctrlProd = new CtrlProd();
         ctrlAlg = new CtrlAlgorithm();
     }

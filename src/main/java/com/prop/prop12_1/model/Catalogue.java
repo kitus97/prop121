@@ -1,15 +1,19 @@
 package com.prop.prop12_1.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
+import com.prop.prop12_1.controller.CtrlProd;
+import com.prop.prop12_1.exceptions.ProductAlreadyAddedException;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class Catalogue {
+    private static Map<String, Product> allProducts = new CtrlProd().getProducts();
     private String name;
-    Set<Product> products;
+    private Map<String, Product> products;
 
     public Catalogue(String name) {
         this.name = name;
-        products = new HashSet<Product>();
+        products = new HashMap<>();
     }
 
     public String getName() {
@@ -20,19 +24,27 @@ public class Catalogue {
         this.name = name;
     }
 
-    public Set<Product> getProducts() {
-        return products;
+    public List<Pair<Integer, Set<String>>> getProductsArray() {
+        List<Pair<Integer, Set<String>>> ret= new ArrayList<Pair<Integer, Set<String>>>();
+        for(Product p : products.values()) {
+            ret.add(Pair.of(p.getId(), p.getRestrictions()));
+        }
+        return ret;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(Map<String, Product> products) {
         this.products = products;
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
+    public void addProduct(String product) {
+        if(!allProducts.containsKey(product)) throw new NoSuchElementException("The product " + product + " does not exist.");
+        else if(products.containsKey(product)) throw new ProductAlreadyAddedException("The product " + product + " already exists in the catalogue.");
+        else products.put(product, allProducts.get(product));
     }
 
-    public void removeProduct(Product product) {
-        products.remove(product);
+    public void removeProduct(String product) {
+        if(products.remove(product) == null) throw new NoSuchElementException("The product " + product + " does not exist in the catalogue.");
     }
+
+
 }
