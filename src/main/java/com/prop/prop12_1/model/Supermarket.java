@@ -1,8 +1,6 @@
 package com.prop.prop12_1.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 import com.prop.prop12_1.controller.CtrlAlgorithm;
 import com.prop.prop12_1.exceptions.ShelfAlreadyAddedException;
@@ -11,10 +9,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
 public class Supermarket {
-    private HashMap<String, Shelf> shelves;
-    private HashMap<String, Catalogue> catalogs; //<catalog>
+    private Map<String, Shelf> shelves;
+    private Map<String, Catalogue> catalogs; //<catalog>
     private String name;
-    private HashMap<String, Object> solutions; //<solution>
+    private Map<String, Object> solutions; //<solution>
 
 
     public Supermarket(String n){
@@ -28,7 +26,7 @@ public class Supermarket {
         return name;
     }
 
-    public ArrayList<Shelf> getShelves() {
+    public List<Shelf> getShelves() {
         return new ArrayList<>(shelves.values());
     }
 
@@ -36,7 +34,7 @@ public class Supermarket {
         return shelves.get(s);
     }
 
-    public ArrayList<Object> getCatalogs() {
+    public List<Object> getCatalogs() {
         return new ArrayList<>(catalogs.values());
     }
 
@@ -44,7 +42,7 @@ public class Supermarket {
         return catalogs.get(s);
     }
 
-    public ArrayList<Object> getSolutions() {
+    public List<Object> getSolutions() {
         return new ArrayList<>(solutions.values());
     }
 
@@ -57,8 +55,8 @@ public class Supermarket {
         Shelf sh = shelves.get(shelf);
         Catalogue cat = catalogs.get(catalog);
 
-        ArrayList<Set<String>> distribution = sh.getDistribution();;
-        ArrayList<Pair<Integer, Set<String>>> products = cat.getProductsArray();
+        List<Set<String>> distribution = sh.getDistribution();;
+        List<Pair<Integer, Set<String>>> products = cat.getProductsArray();
 
         if(solutions.containsKey(name)) throw new SolutionAlreadyAddedException("Name: " + name + " is already used as a solution name.");
 

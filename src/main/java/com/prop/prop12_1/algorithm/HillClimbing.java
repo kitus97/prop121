@@ -8,13 +8,13 @@ import java.util.Set;
 
 public class HillClimbing implements Algorithm{
 
-    private ArrayList<Set<String>> shelf;
-    private ArrayList<Pair<Integer, Set<String>>> products;
+    private List<Set<String>> shelf;
+    private List<Pair<Integer, Set<String>>> products;
 
     public HillClimbing() {}
 
     @Override
-    public ArrayList<Pair<Integer, Set<String>>> generateSolution(ArrayList<Set<String>> shelf, ArrayList<Pair<Integer, Set<String>>> products, ArrayList<ArrayList<Double>> similarityTable) {
+    public List<Pair<Integer, Set<String>>> generateSolution(List<Set<String>> shelf, List<Pair<Integer, Set<String>>> products, List<List<Double>> similarityTable) {
         this.shelf = shelf;
         this.products = products;
 
@@ -54,7 +54,7 @@ public class HillClimbing implements Algorithm{
     }
 
      private State generateInitialState() {
-        ArrayList<Pair<Integer, Set<String>>> initialSolution = new ArrayList<>();
+        List<Pair<Integer, Set<String>>> initialSolution = new ArrayList<>();
 
         for (Set<String> restriction : shelf) {
             boolean assigned = false;

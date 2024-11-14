@@ -5,6 +5,7 @@ import com.prop.prop12_1.model.Supermarket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CtrlSupermarket {
 
@@ -30,9 +31,9 @@ public class CtrlSupermarket {
         return supermarkets.remove(n) != null;
     }
 
-    public ArrayList<String> getSupermarkets(){
-        ArrayList<Supermarket> temp = new ArrayList<>(supermarkets.values());
-        ArrayList<String> ret = new ArrayList<>();
+    public List<String> getSupermarkets(){
+        List<Supermarket> temp = new ArrayList<>(supermarkets.values());
+        List<String> ret = new ArrayList<>();
         for(Supermarket s : temp){
             ret.add(s.getName());
         }
@@ -47,17 +48,17 @@ public class CtrlSupermarket {
     }
 
     /*Pre: s exists*/
-    public boolean createShelf(String s, String sh, int size){
+    public void createShelf(String s, String sh, int size){
         Supermarket m = supermarkets.get(s);
         Shelf shelf = new Shelf(sh, size);
-        return(m.addShelf(shelf));
+        m.addShelf(shelf);
     }
 
     /*Pre: s exists*/
-    public ArrayList<String> getShelves(String s){
+    public List<String> getShelves(String s){
         Supermarket m = supermarkets.get(s);
-        ArrayList<Shelf> x = m.getShelves();
-        ArrayList<String> shelfs = new ArrayList<>();
+        List<Shelf> x = m.getShelves();
+        List<String> shelfs = new ArrayList<>();
         for(Shelf sh : x){
             shelfs.add(sh.getName());
         }
