@@ -312,6 +312,7 @@ public class CtrlProd {
         similarityTable = arraySimilarityTable;
     }
 
+
     public Map<Integer, String> getMapProductsId() {
         return mapProductsId;
     }
