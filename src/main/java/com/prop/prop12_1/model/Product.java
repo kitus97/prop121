@@ -63,5 +63,13 @@ public class Product {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "name='" + name + '\'' +
+                ", characterisics=" + characterisics +
+                '}';
+    }
 }
 
