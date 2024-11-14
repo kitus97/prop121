@@ -2,12 +2,13 @@ package com.prop.prop12_1.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Shelf{
 
     private String name;
-    private ArrayList<Set<String>> distribution;
+    private List<Set<String>> distribution;
 
 
     public Shelf(String n, int t) {
@@ -23,7 +24,7 @@ public class Shelf{
         return name;
     }
 
-    public ArrayList<Set<String>> getDistribution() {
+    public List<Set<String>> getDistribution() {
         return distribution;
     }
 
