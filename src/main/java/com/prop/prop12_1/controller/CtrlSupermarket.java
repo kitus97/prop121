@@ -1,6 +1,5 @@
 package com.prop.prop12_1.controller;
 
-import com.prop.prop12_1.model.Shelf;
 import com.prop.prop12_1.model.Supermarket;
 
 import java.util.ArrayList;
@@ -42,32 +41,26 @@ public class CtrlSupermarket {
     }
 
     /*Pre: supermarket exists*/
-    public boolean removeShelf(String supermarket, String shelf){
+    public void removeShelf(String supermarket, String shelf){
         Supermarket m = supermarkets.get(supermarket);
-        return m.deleteShelf(shelf);
+        m.deleteShelf(shelf) ;
     }
 
     /*Pre: s exists*/
-    public void createShelf(String s, String sh, int size){
-        Supermarket m = supermarkets.get(s);
-        Shelf shelf = new Shelf(sh, size);
-        m.addShelf(shelf);
+    public void createShelf(String supermarket, String shelf, int size){
+        Supermarket m = supermarkets.get(supermarket);
+        m.addShelf(shelf, size);
     }
 
     /*Pre: s exists*/
-    public List<String> getShelves(String s){
-        Supermarket m = supermarkets.get(s);
-        List<Shelf> x = m.getShelves();
-        List<String> shelfs = new ArrayList<>();
-        for(Shelf sh : x){
-            shelfs.add(sh.getName());
-        }
-        return shelfs;
+    public List<String> getShelves(String supermarket){
+        Supermarket m = supermarkets.get(supermarket);
+        return m.getShelves();
     }
 
     /*Returns null if sh doesnt exist.*/
-    public String getShelf(String s, String sh){
-        Supermarket m = supermarkets.get(s);
+    public String getShelf(String supermarket, String sh){
+        Supermarket m = supermarkets.get(supermarket);
         if(m.getShelf(sh) != null){
             return m.getShelf(sh).getName();
         }
@@ -75,29 +68,43 @@ public class CtrlSupermarket {
     }
 
     /*restriction es el nombre de una caracteristica existente, se comprueba quee existe en el ctrl domini*/
-    public boolean addRestriction(String supermarket, String restriction, String shelf, int index){
+    public void addRestriction(String supermarket, String shelf, String restriction, int index){
         Supermarket m = supermarkets.get(supermarket);
-        //falta tratar errores
-        Shelf sh = m.getShelf(shelf);
-
-        sh.setRestriction(restriction, index);
-        return true;
+        m.addRestriction(shelf, restriction, index);
 
     }
 
-    public boolean removeRestriction(String supermarket, String shelf, int index){
+    public void removeRestriction(String supermarket, String shelf, int index){
         Supermarket m = supermarkets.get(supermarket);
-        //tratar errores
-        Shelf sh = m.getShelf(shelf);
-        sh.deleteRestrictions(index);
-        return true;
+        m.deleteRestrictions(shelf, index);
     }
 
-    public boolean resizeShelf(String supermarket, String shelf, int size){
+    public void resizeShelf(String supermarket, String shelf, int size){
         Supermarket m = supermarkets.get(supermarket);
-        Shelf sh = m.getShelf(shelf);
-        sh.resizeShelf(size);
-        return true;
+        m.resizeShelf(shelf, size);
+    }
+
+    public String getRequirements(){
+        String s = "To generate a solution you need to input, in order: \n" +
+                "-The name of the solution you want to create\n" +
+                "-The name of the shelf to be used\n" +
+                "-The name of the catalogue to be used\n" +
+                "-1 or 0 to select the heuristic (1= generated, 0= predefined)\n" +
+                "-1 or 0 to select the algorithm (1= BackTracking, 0= HillClimbing\n";
+        return s;
+    }
+
+    public void generateSolution(String supermarket, String name, String shelf, String catalog, boolean heuristic, int algorithm){
+        Supermarket m = supermarkets.get(supermarket);
+        m.generateSolution(name, shelf, catalog, heuristic, algorithm);
+    }
+
+    public void addProductToCatalogue(String supermarket, String product, String catalog){
+        supermarkets.get(supermarket).addProductToCatalogue(product, catalog);
+    }
+
+    public void removeProductFromCatalogue(String supermarket, String product, String catalog){
+        supermarkets.get(supermarket).removeProductFromCatalogue(product, catalog);
     }
 
 

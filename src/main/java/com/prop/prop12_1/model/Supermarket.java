@@ -3,6 +3,7 @@ package com.prop.prop12_1.model;
 import java.util.*;
 
 import com.prop.prop12_1.controller.CtrlAlgorithm;
+import com.prop.prop12_1.exceptions.CatalogAlreadyAdded;
 import com.prop.prop12_1.exceptions.ShelfAlreadyAddedException;
 import com.prop.prop12_1.exceptions.SolutionAlreadyAddedException;
 import org.apache.commons.lang3.tuple.Pair;
@@ -12,7 +13,7 @@ public class Supermarket {
     private Map<String, Shelf> shelves;
     private Map<String, Catalogue> catalogs; //<catalog>
     private String name;
-    private Map<String, Object> solutions; //<solution>
+    private Map<String, Solution> solutions; //<solution>
 
 
     public Supermarket(String n){
@@ -26,8 +27,9 @@ public class Supermarket {
         return name;
     }
 
-    public List<Shelf> getShelves() {
-        return new ArrayList<>(shelves.values());
+    public List<String> getShelves() {
+        List<String> shelfs = new ArrayList<>(shelves.keySet());
+        return shelfs;
     }
 
     public Shelf getShelf(String s){
@@ -61,23 +63,75 @@ public class Supermarket {
         if(solutions.containsKey(name)) throw new SolutionAlreadyAddedException("Name: " + name + " is already used as a solution name.");
 
         else {
-            solutions.put(name, new CtrlAlgorithm().getSolution(distribution, products, algorithm, heuristic));
+            String alg;
+            String heu;
+            if(algorithm == 0) alg = "BT";
+            else alg = "HC";
+            if(heuristic) heu = "Generated";
+            else heu = "Defined";
+            Pair<Double, List<Pair<Integer, Set<String>>>> res = new CtrlAlgorithm().getSolution(distribution, products, algorithm, heuristic);
+            Solution s = new Solution(name, catalog, shelf, heu, alg, res.getLeft(), res.getRight());
+
+            solutions.put(name, s);
         }
 
     }
 
 
-    public void addShelf(Shelf s){
-        if(shelves.containsKey(s.getName())){
-            throw new ShelfAlreadyAddedException("Name: " + s.getName() + " is already used as a shelf name.");
+    public void addShelf(String shelf, int size){
+        if(shelves.containsKey(shelf)){
+            throw new ShelfAlreadyAddedException("Name: " + shelf + " is already used as a shelf name.");
         }
-        else shelves.put(s.getName(), s);
+        else{
+            Shelf s = new Shelf(shelf, size);
+            shelves.put(s.getName(), s);
+        }
     }
 
     /*Devuelve un boolean indicando si se ha eliminado o no la estanteria con nombre s*/
-    public boolean deleteShelf(String s){
-        return shelves.remove(s) != null;
+    public void deleteShelf(String shelf){
+        if (shelves.remove(shelf) == null) throw new NoSuchElementException("No such shelf.");
     }
+
+    public void addCatalogue(String catalog){
+        if(catalogs.containsKey(catalog)) throw new CatalogAlreadyAdded("Name " + catalog + " is already used as a catalogue.");
+        else catalogs.put(catalog, new Catalogue(catalog));
+    }
+
+    public void addRestriction(String shelf, String restriction, int index){
+        Shelf sh = shelves.get(shelf);
+        if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
+        else sh.setRestriction(restriction, index);
+    }
+
+    public void deleteRestrictions(String shelf, int index){
+        Shelf sh = shelves.get(shelf);
+        if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
+        else sh.deleteRestrictions(index);
+
+    }
+
+    public void addProductToCatalogue(String product, String catalog){
+        Catalogue cat = catalogs.get(catalog);
+        if(cat == null) throw new NoSuchElementException("The catalog " + catalog + " does not exist.");
+        else cat.addProduct(product);
+    }
+
+    public void removeProductFromCatalogue(String product, String catalog){
+        Catalogue cat = catalogs.get(catalog);
+        if(cat == null) throw new NoSuchElementException("The catalog " + catalog + " does not exist.");
+        else cat.removeProduct(product);
+    }
+
+    public void resizeShelf(String shelf, int size){
+        Shelf sh = shelves.get(shelf);
+        if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
+        else sh.deleteRestrictions(size);
+    }
+
+
+
+
 
 
 }
