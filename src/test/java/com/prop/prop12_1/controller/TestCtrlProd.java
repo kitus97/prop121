@@ -156,10 +156,6 @@ public class TestCtrlProd {
         assertEquals(expectedTable, result);
     }
 
-
-
-
-
     @Test
     public void testGetRestrictionsProducts_ProductNotFound() {
         assertThrows(ProductNotFoundException.class, () -> ctrlProd.getRestrictionsProducts("Nonexistent Product"));
@@ -327,11 +323,6 @@ public class TestCtrlProd {
         assertThrows(CharacteristicNotFoundException.class, () -> ctrlProd.removeCharacteristicProduct("Nonexistent Characteristic", "Product 1"));
     }
 
-
-
-
-
-
     @Test
     public void testFindCharacteristicByName() {
         List<Characteristics> characteristicList = Arrays.asList(characteristicMock, characteristicMock2);
@@ -385,18 +376,50 @@ public class TestCtrlProd {
         assertTrue(result.contains("Product 1"));
     }
 
-    // Test para setSimilarities
+    @Test
+    public void testSetSimilarities_FirstProduct() {
+        Product product1 = new Product(0, "Product 1");
+
+        productsMap.put("Product 1", product1);
+        mapProductsId.put(0, "Product 1");
+
+        boolean result = ctrlProd.setSimilarities(null);
+
+        assertTrue(result);
+        assertEquals(1, similarityTable.size());
+        assertEquals(1.0, similarityTable.get(0).get(0));
+    }
+
     @Test
     public void testSetSimilarities_NullInput() {
-        ctrlProd.addProduct("Product 1");
-        ctrlProd.addProduct("Product 2");
+        Product product1 = new Product(0, "Product 1");
+        Product product2 = new Product(1, "Product 2");
+
+        Characteristics characteristic1 = new Characteristics(1, "char 1");
+        Characteristics characteristic2 = new Characteristics(2, "char 2");
+
+        Set<Characteristics> characteristicsSet1 = new HashSet<>(Collections.singletonList(characteristic1));
+        Set<Characteristics> characteristicsSet2 = new HashSet<>(Arrays.asList(characteristic1, characteristic2));
+
+        product1.setCharacteristics(characteristicsSet1);
+        product2.setCharacteristics(characteristicsSet2);
+
+        productsMap.put("Product 1", product1);
+        productsMap.put("Product 2", product2);
+        mapProductsId.put(0, "Product 1");
+        mapProductsId.put(1, "Product 2");
+
+        similarityTable.add(new ArrayList<>(Collections.singletonList(1.0)));
 
         boolean result = ctrlProd.setSimilarities(null);
 
         assertTrue(result);
         assertEquals(1.0, similarityTable.get(0).get(0));
-        assertEquals(0.0, similarityTable.get(1).get(0));
+        assertEquals(0.5, similarityTable.get(0).get(1));
+        assertEquals(0.5, similarityTable.get(1).get(0));
+        assertEquals(1.0, similarityTable.get(1).get(1));
     }
+
 
     @Test
     public void testSetSimilarities_InvalidInputSize() {
@@ -410,19 +433,27 @@ public class TestCtrlProd {
 
     @Test
     public void testSetSimilarities_ValidInput() {
-        ctrlProd.addProduct("Product 1");
-        ctrlProd.addProduct("Product 2");
+        Product product1 = new Product(0, "Product 1");
+        Product product2 = new Product(1, "Product 2");
 
+        productsMap.put("Product 1", product1);
+        productsMap.put("Product 2", product2);
+        mapProductsId.put(0, "Product 1");
+        mapProductsId.put(1, "Product 2");
+
+        similarityTable.add(new ArrayList<>(Collections.singletonList(1.0)));
         Double[] similarities = {0.8};
 
         boolean result = ctrlProd.setSimilarities(similarities);
 
         assertTrue(result);
+        assertEquals(1.0, similarityTable.get(0).get(0));
         assertEquals(0.8, similarityTable.get(0).get(1));
         assertEquals(0.8, similarityTable.get(1).get(0));
+        assertEquals(1.0, similarityTable.get(1).get(1));
     }
 
-    // Test para modifySimilarity
+
     @Test
     public void testModifySimilarity_Success() {
         Product product1 = new Product(0, "Product 1");
@@ -446,7 +477,7 @@ public class TestCtrlProd {
         assertThrows(ProductNotFoundException.class, () -> ctrlProd.modifySimilarity("Nonexistent Product 1", "Nonexistent Product 2", 0.8));
     }
 
-    // Test para checkProductsSimilarity
+
     @Test
     public void testCheckProductsSimilarity_Success() {
         Product product1 = new Product(0, "Product 1");
@@ -471,7 +502,7 @@ public class TestCtrlProd {
         assertThrows(ProductNotFoundException.class, () -> ctrlProd.checkProductsSimilarity("Nonexistent Product 1", "Nonexistent Product 2"));
     }
 
-    // Test para generateSimilarityTable
+
     @Test
     public void testGenerateSimilarityTable_EmptyProducts() {
         List<List<Double>> result = ctrlProd.generateSimilarityTable();
@@ -502,7 +533,7 @@ public class TestCtrlProd {
         assertEquals(1.0, result.get(1).get(1));
     }
 
-    // Test para calculateSimilarity
+
     @Test
     public void testCalculateSimilarity_EmptySets() {
         double similarity = ctrlProd.calculateSimilarity(new HashSet<>(), new HashSet<>());

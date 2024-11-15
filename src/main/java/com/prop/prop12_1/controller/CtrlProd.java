@@ -108,40 +108,47 @@ public class CtrlProd {
 
     }
 
-    //Pre: We assume that a new product has been added and CtrlProd function is called right after
     public Boolean setSimilarities(Double[] similarities) {
+        System.out.println("Initial similarityTable: " + similarityTable);
 
-        if (similarities == null) {
-            int idx1 = products.size()-1;
+        if (products.size() == 1) {
+            List<Double> row = new ArrayList<>();
+            row.add(1.0);
+            similarityTable.add(row);
+            System.out.println("After adding the first product: " + similarityTable);
+        } else if (similarities == null) {
+            int idx1 = products.size() - 1;
             Set<Characteristics> characteristics1 = products.get(mapProductsId.get(idx1)).getCharacteristics();
             List<Double> newRow = new ArrayList<>();
-            for (int i =0 ; i < idx1; i++) {
+            for (int i = 0; i < idx1; i++) {
                 Set<Characteristics> characteristics2 = products.get(mapProductsId.get(i)).getCharacteristics();
-                double similarity = calculateSimilarity(characteristics1,characteristics2);
+                double similarity = calculateSimilarity(characteristics1, characteristics2);
                 newRow.add(similarity);
-                similarityTable.get(i).add(similarity);
             }
             newRow.add(1.0);
             similarityTable.add(newRow);
-        }
-        else if (similarities.length == products.size()-1) {
-            List<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
-            newLine.add(1.0);
-            similarityTable.add(newLine);
-            int j = 0;
-            for(List<Double> line : similarityTable) {
-                if (j < similarities.length) {
-                    line.add(similarities[j]);
-                }
-                j++;
+            System.out.println("Added new row for the last product: " + similarityTable);
+            for (int i = 0; i < idx1; i++) {
+                similarityTable.get(i).add(newRow.get(i));
+                System.out.println("Updated row " + i + ": " + similarityTable.get(i));
             }
-        }
-        else {
+        } else if (similarities.length == products.size() - 1) {
+            List<Double> newRow = new ArrayList<>(Arrays.asList(similarities));
+            newRow.add(1.0);
+            similarityTable.add(newRow);
+            System.out.println("Added new row with similarities: " + similarityTable);
+            for (int i = 0; i < similarities.length; i++) {
+                similarityTable.get(i).add(similarities[i]);
+                System.out.println("Updated row " + i + ": " + similarityTable.get(i));
+            }
+        } else {
             throw new SimilarityArrayIncorrectSizeException("The similarity array has incorrect size");
         }
-        return true;
 
+        System.out.println("Final similarityTable: " + similarityTable);
+        return true;
     }
+
 
     public double calculateSimilarity(Set<Characteristics> characteristics1, Set<Characteristics> characteristics2) {
         Set<Characteristics> intersection = new HashSet<>(characteristics1);
