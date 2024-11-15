@@ -156,11 +156,16 @@ public class TestProduct {
     public void testToString() {
         product.addCharacteristic(characteristicMock);
         product.addRestriction(restrictionMock);
+        when(characteristicMock.toString()).thenReturn("Characteristics{name='caracteristica 1'}");
+        when(restrictionMock.toString()).thenReturn("Restriction Mock");
+
 
         String productString = product.toString();
-        assertTrue(productString.contains("Test Product"));
-        assertTrue(productString.contains("Characteristic 1"));
+
+        assertTrue(productString.contains("Test Product")); 
+        assertTrue(productString.contains("Characteristics{name='caracteristica 1'}"));
         assertTrue(productString.contains("Restriction Mock"));
+
     }
 
     @Test

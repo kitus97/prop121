@@ -2,6 +2,7 @@ package com.prop.prop12_1.controller;
 
 import com.prop.prop12_1.exceptions.CharacteristicNotFoundException;
 import com.prop.prop12_1.exceptions.CharacteristicAlreadyAddedToProductException;
+import com.prop.prop12_1.exceptions.SimilarityArrayIncorrectSizeException;
 import com.prop.prop12_1.exceptions.RestrictionNotFoundInProductException;
 import com.prop.prop12_1.exceptions.RestrictionAlreadyAddedToProductException;
 import com.prop.prop12_1.exceptions.CharacteristicNotFoundInProductException;
@@ -123,26 +124,29 @@ public class CtrlProd {
             newRow.add(1.0);
             similarityTable.add(newRow);
         }
-        else {
+        else if (similarities.length == products.size()-1) {
             List<Double> newLine = new ArrayList<>(Arrays.asList(similarities));
-            newLine.add(0.0);
+            newLine.add(1.0);
             similarityTable.add(newLine);
             int j = 0;
             for(List<Double> line : similarityTable) {
-                if (line.size() < products.size() && j < similarities.length) {
+                if (j < similarities.length) {
                     line.add(similarities[j]);
                 }
                 j++;
             }
+        }
+        else {
+            throw new SimilarityArrayIncorrectSizeException("The similarity array has incorrect size");
         }
         return true;
 
     }
 
     public double calculateSimilarity(Set<Characteristics> characteristics1, Set<Characteristics> characteristics2) {
-        List<Characteristics> intersection = new ArrayList<>(characteristics1);
+        Set<Characteristics> intersection = new HashSet<>(characteristics1);
         intersection.retainAll(characteristics2);
-        List<Characteristics> union = new ArrayList<>(characteristics1);
+        Set<Characteristics> union = new HashSet<>(characteristics1);
         union.addAll(characteristics2);
 
         return union.isEmpty() ?  0 : (double) intersection.size() / union.size();
