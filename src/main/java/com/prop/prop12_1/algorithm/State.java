@@ -71,14 +71,17 @@ public class State {
     public Double calculateHeuristic() {
         double totalSimilarity = 0.0;
         for (int i = 0; i < solution.size() - 1; i++) {
-            if (solution.get(i) == null || solution.get(i+1) == null) {
+            if (solution.get(i).getLeft() == null || solution.get(i+1).getLeft() == null) {
                 continue;
             }
+
             int actualProduct = solution.get(i).getLeft();
             int nextProduct = solution.get(i + 1).getLeft();
             totalSimilarity += similarityTable.get(actualProduct).get(nextProduct);
+
+
         }
-        if (solution.getLast() != null && solution.getFirst() != null) {
+        if (solution.getLast().getLeft() != null && solution.getFirst().getLeft() != null) {
             int actualProduct = solution.getLast().getLeft();
             int nextProduct = solution.getFirst().getLeft();
             totalSimilarity += similarityTable.get(actualProduct).get(nextProduct);
@@ -86,10 +89,10 @@ public class State {
         return Math.round(totalSimilarity * 1e5) / 1e5;
     }
 
-    public void changeProducts(Pair<Integer, Set<String>> product1, Pair<Integer, Set<String>> product2, Integer j) {
+    private void changeProducts(Pair<Integer, Set<String>> product1, Pair<Integer, Set<String>> product2, Integer j) {
         products.remove(product1);
         products.add(product2);
-        solution.set(j, product1);
+        solution.add(j, product1);
     }
 
     public List<Pair<Integer, Set<String>>> getSolution() {
