@@ -34,6 +34,31 @@ public class Supermarket {
         associatedShelfSolutions = new HashMap<>();
     }
 
+    public void setShelves(Map<String, Shelf> shelves) {
+        this.shelves = shelves;
+    }
+
+    public void setCatalogs(Map<String, Catalogue> catalogs) {
+        this.catalogs = catalogs;
+    }
+
+
+    public void setSolutions(Map<String, Solution> solutions) {
+        this.solutions = solutions;
+    }
+
+    public void setAssociatedCatalogSolutions(Map<String, List<Solution>> associatedCatalogSolutions) {
+        this.associatedCatalogSolutions = associatedCatalogSolutions;
+    }
+
+    public void setAssociatedProductSolutions(Map<String, List<Solution>> associatedProductSolutions) {
+        this.associatedProductSolutions = associatedProductSolutions;
+    }
+
+    public void setAssociatedShelfSolutions(Map<String, List<Solution>> associatedShelfSolutions) {
+        this.associatedShelfSolutions = associatedShelfSolutions;
+    }
+
     public String getName() {
         return name;
     }
@@ -89,7 +114,7 @@ public class Supermarket {
 
     }
 
-    public void invalidateCatalogSolution(String catalog){
+    private void invalidateCatalogSolution(String catalog){
         List<Solution> solutions = associatedCatalogSolutions.get(catalog);
         for (int i = 0; i < solutions.size(); i++) {
             if(solutions.get(i).deleted()) solutions.remove(i);
@@ -97,7 +122,7 @@ public class Supermarket {
         }
     }
 
-    public void invalidateShelfSolution(String shelf){
+    private void invalidateShelfSolution(String shelf){
         List<Solution> solutions = associatedShelfSolutions.get(shelf);
         for (int i = 0; i < solutions.size(); i++) {
             if(solutions.get(i).deleted()) solutions.remove(i);
