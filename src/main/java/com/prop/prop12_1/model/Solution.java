@@ -1,11 +1,18 @@
 package com.prop.prop12_1.model;
 
+import com.prop.prop12_1.controller.CtrlProd;
+import com.prop.prop12_1.exceptions.InvalidProductRestrictionException;
+import com.prop.prop12_1.exceptions.NotInterchangeableException;
+import com.prop.prop12_1.exceptions.ProductNotFoundException;
 import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Solution {
+
+    private static CtrlProd ctrlProd = new CtrlProd();
 
     private String solutionName;
     private String idCatalog;
@@ -13,7 +20,8 @@ public class Solution {
     private String heuristic;
     private String algorithm;
     private Double mark;
-    private List<Pair<Integer, Set<String>>> distribution;
+    private Boolean valid;
+    private List<Pair<Product, Set<String>>> distribution;
 
     public Solution(String solutionName, String idCatalog, String idShelf, String heuristic, String algorthm, double mark, List<Pair<Integer,Set<String>>> distribution) {
         this.solutionName = solutionName;
@@ -22,11 +30,29 @@ public class Solution {
         this.heuristic = heuristic;
         this.algorithm = algorthm;
         this.mark = mark;
-        this.distribution = distribution;
+        this.valid = true;
+        List<Pair<Product, Set<String>>> products = new ArrayList<>();
+
+        for(int i = 0; i < distribution.size(); i++) {
+            Pair<Integer, Set<String>> pair = distribution.get(i);
+            if(pair.getLeft() == null) products.add(Pair.of(null, pair.getRight()));
+            else products.add(Pair.of(ctrlProd.findProduct(ctrlProd.getProductName(pair.getLeft())), pair.getRight()));
+
+        }
+
+        this.distribution = products;
     }
 
-    public List<Pair<Integer,Set<String>>> getDistribution() {
+    public List<Pair<Product,Set<String>>> getDistribution() {
         return distribution;
+    }
+
+    public Boolean getValid() {
+        return valid;
+    }
+
+    public void setValid(Boolean valid) {
+        this.valid = valid;
     }
 
     public double getMark() {
@@ -55,16 +81,95 @@ public class Solution {
     }
 
 
-    public void setDistribution(List<Pair<Integer,Set<String>>> distribution) {
+    public void setDistribution(List<Pair<Product ,Set<String>>> distribution) {
         this.distribution = distribution;
     }
-    /*
-    public ArrayList<String> changeDistribution(int idx1, int idx2) {
-        String s1 = distribution.get(idx1);
-        String s2 = distribution.get(idx2);
-        distribution.set(idx1, s2);
-        distribution.set(idx2, s1);
-        return distribution;
+
+    public void delete(){
+        this.solutionName = null;
+        this.idCatalog = null;
+        this.idShelf = null;
+        this.heuristic = null;
+        this.algorithm = null;
+        this.mark = null;
+        this.valid = null;
+        this.distribution = null;
     }
-    */
+
+    public Boolean deleted(){
+        return this.solutionName == null;
+    }
+
+    public void changeProducts(int idx1, int idx2) {
+        if(idx1 >= distribution.size() || idx2 >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
+
+        Pair<Product, Set<String>> s1 = distribution.get(idx1);
+        Pair<Product, Set<String>> s2 = distribution.get(idx2);
+
+        if(s1.getRight().equals(s2.getRight())) {
+            distribution.set(idx1, s2);
+            distribution.set(idx2, s1);
+        }
+        else throw new NotInterchangeableException("The products selected can't be swapped");
+
+    }
+
+    public void deleteProduct(int index){
+        if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
+        Pair<Product, Set<String>> pair = distribution.get(index);
+        distribution.set(index, Pair.of(null, pair.getRight()));
+    }
+
+    public void addProduct(String product, int index){
+        if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
+        Product p = ctrlProd.findProduct(product);
+        if(p == null) throw new ProductNotFoundException("Product not found");
+        Pair<Product, Set<String>> pair = distribution.get(index);
+        if(p.getRestrictions().equals(pair.getRight())) {
+            distribution.set(index, Pair.of(p, pair.getRight()));
+        }
+        else throw new InvalidProductRestrictionException("The product does not meet the required restrictions of the cell");
+    }
+
+    public void updateMark(){
+        if(heuristic == "Generated"){
+            List<List<Double>> similaritytable = ctrlProd.generateSimilarityTable();
+            mark = calculateHeuristic(similaritytable);
+        }
+        else{
+            mark = calculateHeuristic(ctrlProd.getSimilarityTable());
+
+        }
+    }
+
+    private Double calculateHeuristic(List<List<Double>> similarityTable) {
+        double totalSimilarity = 0.0;
+        for (int i = 0; i < distribution.size() - 1; i++) {
+            if (distribution.get(i).getLeft() == null || distribution.get(i+1).getLeft() == null) {
+                continue;
+            }
+            int actualProduct = distribution.get(i).getLeft().getId();
+            int nextProduct = distribution.get(i + 1).getLeft().getId();
+            totalSimilarity += similarityTable.get(actualProduct).get(nextProduct);
+        }
+        if (distribution.getLast().getLeft() != null && distribution.getFirst().getLeft() != null) {
+            int actualProduct = distribution.getLast().getLeft().getId();
+            int nextProduct = distribution.getFirst().getLeft().getId();
+            totalSimilarity += similarityTable.get(actualProduct).get(nextProduct);
+        }
+        return Math.round(totalSimilarity * 1e5) / 1e5;
+    }
+
+    @Override
+    public String toString() {
+        return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
+        + mark + "}\n";
+    }
+
+    public String toString1() {
+        return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
+                + mark + distribution.toString() + "}\n";
+    }
 }

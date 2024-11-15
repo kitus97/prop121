@@ -113,9 +113,41 @@ public class CtrlSupermarket {
         }
     }
 
+    public String getSolution(String supermarket, String solution){
+        return supermarkets.get(supermarket).getSolution(solution);
+    }
+
+    public List<String> getSolutions(String supermarket){
+        return supermarkets.get(supermarket).getSolutions();
+    }
+
+    public void deleteCatalog(String supermarket, String catalog){
+        supermarkets.get(supermarket).deleteCatalogue(catalog);
+    }
+
+    public void deleteSolution(String supermarket, String solution){
+        supermarkets.get(supermarket).deleteSolution(solution);
+    }
 
 
+    public void addCatalog(String supermarket, String catalog){
+        supermarkets.get(supermarket).addCatalogue(catalog);
+    }
+
+    public void deleteSolutionProduct(String supermarket, String solution, int index){
+        supermarkets.get(supermarket).deleteSolutionProduct(solution, index);
+    }
+
+    public void addSolutionProduct(String supermarket, String solution, String product, int index){
+        supermarkets.get(supermarket).addSolutionProduct(solution, product, index);
+    }
+
+    public void changeSolutionProducts(String supermarket, int indx1, int indx2, String solution){
+        supermarkets.get(supermarket).changeSolutionProducts(indx1, indx2, solution);
+    }
 
 
-
+    public List<String> listProdsCatalogue(String supermarket, String catalogueName) {
+        return supermarkets.get(supermarket).listProdsCatalogue(catalogueName);
+    }
 }
