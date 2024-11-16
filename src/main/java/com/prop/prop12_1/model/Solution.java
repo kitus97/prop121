@@ -10,6 +10,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Representa una solución generada para la distribución de productos en una estantería dentro de un supermercado.
+ * <p>
+ * La clase {@code Solution} representa una solución en el contexto del sistema,
+ * que consiste en una distribución de productos sobre una estantería,
+ * junto con un conjunto de características como su puntuación, validez,
+ * algoritmo utilizado, entre otros.
+ * <p>
+ */
 public class Solution {
 
     private static CtrlProd ctrlProd = new CtrlProd();
@@ -23,6 +32,17 @@ public class Solution {
     private Boolean valid;
     private List<Pair<Product, Set<String>>> distribution;
 
+    /**
+     * Constructora que crea una nueva solución con los parámetros especificados.
+     *
+     * @param solutionName El nombre de la solución.
+     * @param idCatalog El identificador del catálogo.
+     * @param idShelf El identificador de la estantería.
+     * @param heuristic El tipo de heurística utilizada ("Generada" o "Definida").
+     * @param algorthm El algoritmo utilizado ("BT", "HC" o "Greedy").
+     * @param mark La puntuación de la solución.
+     * @param distribution La distribución de los productos en la estantería.
+     */
     public Solution(String solutionName, String idCatalog, String idShelf, String heuristic, String algorthm, double mark, List<Pair<Integer,Set<String>>> distribution) {
         this.solutionName = solutionName;
         this.idCatalog = idCatalog;
@@ -98,6 +118,10 @@ public class Solution {
         this.distribution = distribution;
     }
 
+    /**
+     * Elimina todos los datos de la solución.
+     * Pone a null todos los atributos de la solución.
+     */
     public void delete(){
         this.solutionName = null;
         this.idCatalog = null;
@@ -109,28 +133,60 @@ public class Solution {
         this.distribution = null;
     }
 
+    /**
+     * Verifica si la solución ha sido eliminada.
+     *
+     * @return true si la solución ha sido eliminada, false si no lo ha sido.
+     */
     public Boolean deleted(){
         return this.solutionName == null;
     }
 
+    /**
+     * Calcula la nueva puntuación de la solución si se intercambian dos productos.
+     *
+     * @param idx1 El índice del primer producto.
+     * @param idx2 El índice del segundo producto.
+     * @return La nueva puntuación de la solución después del intercambio.
+     */
     public double checkMarkSwap(int idx1, int idx2){
         Solution s = copy();
         s.changeProducts(idx1, idx2);
         return s.mark;
     }
 
+    /**
+     * Calcula la nueva puntuación de la solución si se elimina un producto.
+     *
+     * @param index El índice del producto a eliminar.
+     * @return La nueva puntuación de la solución después de eliminar el producto.
+     */
     public double checkMarkDelete(int index){
         Solution s = copy();
         s.deleteProduct(index);
         return s.mark;
     }
 
+    /**
+     * Calcula la nueva puntuación de la solución si se agrega un producto.
+     *
+     * @param product El nombre del producto a agregar.
+     * @param index El índice donde agregar el producto.
+     * @return La nueva puntuación de la solución después de agregar el producto.
+     */
     public double checkMarkAdd(String product, int index){
         Solution s = copy();
         s.addProduct(product, index);
         return s.mark;
     }
 
+    /**
+     * Cambia la posición de dos productos en la distribución.
+     *
+     * @param idx1 El índice del primer producto.
+     * @param idx2 El índice del segundo producto.
+     * @throws NotInterchangeableException Si los productos no se pueden intercambiar debido a sus restricciones.
+     */
     public void changeProducts(int idx1, int idx2) {
         if(idx1 >= distribution.size() || idx2 >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
 
@@ -146,6 +202,13 @@ public class Solution {
 
     }
 
+    /**
+     * Elimina un producto de la distribución.
+     *
+     * @param index El índice del producto a eliminar.
+     * @return El nombre del producto eliminado.
+     * @throws IndexOutOfBoundsException Si el índice está fuera de rango.
+     */
     public String deleteProduct(int index){
         if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
         Pair<Product, Set<String>> pair = distribution.get(index);
@@ -154,6 +217,14 @@ public class Solution {
         return pair.getLeft().getName();
     }
 
+    /**
+     * Agrega un producto a la distribución.
+     *
+     * @param product El nombre del producto a agregar.
+     * @param index El índice donde agregar el producto.
+     * @throws InvalidProductRestrictionException Si el producto no cumple con las restricciones de la celda.
+     * @throws ProductNotFoundException Si el producto no existe.
+     */
     public void addProduct(String product, int index){
         if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
         Product p = ctrlProd.findProduct(product);
@@ -166,6 +237,11 @@ public class Solution {
         else throw new InvalidProductRestrictionException("The product does not meet the required restrictions of the cell");
     }
 
+    /**
+     * Actualiza la puntuación de la solución basándose en una tabla de similitud.
+     *
+     * @param similarityTable La tabla de similitud que se utilizará para calcular la puntuación.
+     */
     public void updateMark(List<List<Double>> similarityTable){
         mark = calculateHeuristic(similarityTable);
     }
@@ -193,6 +269,28 @@ public class Solution {
         return Math.round(totalSimilarity * 1e5) / 1e5;
     }
 
+    /**
+     * Devuelve una representación en forma de string de la solución.
+     *
+     * @return La representación en forma de string de la solución, indicando:
+     * <p>
+     * - El nombre de la solución.
+     * <p>
+     * - El identificador del catálogo.
+     * <p>
+     * - El identificador de la estantería.
+     * <p>
+     * - La heurística utilizada en la solución.
+     * <p>
+     * - El algoritmo utilizado en la solución.
+     * <p>
+     * - La puntuación calculada para la solución.
+     * <p>
+     * - La validez de la solución.
+     * <p>
+     * - La distribución de productos en la estantería junto con sus restricciones, si existen.
+     * <p>
+     */
     @Override
     public String toString() {
         StringBuilder distributionString = new StringBuilder("[");
