@@ -40,6 +40,10 @@ public class Catalogue {
         this.products = products;
     }
 
+    public Map<String, Product> getProducts() {
+        return products;
+    }
+
     public void addProduct(String product) {
         if(!allProducts.containsKey(product)) throw new NoSuchElementException("Error: The product " + product + " does not exist.");
         else if(products.containsKey(product)) throw new ProductAlreadyAddedException("The product " + product + " already exists in the catalogue.");

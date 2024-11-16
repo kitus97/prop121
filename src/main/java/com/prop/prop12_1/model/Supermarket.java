@@ -97,7 +97,8 @@ public class Supermarket {
             String alg;
             String heu;
             if(algorithm == 0) alg = "BT";
-            else alg = "HC";
+            else if(algorithm == 1) alg = "HC";
+            else alg = "Greedy";
             if(heuristic) heu = "Generated";
             else heu = "Defined";
             Pair<Double, List<Pair<Integer, Set<String>>>> res = new CtrlAlgorithm().getSolution(distribution, products, algorithm, heuristic);
@@ -108,7 +109,9 @@ public class Supermarket {
             associatedCatalogSolutions.get(catalog).add(s);
             List<String> associatedProducts = cat.getProductNames();
             for(int i = 0; i < associatedProducts.size(); i++){
-                associatedProductSolutions.computeIfAbsent(associatedProducts.get(i), k -> new ArrayList<>()).add(s);
+                String product = associatedProducts.get(i);
+                associatedProductSolutions.computeIfAbsent(product, k -> new ArrayList<>()).add(s);
+
             }
         }
     }
@@ -157,7 +160,7 @@ public class Supermarket {
         else{
             Shelf s = new Shelf(shelf, size);
             shelves.put(s.getName(), s);
-            associatedShelfSolutions.put(s.getName(), new ArrayList<>());
+            associatedShelfSolutions.put(shelf, new ArrayList<>());
         }
     }
 
