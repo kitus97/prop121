@@ -1,0 +1,278 @@
+login marc 123
+
+add-super super1
+select-super super1
+
+// Crear características
+add-char charA
+add-char charB
+add-char charC
+add-char charD
+add-char charE
+add-char charF
+add-char charG
+
+// Crear productos y asignar características aleatorias
+add-prod product1
+mod-prod product1 charA
+mod-prod product1 charB
+
+add-prod product2
+mod-prod product2 charC
+mod-prod product2 charD
+mod-prod product2 charE
+
+add-prod product3
+mod-prod product3 charF
+
+add-prod product4
+mod-prod product4 charG
+mod-prod product4 charA
+mod-prod product4 charB
+
+add-prod product5
+mod-prod product5 charC
+mod-prod product5 charD
+
+add-prod product6
+mod-prod product6 charE
+mod-prod product6 charF
+
+add-prod product7
+mod-prod product7 charG
+mod-prod product7 charA
+
+add-prod product8
+mod-prod product8 charB
+mod-prod product8 charC
+
+add-prod product9
+mod-prod product9 charD
+mod-prod product9 charE
+mod-prod product9 charF
+
+add-prod product10
+mod-prod product10 charG
+
+add-prod product11
+mod-prod product11 charA
+mod-prod product11 charB
+mod-prod product11 charC
+
+add-prod product12
+mod-prod product12 charD
+
+add-prod product13
+mod-prod product13 charE
+mod-prod product13 charF
+mod-prod product13 charG
+
+add-prod product14
+mod-prod product14 charA
+
+add-prod product15
+mod-prod product15 charB
+mod-prod product15 charC
+mod-prod product15 charD
+
+add-prod product16
+mod-prod product16 charE
+
+add-prod product17
+mod-prod product17 charF
+mod-prod product17 charG
+
+add-prod product18
+mod-prod product18 charA
+mod-prod product18 charB
+
+add-prod product19
+mod-prod product19 charC
+mod-prod product19 charD
+
+add-prod product20
+mod-prod product20 charE
+mod-prod product20 charF
+
+add-prod product21
+mod-prod product21 charG
+mod-prod product21 charA
+mod-prod product21 charB
+
+add-prod product22
+mod-prod product22 charC
+mod-prod product22 charD
+
+add-prod product23
+mod-prod product23 charE
+mod-prod product23 charF
+
+add-prod product24
+mod-prod product24 charG
+
+add-prod product25
+mod-prod product25 charA
+mod-prod product25 charB
+mod-prod product25 charC
+
+add-prod product26
+mod-prod product26 charD
+
+add-prod product27
+mod-prod product27 charE
+mod-prod product27 charF
+mod-prod product27 charG
+
+add-prod product28
+mod-prod product28 charA
+
+add-prod product29
+mod-prod product29 charB
+mod-prod product29 charC
+mod-prod product29 charD
+
+add-prod product30
+mod-prod product30 charE
+
+add-prod product31
+mod-prod product31 charF
+mod-prod product31 charG
+
+add-prod product32
+mod-prod product32 charA
+mod-prod product32 charB
+
+add-prod product33
+mod-prod product33 charC
+mod-prod product33 charD
+
+add-prod product34
+mod-prod product34 charE
+mod-prod product34 charF
+
+add-prod product35
+mod-prod product35 charG
+mod-prod product35 charA
+mod-prod product35 charB
+
+add-prod product36
+mod-prod product36 charC
+mod-prod product36 charD
+
+add-prod product37
+mod-prod product37 charE
+mod-prod product37 charF
+
+add-prod product38
+mod-prod product38 charG
+
+add-prod product39
+mod-prod product39 charA
+mod-prod product39 charB
+mod-prod product39 charC
+
+add-prod product40
+mod-prod product40 charD
+
+add-prod product41
+mod-prod product41 charE
+mod-prod product41 charF
+mod-prod product41 charG
+
+add-prod product42
+mod-prod product42 charA
+
+add-prod product43
+mod-prod product43 charB
+mod-prod product43 charC
+mod-prod product43 charD
+
+add-prod product44
+mod-prod product44 charE
+
+add-prod product45
+mod-prod product45 charF
+mod-prod product45 charG
+
+add-prod product46
+mod-prod product46 charA
+mod-prod product46 charB
+
+add-prod product47
+mod-prod product47 charC
+mod-prod product47 charD
+
+add-prod product48
+mod-prod product48 charE
+mod-prod product48 charF
+
+add-prod product49
+mod-prod product49 charG
+mod-prod product49 charA
+mod-prod product49 charB
+
+add-prod product50
+mod-prod product50 charC
+
+// Crear una estantería sin restricciones
+add-shelf shelf1 50
+
+// Crear un catálogo y añadir todos los productos
+add-cat catalogue1
+mod-cat catalogue1 product1
+mod-cat catalogue1 product2
+mod-cat catalogue1 product3
+mod-cat catalogue1 product4
+mod-cat catalogue1 product5
+mod-cat catalogue1 product6
+mod-cat catalogue1 product7
+mod-cat catalogue1 product8
+mod-cat catalogue1 product9
+mod-cat catalogue1 product10
+mod-cat catalogue1 product11
+mod-cat catalogue1 product12
+mod-cat catalogue1 product13
+mod-cat catalogue1 product14
+mod-cat catalogue1 product15
+mod-cat catalogue1 product16
+mod-cat catalogue1 product17
+mod-cat catalogue1 product18
+mod-cat catalogue1 product19
+mod-cat catalogue1 product20
+mod-cat catalogue1 product21
+mod-cat catalogue1 product22
+mod-cat catalogue1 product23
+mod-cat catalogue1 product24
+mod-cat catalogue1 product25
+mod-cat catalogue1 product26
+mod-cat catalogue1 product27
+mod-cat catalogue1 product28
+mod-cat catalogue1 product29
+mod-cat catalogue1 product30
+mod-cat catalogue1 product31
+mod-cat catalogue1 product32
+mod-cat catalogue1 product33
+mod-cat catalogue1 product34
+mod-cat catalogue1 product35
+mod-cat catalogue1 product36
+mod-cat catalogue1 product37
+mod-cat catalogue1 product38
+mod-cat catalogue1 product39
+mod-cat catalogue1 product40
+mod-cat catalogue1 product41
+mod-cat catalogue1 product42
+mod-cat catalogue1 product43
+mod-cat catalogue1 product44
+mod-cat catalogue1 product45
+mod-cat catalogue1 product46
+mod-cat catalogue1 product47
+mod-cat catalogue1 product48
+mod-cat catalogue1 product49
+mod-cat catalogue1 product50
+
+// Generar soluciones y verificarlas
+generate-solution solution50BT catalogue1 shelf1 Backtracking 1
+check-sol solution50BT
+
+generate-solution solution50HC catalogue1 shelf1 HillClimbing 1
+check-sol solution50HC

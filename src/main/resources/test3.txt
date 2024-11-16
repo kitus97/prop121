@@ -1,0 +1,103 @@
+login marc 123
+
+add-super super1
+select-super super1
+
+// Crear productos y añadir características
+add-prod product1
+add-prod product2
+add-prod product3
+add-prod product4
+
+add-char charA
+add-char charB
+add-char charC
+add-char charD
+
+// Asociar características a los productos
+mod-prod product1 charA
+mod-prod product1 charB
+mod-prod product2 charB
+mod-prod product2 charC
+mod-prod product3 charC
+mod-prod product3 charD
+mod-prod product4 charA
+mod-prod product4 charD
+
+// Añadir restricciones a los productos
+add-prod-rest product1 charA
+add-prod-rest product2 charC
+add-prod-rest product3 charD
+add-prod-rest product4 charB
+
+// Crear una estantería con tamaño suficiente
+add-shelf shelf1 4
+
+// Añadir restricciones a posiciones de la estantería
+add-rest shelf1 charA 0
+add-rest shelf1 charC 1
+add-rest shelf1 charD 2
+add-rest shelf1 charB 3
+
+// Crear un catálogo y añadir los productos
+add-cat catalogue1
+mod-cat catalogue1 product1
+mod-cat catalogue1 product2
+mod-cat catalogue1 product3
+mod-cat catalogue1 product4
+
+// Generar una solución con dos algoritmos y listar las soluciones
+generate-solution solution1BT catalogue1 shelf1 Backtracking 1
+generate-solution solution1HC catalogue1 shelf1 HillClimbing 1
+ls-sol
+
+// Caso 2: Otro conjunto de productos con restricciones más simples
+add-prod product5
+add-prod product6
+add-prod product7
+
+mod-prod product5 charA
+mod-prod product6 charB
+mod-prod product7 charC
+
+add-prod-rest product5 charA
+add-prod-rest product6 charB
+add-prod-rest product7 charC
+
+add-shelf shelf2 3
+
+add-rest shelf2 charA 0
+add-rest shelf2 charB 1
+add-rest shelf2 charC 2
+
+add-cat catalogue2
+mod-cat catalogue2 product5
+mod-cat catalogue2 product6
+mod-cat catalogue2 product7
+
+generate-solution solution2BT catalogue2 shelf2 Backtracking 1
+generate-solution solution2HC catalogue2 shelf2 HillClimbing 1
+ls-sol
+
+// Caso 3: Restricciones parcialmente vacías
+add-prod product8
+add-prod product9
+
+mod-prod product8 charA
+mod-prod product9 charC
+
+add-prod-rest product8 charA
+// No restricción para product9
+
+add-shelf shelf3 2
+
+add-rest shelf3 charA 0
+// No restricción para posición 1
+
+add-cat catalogue3
+mod-cat catalogue3 product8
+mod-cat catalogue3 product9
+
+generate-solution solution3BT catalogue3 shelf3 Backtracking 1
+generate-solution solution3HC catalogue3 shelf3 HillClimbing 1
+ls-sol

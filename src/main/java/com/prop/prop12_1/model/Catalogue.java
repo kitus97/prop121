@@ -41,13 +41,13 @@ public class Catalogue {
     }
 
     public void addProduct(String product) {
-        if(!allProducts.containsKey(product)) throw new NoSuchElementException("The product " + product + " does not exist.");
+        if(!allProducts.containsKey(product)) throw new NoSuchElementException("Error: The product " + product + " does not exist.");
         else if(products.containsKey(product)) throw new ProductAlreadyAddedException("The product " + product + " already exists in the catalogue.");
         else products.put(product, allProducts.get(product));
     }
 
     public void removeProduct(String product) {
-        if(products.remove(product) == null) throw new NoSuchElementException("The product " + product + " does not exist in the catalogue.");
+        if(products.remove(product) == null) throw new NoSuchElementException("Error: The product " + product + " does not exist in the catalogue.");
     }
 
     @Override

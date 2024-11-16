@@ -36,13 +36,6 @@ public class CtrlProd {
         }
     }
 
-    public void removeCharacteristic(String characteristicName) {
-        Characteristics deletedCharacteristic = characteristics.remove(characteristicName);
-        if (deletedCharacteristic == null) {
-            throw new CharacteristicNotFoundException("Characteristic with name '" + characteristicName + "' was not found");
-        }
-    }
-
     public Map<String,Double> checkProductSimilarities(String productName) {
         Product product = products.get(productName);
 
@@ -218,8 +211,7 @@ public class CtrlProd {
             Product p = findProduct(productName);
             if (p != null) {
                 if (p.getRestrictions().contains(c.getName())) {
-                    p.removeCharacteristic(c);
-                    c.removeAssociatedProduct(p);
+                    p.removeRestriction(c);
                 }
                 else {
                     throw new RestrictionNotFoundInProductException("Restriction with name '" + restrictionName + "' was not found in product");
@@ -293,7 +285,7 @@ public class CtrlProd {
         return products.get(productName);
     }
 
-    private Characteristics findCharacteristic(String characteristicName) {
+    public Characteristics findCharacteristic(String characteristicName) {
         return characteristics.get(characteristicName);
     }
 
@@ -311,6 +303,10 @@ public class CtrlProd {
         return products.values().stream()
                                 .map(Product::getName)
                                 .collect(Collectors.toList());
+    }
+
+    public String printProduct(String productName) {
+        return products.get(productName).toString();
     }
 
     public void setProducts(Map<String, Product> products) {
@@ -371,7 +367,7 @@ public class CtrlProd {
     }
 
     public String getProductName(int id) {
-        return products.get(id).getName();
+        return mapProductsId.get(id);
     }
 
 

@@ -12,6 +12,7 @@ public class Shelf{
 
 
     public Shelf(String n, int t) {
+        if(t < 0) throw new IndexOutOfBoundsException("Invalid size");
         name = n;
         distribution = new ArrayList<Set<String>>();
         for (int i = 0; i < t; ++i) {

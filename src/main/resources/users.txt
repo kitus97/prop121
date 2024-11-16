@@ -1,0 +1,4 @@
+josep:1234:User
+victor:1234:Admin
+marc:123:Admin
+odei:1234:Admin
