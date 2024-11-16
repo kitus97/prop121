@@ -192,7 +192,6 @@ public class Solution {
         return Math.round(totalSimilarity * 1e5) / 1e5;
     }
 
-
     @Override
     public String toString() {
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +

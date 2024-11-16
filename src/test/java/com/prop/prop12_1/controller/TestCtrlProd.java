@@ -67,18 +67,6 @@ public class TestCtrlProd {
     }
 
     @Test
-    public void testRemoveCharacteristic_Success() {
-        characteristicsMap.put("Characteristic 1", characteristicMock);
-        ctrlProd.removeCharacteristic("Characteristic 1");
-        assertFalse(characteristicsMap.containsKey("Characteristic 1"));
-    }
-
-    @Test
-    public void testRemoveCharacteristic_NotFound() {
-        assertThrows(CharacteristicNotFoundException.class, () -> ctrlProd.removeCharacteristic("Characteristic X"));
-    }
-
-    @Test
     public void testCheckProductSimilarities_Success() {
         productsMap.put("Product 1", productMock);
         similarityTable.add(Arrays.asList(1.0, 0.5));

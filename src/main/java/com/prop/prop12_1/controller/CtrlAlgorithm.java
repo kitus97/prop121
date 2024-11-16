@@ -2,6 +2,7 @@ package com.prop.prop12_1.controller;
 
 
 import com.prop.prop12_1.algorithm.BackTracking;
+import com.prop.prop12_1.algorithm.Greedy;
 import com.prop.prop12_1.algorithm.HillClimbing;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -27,14 +28,19 @@ public class CtrlAlgorithm {
         }
 
         if(algorithm == 0){
-            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new HillClimbing().generateSolution(shelf, products, similarityTable);
+            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new BackTracking().generateSolution(shelf, products, similarityTable);
             return solution;
         }
 
         else if(algorithm == 1){
-            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new BackTracking().generateSolution(shelf, products, similarityTable);
+            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new HillClimbing().generateSolution(shelf, products, similarityTable);
             return solution;
 
+        }
+
+        else if(algorithm == 2){
+            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new Greedy().generateSolution(shelf, products, similarityTable);
+            return solution;
         }
 
         return null;

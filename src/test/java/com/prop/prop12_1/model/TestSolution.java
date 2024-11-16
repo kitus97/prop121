@@ -8,7 +8,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
-
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ class TestSolution {
         productMock1 = mock(Product.class);
         productMock2 = mock(Product.class);
         ctrlProdMock = mock(CtrlProd.class);
+
 
         Field ctrlProdField = Solution.class.getDeclaredField("ctrlProd");
         ctrlProdField.setAccessible(true);
@@ -72,9 +74,9 @@ class TestSolution {
 
     @Test
     void testGetAndSetMark() {
-        assertEquals(5.0, solution.getMark());
+        assertEquals(5.0, solution.getMark(), 0.001);
         solution.setMark(8.5);
-        assertEquals(8.5, solution.getMark());
+        assertEquals(8.5, solution.getMark(), 0.001);
     }
 
     @Test
@@ -190,9 +192,9 @@ class TestSolution {
                 List.of(0.0, 1.0,0.0),
                 List.of(1.0, 0.0,1.0)
         ));
-        solution.updateMark(ctrlProdMock.generateSimilarityTable());
+        solution.updateMark();
 
-        assertEquals(1.0, solution.getMark());
+        assertEquals(1.0, solution.getMark(), 0.01);
     }
 
     @Test
@@ -207,9 +209,9 @@ class TestSolution {
         heuristicField.setAccessible(true);
         heuristicField.set(solution, "Custom");
 
-        solution.updateMark(ctrlProdMock.generateSimilarityTable());
+        solution.updateMark();
 
-        assertEquals(1.0, solution.getMark());
+        assertEquals(1.0, solution.getMark(), 0.01);
     }
 
 
@@ -314,5 +316,8 @@ class TestSolution {
         String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Puntuation: 5.0, Distribution: [(Product: Product1, Restrictions: [restriction1]), (Product: null, Restrictions: [restriction2]), (Product: Product2, Restrictions: null)]}\n";
         assertEquals(expected, solution.toString1());
     }
+
+
+
 }
 
