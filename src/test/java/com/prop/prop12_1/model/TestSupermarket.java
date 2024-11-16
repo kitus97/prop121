@@ -1,13 +1,8 @@
-package com.prop.prop12_1.controller;
+package com.prop.prop12_1.model;
 
 import com.prop.prop12_1.exceptions.CatalogAlreadyAdded;
 import com.prop.prop12_1.exceptions.ShelfAlreadyAddedException;
 import com.prop.prop12_1.exceptions.SolutionAlreadyAddedException;
-import com.prop.prop12_1.model.Catalogue;
-import com.prop.prop12_1.model.Shelf;
-import com.prop.prop12_1.model.Solution;
-import com.prop.prop12_1.model.Supermarket;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
