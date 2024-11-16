@@ -192,9 +192,6 @@ public class Solution {
         return Math.round(totalSimilarity * 1e5) / 1e5;
     }
 
-    public String getHeuristic(){
-        return heuristic;
-    }
 
     @Override
     public String toString() {
