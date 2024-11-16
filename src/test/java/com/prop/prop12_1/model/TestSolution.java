@@ -8,8 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 
 import java.util.ArrayList;
 
@@ -31,7 +30,6 @@ class TestSolution {
         productMock1 = mock(Product.class);
         productMock2 = mock(Product.class);
         ctrlProdMock = mock(CtrlProd.class);
-
 
         Field ctrlProdField = Solution.class.getDeclaredField("ctrlProd");
         ctrlProdField.setAccessible(true);
@@ -74,10 +72,57 @@ class TestSolution {
 
     @Test
     void testGetAndSetMark() {
-        assertEquals(5.0, solution.getMark(), 0.001);
+        assertEquals(5.0, solution.getMark());
         solution.setMark(8.5);
-        assertEquals(8.5, solution.getMark(), 0.001);
+        assertEquals(8.5, solution.getMark());
     }
+
+    @Test
+    public void testCheckMarkSwap() {
+        when(ctrlProdMock.generateSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.5),
+                List.of(0.5, 1.0)
+        ));
+        when(ctrlProdMock.getProductName(anyInt())).thenReturn("Product1", "Product2");
+        when(ctrlProdMock.findProduct(anyString())).thenReturn(productMock1, productMock2);
+
+        solution.setMark(2.0);
+        Double markAfterSwap = solution.checkMarkSwap(0, 1);
+
+        assertNotNull(markAfterSwap);
+        assertNotEquals(solution.getMark(), markAfterSwap);
+    }
+
+    @Test
+    public void testCheckMarkDelete() {
+        when(ctrlProdMock.generateSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.5),
+                List.of(0.5, 1.0)
+        ));
+
+        solution.setMark(2.0);
+        Double markAfterDelete = solution.checkMarkDelete(0);
+
+        assertNotNull(markAfterDelete);
+        assertNotEquals(solution.getMark(), markAfterDelete);
+    }
+
+    @Test
+    public void testCheckMarkAdd() {
+        when(ctrlProdMock.findProduct("Product1")).thenReturn(productMock1);
+        when(productMock1.getRestrictions()).thenReturn(Set.of("restriction1"));
+        when(ctrlProdMock.generateSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.5),
+                List.of(0.5, 1.0)
+        ));
+
+        solution.setMark(2.0);
+        Double markAfterAdd = solution.checkMarkAdd("Product1", 0);
+
+        assertNotNull(markAfterAdd);
+        assertNotEquals(solution.getMark(), markAfterAdd);
+    }
+
 
 
 
@@ -129,9 +174,8 @@ class TestSolution {
                 List.of(0.0,0.0,1.0)
         ));
 
-        solution.updateMark();
-
-        assertEquals(1.0, solution.getMark(), 0.01);
+        solution.updateMark(ctrlProdMock.generateSimilarityTable());
+        assertEquals(1.0, solution.getMark());
     }
 
     @Test
@@ -146,9 +190,9 @@ class TestSolution {
                 List.of(0.0, 1.0,0.0),
                 List.of(1.0, 0.0,1.0)
         ));
-        solution.updateMark();
+        solution.updateMark(ctrlProdMock.generateSimilarityTable());
 
-        assertEquals(1.0, solution.getMark(), 0.01);
+        assertEquals(1.0, solution.getMark());
     }
 
     @Test
@@ -163,9 +207,9 @@ class TestSolution {
         heuristicField.setAccessible(true);
         heuristicField.set(solution, "Custom");
 
-        solution.updateMark();
+        solution.updateMark(ctrlProdMock.generateSimilarityTable());
 
-        assertEquals(1.0, solution.getMark(), 0.01);
+        assertEquals(1.0, solution.getMark());
     }
 
 
@@ -270,8 +314,5 @@ class TestSolution {
         String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Puntuation: 5.0, Distribution: [(Product: Product1, Restrictions: [restriction1]), (Product: null, Restrictions: [restriction2]), (Product: Product2, Restrictions: null)]}\n";
         assertEquals(expected, solution.toString1());
     }
-
-
-
 }
 

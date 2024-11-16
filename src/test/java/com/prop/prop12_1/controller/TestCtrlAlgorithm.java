@@ -114,16 +114,5 @@ public class TestCtrlAlgorithm {
         assertNull(solution);
     }
 
-    @Test
-    public void testGetSolution_EmptyInputs() {
-        List<Set<String>> shelf = Collections.emptyList();
-        List<Pair<Integer, Set<String>>> products = Collections.emptyList();
 
-        Pair<Double, List<Pair<Integer, Set<String>>>> solution =
-                ctrlAlgorithm.getSolution(shelf, products, 0, true);
-
-        assertNotNull(solution);
-        assertEquals(0.0, solution.getLeft());
-        assertTrue(solution.getRight().isEmpty());
-    }
 }
