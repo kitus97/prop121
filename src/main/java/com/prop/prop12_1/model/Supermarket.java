@@ -2,6 +2,7 @@ package com.prop.prop12_1.model;
 
 import com.prop.prop12_1.controller.CtrlAlgorithm;
 import com.prop.prop12_1.exceptions.CatalogAlreadyAdded;
+import com.prop.prop12_1.exceptions.ProductAlreadyAddedException;
 import com.prop.prop12_1.exceptions.ShelfAlreadyAddedException;
 import com.prop.prop12_1.exceptions.SolutionAlreadyAddedException;
 import org.apache.commons.lang3.tuple.Pair;
@@ -107,7 +108,8 @@ public class Supermarket {
             associatedCatalogSolutions.get(catalog).add(s);
             List<String> associatedProducts = cat.getProductNames();
             for(int i = 0; i < associatedProducts.size(); i++){
-                associatedProductSolutions.get(associatedProducts.get(i)).add(s);
+                String product = associatedProducts.get(i);
+                associatedProductSolutions.computeIfAbsent(product, k -> new ArrayList<>()).add(s);
 
             }
         }
@@ -157,6 +159,7 @@ public class Supermarket {
         else{
             Shelf s = new Shelf(shelf, size);
             shelves.put(s.getName(), s);
+            associatedShelfSolutions.put(shelf, new ArrayList<>());
         }
     }
 
@@ -168,7 +171,10 @@ public class Supermarket {
 
     public void addCatalogue(String catalog){
         if(catalogs.containsKey(catalog)) throw new CatalogAlreadyAdded("Name " + catalog + " is already used as a catalogue.");
-        else catalogs.put(catalog, new Catalogue(catalog));
+        else{
+            catalogs.put(catalog, new Catalogue(catalog));
+            associatedCatalogSolutions.put(catalog, new ArrayList<>());
+        }
     }
 
     public void addRestriction(String shelf, String restriction, int index){
@@ -248,12 +254,25 @@ public class Supermarket {
 
     public void deleteSolutionProduct(String solution, int index){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
-        else solutions.get(solution).deleteProduct(index);
+        else {
+            String product = solutions.get(solution).deleteProduct(index);
+            List<Solution> ss = associatedProductSolutions.get(product);
+            Solution s = solutions.get(solution);
+            ss.remove(s);
+        }
     }
 
     public void addSolutionProduct(String solution, String product, int index){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
-        else solutions.get(solution).addProduct(product, index);
+        else if(associatedProductSolutions.get(product) != null && associatedProductSolutions.get(product).contains(solutions.get(solution))){
+            throw new ProductAlreadyAddedException("The product is already in the solution");
+        }
+        else{
+            solutions.get(solution).addProduct(product, index);
+            List<Solution> ss = associatedProductSolutions.get(product);
+            Solution s = solutions.get(solution);
+            ss.add(s);
+        }
     }
 
     public void updateSolutionMark(String product1, List<List<Double>> similarityTable, Boolean generated){

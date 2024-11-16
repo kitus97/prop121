@@ -146,11 +146,12 @@ public class Solution {
 
     }
 
-    public void deleteProduct(int index){
+    public String deleteProduct(int index){
         if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
         Pair<Product, Set<String>> pair = distribution.get(index);
         distribution.set(index, Pair.of(null, pair.getRight()));
         updateMark(getSimilarityTable());
+        return pair.getLeft().getName();
     }
 
     public void addProduct(String product, int index){
