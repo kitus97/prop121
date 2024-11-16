@@ -94,7 +94,7 @@ public class CtrlProd {
             Product newProduct = new Product(products.size(), productName);
             products.put(productName, newProduct);
             int size = products.size();
-            mapProductsId.put(size,productName);
+            mapProductsId.put(size - 1, productName);
         }
         else {
             throw new ProductAlreadyAddedException("Product with name '" + productName + "' was already added");

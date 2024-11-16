@@ -34,21 +34,16 @@ public class Greedy {
             solution.add(Pair.of(null, shelf.get(i)));
         }
 
-        Boolean primero = false;
         int shelfSize = shelf.size();
         if (shelfSize > 0) {
+            Set<String> currentRestrictions = shelf.getFirst();
             for (int j = 0; j < products.size(); j++) {
-                Set<String> currentRestrictions = shelf.get(0);
                 if (products.get(j).getRight().equals(currentRestrictions)) {
                     solution.set(0, products.get(j));
                     products.remove(j);
-                    primero = true;
                     break;
                 }
             }
-        }
-        if (!primero) {
-            solution.set(0, Pair.of(null, shelf.getFirst()));
         }
 
         for (int i = 1; i < shelfSize; i++) {
@@ -59,12 +54,12 @@ public class Greedy {
             for (int j = 0; j < products.size(); ++j) {
                 if (products.get(j).getRight().equals(shelf.get(i))) {
                     if (idAnt == -1) {
-                        solution.set(i, products.get(j));
+                        idAct = products.get(j).getLeft();
                         break;
                     } else {
-                        if (maxsim < similarityTable.get(idAnt).get(j)) {
+                        if (maxsim <= similarityTable.get(idAnt).get(products.get(j).getLeft())) {
                             idAct = j;
-                            maxsim = similarityTable.get(idAnt).get(j);
+                            maxsim = similarityTable.get(idAnt).get(products.get(j).getLeft());
                         }
                     }
                 }
