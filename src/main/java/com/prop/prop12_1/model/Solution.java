@@ -215,7 +215,6 @@ public class Solution {
         updateMark(getSimilarityTable());
     }
 
-
     /**
      * Agrega un producto a la distribución.
      *

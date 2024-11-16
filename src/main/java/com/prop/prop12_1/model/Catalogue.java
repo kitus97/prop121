@@ -91,7 +91,7 @@ public class Catalogue {
     }
 
     /**
-     * Devuelve una representación en forma de string del catálogo, incluyendo su nombre y productos.
+     * Devuelve una representación en forma de string del catálogo, incluyendo su nombre y sus productos.
      *
      * @return Una representación en forma de string del catálogo.
      */
