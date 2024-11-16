@@ -69,8 +69,9 @@ public class Supermarket {
         return shelfs;
     }
 
-    public Shelf getShelf(String s){
-        return shelves.get(s);
+    public String getShelf(String s){
+        if(!shelves.containsKey(s)) throw new NoSuchElementException("No such self");
+        else return shelves.get(s).toString();
     }
 
     public List<Catalogue> getCatalogs() {

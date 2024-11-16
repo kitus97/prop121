@@ -62,10 +62,7 @@ public class CtrlSupermarket {
     /*Returns null if sh doesnt exist.*/
     public String getShelf(String supermarket, String sh){
         Supermarket m = supermarkets.get(supermarket);
-        if(m.getShelf(sh) != null){
-            return m.getShelf(sh).getName();
-        }
-        else return null;
+        return m.getShelf(sh);
     }
 
     /*restriction es el nombre de una caracteristica existente, se comprueba quee existe en el ctrl domini*/
