@@ -28,12 +28,12 @@ public class CtrlAlgorithm {
         }
 
         if(algorithm == 0){
-            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new HillClimbing().generateSolution(shelf, products, similarityTable);
+            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new BackTracking().generateSolution(shelf, products, similarityTable);
             return solution;
         }
 
         else if(algorithm == 1){
-            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new BackTracking().generateSolution(shelf, products, similarityTable);
+            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new HillClimbing().generateSolution(shelf, products, similarityTable);
             return solution;
 
         }

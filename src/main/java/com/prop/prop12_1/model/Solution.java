@@ -113,19 +113,19 @@ public class Solution {
         return this.solutionName == null;
     }
 
-    public Double checkMarkSwap(int idx1, int idx2){
+    public double checkMarkSwap(int idx1, int idx2){
         Solution s = copy();
         s.changeProducts(idx1, idx2);
         return s.mark;
     }
 
-    public Double checkMarkDelete(int index){
+    public double checkMarkDelete(int index){
         Solution s = copy();
         s.deleteProduct(index);
         return s.mark;
     }
 
-    public Double checkMarkAdd(String product, int index){
+    public double checkMarkAdd(String product, int index){
         Solution s = copy();
         s.addProduct(product, index);
         return s.mark;
@@ -193,21 +193,16 @@ public class Solution {
         return Math.round(totalSimilarity * 1e5) / 1e5;
     }
 
-
     @Override
     public String toString() {
-        return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-        + mark + "}\n";
-    }
-
-    public String toString1() {
         StringBuilder distributionString = new StringBuilder("[");
+        int i = 0;
         for (Pair<Product, Set<String>> pair : distribution) {
             String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
             String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
-            distributionString.append("(Product: ").append(productName)
-                    .append(", Restrictions: ").append(restrictions).append("), ");
+            distributionString.append(i).append(" - (").append(productName)
+                    .append(", ").append(restrictions).append("), ");
+            i++;
         }
         if (!distribution.isEmpty()) {
             distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
@@ -215,7 +210,7 @@ public class Solution {
         distributionString.append("]");
 
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + ", Distribution: " + distributionString + "}\n";
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Punctuation: "
+                + mark + ", Valid: " + valid + "\n >> Distribution: " + distributionString + "}\n";
     }
 }

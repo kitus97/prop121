@@ -73,7 +73,7 @@ public class Supermarket {
         return shelves.get(s);
     }
 
-    public List<Object> getCatalogs() {
+    public List<Catalogue> getCatalogs() {
         return new ArrayList<>(catalogs.values());
     }
 
@@ -84,14 +84,14 @@ public class Supermarket {
 
     public void generateSolution(String name, String shelf, String catalog, boolean heuristic, int algorithm){
         Shelf sh = shelves.get(shelf);
-        if(sh == null) throw new NoSuchElementException("No such shelf");
+        if(sh == null) throw new NoSuchElementException("Error: No such shelf");
         Catalogue cat = catalogs.get(catalog);
-        if(cat == null) throw new NoSuchElementException("No such catalog");
+        if(cat == null) throw new NoSuchElementException("Error: No such catalog");
 
         List<Set<String>> distribution = sh.getDistribution();
         List<Pair<Integer, Set<String>>> products = cat.getProductsArray();
 
-        if(solutions.containsKey(name)) throw new SolutionAlreadyAddedException("Name: " + name + " is already used as a solution name.");
+        if(solutions.containsKey(name)) throw new SolutionAlreadyAddedException("Error: Name: " + name + " is already used as a solution name.");
 
         else {
             String alg;
@@ -114,11 +114,11 @@ public class Supermarket {
 
             }
         }
-
     }
 
     private void invalidateCatalogSolution(String catalog){
         List<Solution> solutions = associatedCatalogSolutions.get(catalog);
+        if (solutions == null) return;
         for (int i = 0; i < solutions.size(); i++) {
             if(solutions.get(i).deleted()){
                 solutions.remove(i);
@@ -130,6 +130,7 @@ public class Supermarket {
 
     private void invalidateShelfSolution(String shelf){
         List<Solution> solutions = associatedShelfSolutions.get(shelf);
+        if (solutions == null) return;
         for (int i = 0; i < solutions.size(); i++) {
             if(solutions.get(i).deleted()) {
                 solutions.remove(i);
@@ -142,6 +143,7 @@ public class Supermarket {
 
     public void invalidateProductSolution(String product){
         List<Solution> solutions = associatedProductSolutions.get(product);
+        if (solutions == null) return;
         for (int i = 0; i < solutions.size(); i++) {
             if(solutions.get(i).deleted()){
                 solutions.remove(i);
@@ -150,8 +152,6 @@ public class Supermarket {
             else solutions.get(i).setValid(false);
         }
     }
-
-
 
     public void addShelf(String shelf, int size){
         if(shelves.containsKey(shelf)){
@@ -172,7 +172,7 @@ public class Supermarket {
 
     public void addCatalogue(String catalog){
         if(catalogs.containsKey(catalog)) throw new CatalogAlreadyAdded("Name " + catalog + " is already used as a catalogue.");
-        else{
+        else {
             catalogs.put(catalog, new Catalogue(catalog));
             associatedCatalogSolutions.put(catalog, new ArrayList<>());
         }
@@ -200,13 +200,13 @@ public class Supermarket {
 
     public void addProductToCatalogue(String product, String catalog){
         Catalogue cat = catalogs.get(catalog);
-        if(cat == null) throw new NoSuchElementException("The catalog " + catalog + " does not exist.");
+        if(cat == null) throw new NoSuchElementException("Error: The catalog " + catalog + " does not exist.");
         else cat.addProduct(product);
     }
 
     public void removeProductFromCatalogue(String product, String catalog){
         Catalogue cat = catalogs.get(catalog);
-        if(cat == null) throw new NoSuchElementException("The catalog " + catalog + " does not exist.");
+        if(cat == null) throw new NoSuchElementException("Error: The catalog " + catalog + " does not exist.");
         else{
             cat.removeProduct(product);
             invalidateCatalogSolution(catalog);
@@ -215,7 +215,7 @@ public class Supermarket {
 
     public void resizeShelf(String shelf, int size){
         Shelf sh = shelves.get(shelf);
-        if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
+        if(sh == null) throw new NoSuchElementException("Error: The shelf " + shelf + " does not exist.");
         else{
             sh.resizeShelf(size);
             invalidateShelfSolution(shelf);
@@ -223,24 +223,23 @@ public class Supermarket {
     }
 
     public void deleteCatalogue(String catalog){
-        if (catalogs.remove(catalog) == null) throw new NoSuchElementException("No such catalog.");
+        if (catalogs.remove(catalog) == null) throw new NoSuchElementException("Error: No such catalog.");
         else associatedCatalogSolutions.remove(catalog);
     }
 
     public void deleteSolution(String solution){
         Solution s = solutions.get(solution);
-        if(s == null) throw new NoSuchElementException("No such solution.");
+        if(s == null) throw new NoSuchElementException("Error: No such solution.");
         else {
             solutions.remove(solution);
             s.delete();
         }
-
     }
 
     public String getSolution(String solution){
-        if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        if (!solutions.containsKey(solution)) throw new NoSuchElementException("Error: No such solution.");
         else{
-            return solutions.get(solution).toString1();
+            return solutions.get(solution).toString();
         }
     }
 
@@ -291,7 +290,6 @@ public class Supermarket {
         }
     }
 
-
     public double checkDeleteSolutionProduct(String solution, int index){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
         else return solutions.get(solution).checkMarkDelete(index);
@@ -306,7 +304,6 @@ public class Supermarket {
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
         else return solutions.get(solution).checkMarkSwap(idx1, idx2);
     }
-
 
     @Override
     public String toString() {

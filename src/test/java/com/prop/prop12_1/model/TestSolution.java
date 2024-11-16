@@ -129,7 +129,7 @@ class TestSolution {
                 List.of(0.0,0.0,1.0)
         ));
 
-        solution.updateMark();
+        solution.updateMark(ctrlProdMock.generateSimilarityTable());
 
         assertEquals(1.0, solution.getMark(), 0.01);
     }
@@ -146,7 +146,7 @@ class TestSolution {
                 List.of(0.0, 1.0,0.0),
                 List.of(1.0, 0.0,1.0)
         ));
-        solution.updateMark();
+        solution.updateMark(ctrlProdMock.generateSimilarityTable());
 
         assertEquals(1.0, solution.getMark(), 0.01);
     }
@@ -163,7 +163,7 @@ class TestSolution {
         heuristicField.setAccessible(true);
         heuristicField.set(solution, "Custom");
 
-        solution.updateMark();
+        solution.updateMark(ctrlProdMock.generateSimilarityTable());
 
         assertEquals(1.0, solution.getMark(), 0.01);
     }
@@ -268,7 +268,7 @@ class TestSolution {
         solution.setDistribution(newDist);
 
         String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Puntuation: 5.0, Distribution: [(Product: Product1, Restrictions: [restriction1]), (Product: null, Restrictions: [restriction2]), (Product: Product2, Restrictions: null)]}\n";
-        assertEquals(expected, solution.toString1());
+        assertEquals(expected, solution.toString());
     }
 
 

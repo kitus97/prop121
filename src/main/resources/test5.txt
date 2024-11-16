@@ -1,0 +1,186 @@
+login marc 123
+
+add-super super1
+select-super super1
+
+// Crear características
+add-char charA
+add-char charB
+add-char charC
+add-char charD
+add-char charE
+add-char charF
+add-char charG
+
+// Crear productos y asignar características aleatorias
+add-prod product1
+mod-prod product1 charA
+mod-prod product1 charB
+add-prod-rest product1 charA
+add-prod-rest product1 charB
+
+add-prod product2
+mod-prod product2 charB
+mod-prod product2 charC
+add-prod-rest product2 charB
+add-prod-rest product2 charC
+
+add-prod product3
+mod-prod product3 charC
+add-prod-rest product3 charC
+
+add-prod product4
+mod-prod product4 charD
+mod-prod product4 charA
+add-prod-rest product4 charD
+add-prod-rest product4 charA
+
+add-prod product5
+mod-prod product5 charE
+mod-prod product5 charF
+mod-prod product5 charA
+add-prod-rest product5 charE
+add-prod-rest product5 charA
+
+add-prod product6
+mod-prod product6 charF
+mod-prod product6 charG
+mod-prod product6 charB
+add-prod-rest product6 charF
+add-prod-rest product6 charB
+
+add-prod product7
+mod-prod product7 charG
+mod-prod product7 charA
+mod-prod product7 charC
+add-prod-rest product7 charG
+add-prod-rest product7 charA
+
+add-prod product8
+mod-prod product8 charA
+add-prod-rest product8 charA
+
+add-prod product9
+mod-prod product9 charB
+mod-prod product9 charC
+mod-prod product9 charD
+add-prod-rest product9 charB
+add-prod-rest product9 charC
+
+add-prod product10
+mod-prod product10 charD
+mod-prod product10 charE
+add-prod-rest product10 charD
+
+add-prod product11
+mod-prod product11 charE
+mod-prod product11 charF
+add-prod-rest product11 charE
+
+add-prod product12
+mod-prod product12 charF
+mod-prod product12 charG
+mod-prod product12 charA
+add-prod-rest product12 charF
+add-prod-rest product12 charA
+
+add-prod product13
+mod-prod product13 charG
+add-prod-rest product13 charG
+
+add-prod product14
+mod-prod product14 charA
+mod-prod product14 charB
+mod-prod product14 charC
+add-prod-rest product14 charA
+add-prod-rest product14 charB
+
+add-prod product15
+mod-prod product15 charC
+mod-prod product15 charD
+add-prod-rest product15 charC
+
+add-prod product16
+mod-prod product16 charD
+mod-prod product16 charE
+mod-prod product16 charF
+add-prod-rest product16 charD
+add-prod-rest product16 charE
+
+add-prod product17
+mod-prod product17 charE
+mod-prod product17 charF
+mod-prod product17 charG
+add-prod-rest product17 charE
+add-prod-rest product17 charF
+
+add-prod product18
+mod-prod product18 charF
+mod-prod product18 charG
+add-prod-rest product18 charF
+
+add-prod product19
+mod-prod product19 charG
+mod-prod product19 charA
+add-prod-rest product19 charG
+
+add-prod product20
+mod-prod product20 charA
+mod-prod product20 charB
+add-prod-rest product20 charA
+
+// Crear una estantería con restricciones
+add-shelf shelf1 20
+add-rest shelf1 charA 0
+add-rest shelf1 charB 1
+add-rest shelf1 charC 2
+add-rest shelf1 charD 3
+add-rest shelf1 charE 4
+add-rest shelf1 charF 5
+add-rest shelf1 charG 6
+add-rest shelf1 charA 7
+add-rest shelf1 charB 8
+add-rest shelf1 charC 9
+add-rest shelf1 charD 10
+add-rest shelf1 charE 11
+add-rest shelf1 charF 12
+add-rest shelf1 charG 13
+add-rest shelf1 charA 14
+add-rest shelf1 charB 15
+add-rest shelf1 charC 16
+add-rest shelf1 charD 17
+add-rest shelf1 charE 18
+add-rest shelf1 charF 19
+
+// Crear un catálogo y añadir los productos
+add-cat catalogue1
+mod-cat catalogue1 product1
+mod-cat catalogue1 product2
+mod-cat catalogue1 product3
+mod-cat catalogue1 product4
+mod-cat catalogue1 product5
+mod-cat catalogue1 product6
+mod-cat catalogue1 product7
+mod-cat catalogue1 product8
+mod-cat catalogue1 product9
+mod-cat catalogue1 product10
+mod-cat catalogue1 product11
+mod-cat catalogue1 product12
+mod-cat catalogue1 product13
+mod-cat catalogue1 product14
+mod-cat catalogue1 product15
+mod-cat catalogue1 product16
+mod-cat catalogue1 product17
+mod-cat catalogue1 product18
+mod-cat catalogue1 product19
+mod-cat catalogue1 product20
+
+// Generar soluciones y verificarlas
+generate-solution solution20BT catalogue1 shelf1 Backtracking 1
+check-sol solution20BT
+
+generate-solution solution20HC catalogue1 shelf1 HillClimbing 1
+check-sol solution20HC
+
+// Puntuación ideal (solo cálculos relevantes):
+// Calcular intersection/union para cada pareja de productos contiguos en la estantería.

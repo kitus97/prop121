@@ -1,10 +1,13 @@
 package com.prop.prop12_1.controller;
 
+import com.prop.prop12_1.exceptions.SupermarketAlreadyAddedException;
+import com.prop.prop12_1.model.Catalogue;
 import com.prop.prop12_1.model.Supermarket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class CtrlSupermarket {
 
@@ -16,18 +19,12 @@ public class CtrlSupermarket {
 
     /* Returns true if the supermarket is created succesfully,
     returns false otherwise (the supermarket already existed)*/
-    public boolean addSupermarket(String n){
-        if(supermarkets.containsKey(n)){
-            return false;
-        }
-        else{
-            supermarkets.put(n, new Supermarket(n));
-            return true;
-        }
+    public void addSupermarket(String n){
+        if(supermarkets.put(n, new Supermarket(n)) != null) throw new SupermarketAlreadyAddedException("Supermarket with name '" + n + "' already exists");
     }
 
-    public boolean removeSupermarket(String n){
-        return supermarkets.remove(n) != null;
+    public void removeSupermarket(String n){
+        if (supermarkets.remove(n) == null) throw new NoSuchElementException("Error: supermarket with name '" + n + "' not found");
     }
 
     public List<String> getSupermarkets(){
@@ -38,6 +35,10 @@ public class CtrlSupermarket {
         }
 
         return ret;
+    }
+
+    public boolean existsSupermarket(String supermarket) {
+        return supermarkets.containsKey(supermarket);
     }
 
     /*Pre: supermarket exists*/
@@ -84,16 +85,6 @@ public class CtrlSupermarket {
         m.resizeShelf(shelf, size);
     }
 
-    public String getRequirements(){
-        String s = "To generate a solution you need to input, in order: \n" +
-                "-The name of the solution you want to create\n" +
-                "-The name of the shelf to be used\n" +
-                "-The name of the catalogue to be used\n" +
-                "-1 or 0 to select the heuristic (1= generated, 0= predefined)\n" +
-                "-1 or 0 to select the algorithm (1= BackTracking, 0= HillClimbing\n";
-        return s;
-    }
-
     public void generateSolution(String supermarket, String name, String shelf, String catalog, boolean heuristic, int algorithm){
         Supermarket m = supermarkets.get(supermarket);
         m.generateSolution(name, shelf, catalog, heuristic, algorithm);
@@ -129,7 +120,6 @@ public class CtrlSupermarket {
         supermarkets.get(supermarket).deleteSolution(solution);
     }
 
-
     public void addCatalog(String supermarket, String catalog){
         supermarkets.get(supermarket).addCatalogue(catalog);
     }
@@ -152,20 +142,25 @@ public class CtrlSupermarket {
         }
     }
 
-    public Double checkDeleteSolutionProduct(String supermarket, String solution, int index){
+    public double checkDeleteSolutionProduct(String supermarket, String solution, int index){
         return supermarkets.get(supermarket).checkDeleteSolutionProduct(solution, index);
     }
 
-    public Double checkAddSolutionProduct(String supermarket, String solution, String product, int index){
+    public double checkAddSolutionProduct(String supermarket, String solution, String product, int index){
         return supermarkets.get(supermarket).checkAddSolutionProduct(solution, product, index);
     }
 
-    public Double checkSwapSolution(String supermarket, String solution, int index1, int index2){
+    public double checkSwapSolution(String supermarket, String solution, int index1, int index2){
         return supermarkets.get(supermarket).checkSwapSolution(solution, index1, index2);
     }
 
-
     public List<String> listProdsCatalogue(String supermarket, String catalogueName) {
         return supermarkets.get(supermarket).listProdsCatalogue(catalogueName);
+    }
+
+    public List<String> listCatalogues(String supermarketName) {
+        return supermarkets.get(supermarketName).getCatalogs().stream()
+                                                              .map(Catalogue::getName)
+                                                              .toList();
     }
 }

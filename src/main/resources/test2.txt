@@ -1,0 +1,40 @@
+login marc 123
+
+add-super super1
+select-super super1
+
+add-char c1
+add-char c2
+add-char c3
+
+add-prod p1
+add-prod p2
+add-prod p3
+add-prod p4
+add-prod p5
+
+mod-prod p1 c1
+mod-prod p2 c1
+mod-prod p2 c2
+mod-prod p3 c2
+mod-prod p4 c1
+mod-prod p4 c2
+mod-prod p4 c3
+mod-prod p5 c1
+mod-prod p5 c2
+mod-prod p5 c3
+
+add-cat cat1
+
+mod-cat cat1 p1
+mod-cat cat1 p2
+mod-cat cat1 p3
+mod-cat cat1 p4
+mod-cat cat1 p5
+
+add-shelf sh1 5
+
+generate-solution solution1HC cat1 sh1 HillClimbing 1
+generate-solution solution1BT cat1 sh1 Backtracking 1
+
+ls-sol
