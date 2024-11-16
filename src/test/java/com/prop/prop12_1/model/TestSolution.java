@@ -192,7 +192,7 @@ class TestSolution {
                 List.of(0.0, 1.0,0.0),
                 List.of(1.0, 0.0,1.0)
         ));
-        solution.updateMark();
+        solution.updateMark(ctrlProdMock.generateSimilarityTable());
 
         assertEquals(1.0, solution.getMark(), 0.01);
     }
@@ -209,7 +209,7 @@ class TestSolution {
         heuristicField.setAccessible(true);
         heuristicField.set(solution, "Custom");
 
-        solution.updateMark();
+        solution.updateMark(ctrlProdMock.generateSimilarityTable());
 
         assertEquals(1.0, solution.getMark(), 0.01);
     }

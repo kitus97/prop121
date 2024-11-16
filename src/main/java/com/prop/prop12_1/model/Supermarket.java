@@ -254,12 +254,15 @@ public class Supermarket {
 
     public void deleteSolutionProduct(String solution, int index){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        /*
         else {
             String product = solutions.get(solution).deleteProduct(index);
             List<Solution> ss = associatedProductSolutions.get(product);
             Solution s = solutions.get(solution);
             ss.remove(s);
         }
+
+         */
     }
 
     public void addSolutionProduct(String solution, String product, int index){

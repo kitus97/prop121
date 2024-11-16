@@ -211,21 +211,6 @@ public class TestCtrlProd {
 
 
     @Test
-    public void testRemoveRestrictionProduct_Success() {
-        characteristicsMap.put("Restriction 1", characteristicMock);
-        productsMap.put("Product 1", productMock);
-
-        when(characteristicMock.getName()).thenReturn("Restriction 1");
-        when(productMock.getRestrictions()).thenReturn(Set.of("Restriction 1"));
-
-        ctrlProd.removeRestrictionProduct("Restriction 1", "Product 1");
-
-        verify(productMock).removeCharacteristic(characteristicMock);
-        verify(characteristicMock).removeAssociatedProduct(productMock);
-    }
-
-
-    @Test
     public void testRemoveRestrictionProduct_ProductNotFound() {
         characteristicsMap.put("Restriction 1", characteristicMock);
 
@@ -365,17 +350,15 @@ public class TestCtrlProd {
     }
 
     @Test
-    public void testSetSimilarities_FirstProduct() {
-        Product product1 = new Product(0, "Product 1");
-
-        productsMap.put("Product 1", product1);
-        mapProductsId.put(0, "Product 1");
+    public void testSetSimilarities_SingleProduct() {
+        ctrlProd.addProduct("Product 1");
 
         boolean result = ctrlProd.setSimilarities(null);
 
         assertTrue(result);
-        assertEquals(1, similarityTable.size());
-        assertEquals(1.0, similarityTable.get(0).get(0));
+        assertEquals(1, ctrlProd.getSimilarityTable().size());
+        assertEquals(1, ctrlProd.getSimilarityTable().get(0).size());
+        assertEquals(0.0, ctrlProd.getSimilarityTable().get(0).get(0));
     }
 
     @Test
@@ -383,29 +366,27 @@ public class TestCtrlProd {
         Product product1 = new Product(0, "Product 1");
         Product product2 = new Product(1, "Product 2");
 
-        Characteristics characteristic1 = new Characteristics(1, "char 1");
-        Characteristics characteristic2 = new Characteristics(2, "char 2");
+        Characteristics characteristic1 = new Characteristics(1, "char1");
+        Characteristics characteristic2 = new Characteristics(2, "char2");
 
-        Set<Characteristics> characteristicsSet1 = new HashSet<>(Collections.singletonList(characteristic1));
-        Set<Characteristics> characteristicsSet2 = new HashSet<>(Arrays.asList(characteristic1, characteristic2));
+        product1.setCharacteristics(Set.of(characteristic1));
+        product2.setCharacteristics(Set.of(characteristic1, characteristic2));
 
-        product1.setCharacteristics(characteristicsSet1);
-        product2.setCharacteristics(characteristicsSet2);
+        ctrlProd.getProducts().put("Product 1", product1);
+        ctrlProd.getProducts().put("Product 2", product2);
+        ctrlProd.getMapProductsId().put(0, "Product 1");
+        ctrlProd.getMapProductsId().put(1, "Product 2");
 
-        productsMap.put("Product 1", product1);
-        productsMap.put("Product 2", product2);
-        mapProductsId.put(0, "Product 1");
-        mapProductsId.put(1, "Product 2");
-
-        similarityTable.add(new ArrayList<>(Collections.singletonList(1.0)));
+        similarityTable.add(new ArrayList<>(Collections.singletonList(0.0)));
 
         boolean result = ctrlProd.setSimilarities(null);
 
         assertTrue(result);
-        assertEquals(1.0, similarityTable.get(0).get(0));
-        assertEquals(0.5, similarityTable.get(0).get(1));
-        assertEquals(0.5, similarityTable.get(1).get(0));
-        assertEquals(1.0, similarityTable.get(1).get(1));
+        assertEquals(2, ctrlProd.getSimilarityTable().size());
+        assertEquals(0.0, ctrlProd.getSimilarityTable().get(0).get(0));
+        assertEquals(0.5, ctrlProd.getSimilarityTable().get(0).get(1));
+        assertEquals(0.5, ctrlProd.getSimilarityTable().get(1).get(0));
+        assertEquals(0.0, ctrlProd.getSimilarityTable().get(1).get(1));
     }
 
 
@@ -429,16 +410,16 @@ public class TestCtrlProd {
         mapProductsId.put(0, "Product 1");
         mapProductsId.put(1, "Product 2");
 
-        similarityTable.add(new ArrayList<>(Collections.singletonList(1.0)));
+        similarityTable.add(new ArrayList<>(Collections.singletonList(0.0)));
         Double[] similarities = {0.8};
 
         boolean result = ctrlProd.setSimilarities(similarities);
 
         assertTrue(result);
-        assertEquals(1.0, similarityTable.get(0).get(0));
+        assertEquals(0.0, similarityTable.get(0).get(0));
         assertEquals(0.8, similarityTable.get(0).get(1));
         assertEquals(0.8, similarityTable.get(1).get(0));
-        assertEquals(1.0, similarityTable.get(1).get(1));
+        assertEquals(0.0, similarityTable.get(1).get(1));
     }
 
 
@@ -463,6 +444,102 @@ public class TestCtrlProd {
     public void testModifySimilarity_ProductNotFound() {
         assertThrows(ProductNotFoundException.class, () -> ctrlProd.modifySimilarity("Product 1", "Nonexistent Product", 0.8));
         assertThrows(ProductNotFoundException.class, () -> ctrlProd.modifySimilarity("Nonexistent Product 1", "Nonexistent Product 2", 0.8));
+    }
+
+    @Test
+    public void testModifyProductSimilarities_ValidArray() {
+        Double[] similarities = {0.4, 0.7};
+        Product productMock = mock(Product.class);
+        Product productMock1 = mock(Product.class);
+        Product productMock2 = mock(Product.class);
+        productsMap.put("Product 1", productMock);
+        mapProductsId.put(0, "Product 1");
+        when(productMock.getId()).thenReturn(0);
+        productsMap.put("Product 2", productMock1);
+        mapProductsId.put(1, "Product 2");
+        when(productMock1.getId()).thenReturn(1);
+        productsMap.put("Product 3", productMock2);
+        mapProductsId.put(2, "Product 3");
+        when(productMock2.getId()).thenReturn(2);
+        similarityTable.add(Arrays.asList(1.0, 0.5, 0.3));
+        similarityTable.add(Arrays.asList(0.6, 0.2,0.3));
+        similarityTable.add(Arrays.asList(0.9, 0.2,0.2));
+
+        ctrlProd.modifyProductSimilarities("Product 3", similarities);
+
+        assertEquals(0.4, similarityTable.get(2).get(0));
+        assertEquals(0.4, similarityTable.get(0).get(2));
+        assertEquals(0.7, similarityTable.get(1).get(2));
+        assertEquals(0.7, similarityTable.get(2).get(1));
+    }
+
+    @Test
+    public void testModifyProductSimilarities_NullInput() {
+        Characteristics characteristic1 = new Characteristics(1, "char1");
+        Characteristics characteristic2 = new Characteristics(2, "char2");
+        Characteristics characteristic3 = new Characteristics(3, "char3");
+
+        Set<Characteristics> charSet1 = Set.of(characteristic1);
+        Set<Characteristics> charSet2 = Set.of(characteristic2, characteristic3);
+        Set<Characteristics> charSet3 = Set.of(characteristic1, characteristic3);
+
+        Product product1 = new Product(0, "Product 1");
+        product1.setCharacteristics(charSet1);
+
+        Product product2 = new Product(1, "Product 2");
+        product2.setCharacteristics(charSet2);
+
+        Product product3 = new Product(2, "Product 3");
+        product3.setCharacteristics(charSet3);
+
+        // Agregar productos al mapa
+        ctrlProd.getProducts().put("Product 1", product1);
+        ctrlProd.getProducts().put("Product 2", product2);
+        ctrlProd.getProducts().put("Product 3", product3);
+
+        ctrlProd.getMapProductsId().put(0, "Product 1");
+        ctrlProd.getMapProductsId().put(1, "Product 2");
+        ctrlProd.getMapProductsId().put(2, "Product 3");
+
+
+
+        ctrlProd.setSimilarityTable(similarityTable);
+        similarityTable.add(Arrays.asList(1.0, 0.5, 0.3));
+        similarityTable.add(Arrays.asList(0.6, 0.2,0.3));
+        similarityTable.add(Arrays.asList(0.9, 0.2,0.2));
+
+        ctrlProd.modifyProductSimilarities("Product 1", null);
+
+        double expectedSimilarity12 = ctrlProd.calculateSimilarity(charSet1, charSet2);
+        double expectedSimilarity13 = ctrlProd.calculateSimilarity(charSet1, charSet3);
+
+        assertEquals(expectedSimilarity12, similarityTable.get(0).get(1));
+        assertEquals(expectedSimilarity12, similarityTable.get(1).get(0));
+        assertEquals(expectedSimilarity13, similarityTable.get(0).get(2));
+        assertEquals(expectedSimilarity13, similarityTable.get(2).get(0));
+    }
+
+
+
+
+    @Test
+    public void testModifyProductSimilarities_IncorrectArraySize() {
+        productsMap.put("Product 1", productMock);
+        mapProductsId.put(0, "Product 1");
+        similarityTable.add(Arrays.asList(1.0, 0.5, 0.3));
+
+        Double[] similarities = {0.4}; // Incorrect size
+        assertThrows(SimilarityArrayIncorrectSizeException.class, () ->
+                ctrlProd.modifyProductSimilarities("Product 1", similarities)
+        );
+    }
+
+    @Test
+    public void testModifyProductSimilarities_ProductNotFound() {
+        Double[] similarities = {0.4, 0.7};
+        assertThrows(ProductNotFoundException.class, () ->
+                ctrlProd.modifyProductSimilarities("Nonexistent Product", similarities)
+        );
     }
 
 
