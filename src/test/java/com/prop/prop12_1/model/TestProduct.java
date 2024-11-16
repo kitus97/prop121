@@ -28,7 +28,6 @@ public class TestProduct {
     public void setUpBeforeTest() {
         MockitoAnnotations.openMocks(this);
         product = new Product(1, "Test Product");
-
         when(characteristicMock.getName()).thenReturn("Characteristic 1");
         when(characteristicMock2.getName()).thenReturn("Characteristic 2");
         when(restrictionMock.getName()).thenReturn("Restriction Mock");
@@ -86,7 +85,7 @@ public class TestProduct {
     @Test
     public void testAddDuplicateCharacteristic() {
         product.addCharacteristic(characteristicMock);
-        product.addCharacteristic(characteristicMock);  // Intentar añadir la misma característica
+        product.addCharacteristic(characteristicMock);
 
         assertEquals(1, product.getCharacteristics().size());
         assertTrue(product.getCharacteristics().contains(characteristicMock));
@@ -96,7 +95,6 @@ public class TestProduct {
     public void testRemoveCharacteristic() {
         product.addCharacteristic(characteristicMock);
         product.removeCharacteristic(characteristicMock);
-
         assertFalse(product.getCharacteristics().contains(characteristicMock));
     }
 
@@ -147,7 +145,6 @@ public class TestProduct {
 
     @Test
     public void testRemoveNonExistentRestriction() {
-        // Intentar remover una restricción que no fue agregada
         product.removeRestriction(restrictionMock);
         assertTrue(product.getRestrictions().isEmpty());
     }
@@ -159,9 +156,7 @@ public class TestProduct {
         when(characteristicMock.toString()).thenReturn("Characteristics{name='caracteristica 1'}");
         when(restrictionMock.toString()).thenReturn("Restriction Mock");
 
-
         String productString = product.toString();
-
         assertTrue(productString.contains("Test Product")); 
         assertTrue(productString.contains("Characteristics{name='caracteristica 1'}"));
         assertTrue(productString.contains("Restriction Mock"));

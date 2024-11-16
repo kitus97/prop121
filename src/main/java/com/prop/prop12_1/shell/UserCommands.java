@@ -167,7 +167,7 @@ public class UserCommands {
         if (algorithm.equals("Backtracking")) algorithmID = 0;
         else if (algorithm.equals("HillClimbing")) algorithmID = 1;
         else if (algorithm.equals("Greedy")) algorithmID = 2;
-        else throw new IllegalArgumentException("Unsupported algorithm: Algorithm must be Backtracking or HillClimbing. Written: " + algorithm);
+        else throw new IllegalArgumentException("Unsupported algorithm: Algorithm must be Backtracking, HillClimbing or Greedy. Written: " + algorithm);
 
         boolean heuristicBool;
         if (heuristic == 1) heuristicBool = true;

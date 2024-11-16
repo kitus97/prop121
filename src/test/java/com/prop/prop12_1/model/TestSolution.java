@@ -79,6 +79,53 @@ class TestSolution {
         assertEquals(8.5, solution.getMark(), 0.001);
     }
 
+    @Test
+    public void testCheckMarkSwap() {
+        when(ctrlProdMock.generateSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.5),
+                List.of(0.5, 1.0)
+        ));
+        when(ctrlProdMock.getProductName(anyInt())).thenReturn("Product1", "Product2");
+        when(ctrlProdMock.findProduct(anyString())).thenReturn(productMock1, productMock2);
+
+        solution.setMark(2.0);
+        Double markAfterSwap = solution.checkMarkSwap(0, 1);
+
+        assertNotNull(markAfterSwap);
+        assertNotEquals(solution.getMark(), markAfterSwap);
+    }
+
+    @Test
+    public void testCheckMarkDelete() {
+        when(ctrlProdMock.generateSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.5),
+                List.of(0.5, 1.0)
+        ));
+
+        solution.setMark(2.0);
+        Double markAfterDelete = solution.checkMarkDelete(0);
+
+        assertNotNull(markAfterDelete);
+        assertNotEquals(solution.getMark(), markAfterDelete);
+    }
+
+    @Test
+    public void testCheckMarkAdd() {
+        when(ctrlProdMock.findProduct("Product1")).thenReturn(productMock1);
+        when(productMock1.getRestrictions()).thenReturn(Set.of("restriction1"));
+        when(ctrlProdMock.generateSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.5),
+                List.of(0.5, 1.0)
+        ));
+
+        solution.setMark(2.0);
+        Double markAfterAdd = solution.checkMarkAdd("Product1", 0);
+
+        assertNotNull(markAfterAdd);
+        assertNotEquals(solution.getMark(), markAfterAdd);
+    }
+
+
 
 
     @Test
@@ -130,8 +177,7 @@ class TestSolution {
         ));
 
         solution.updateMark(ctrlProdMock.generateSimilarityTable());
-
-        assertEquals(1.0, solution.getMark(), 0.01);
+        assertEquals(1.0, solution.getMark());
     }
 
     @Test
@@ -268,7 +314,7 @@ class TestSolution {
         solution.setDistribution(newDist);
 
         String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Puntuation: 5.0, Distribution: [(Product: Product1, Restrictions: [restriction1]), (Product: null, Restrictions: [restriction2]), (Product: Product2, Restrictions: null)]}\n";
-        assertEquals(expected, solution.toString());
+        assertEquals(expected, solution.toString1());
     }
 
 

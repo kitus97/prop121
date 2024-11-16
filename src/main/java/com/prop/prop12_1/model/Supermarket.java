@@ -85,8 +85,9 @@ public class Supermarket {
         return shelfs;
     }
 
-    public Shelf getShelf(String s){
-        return shelves.get(s);
+    public String getShelf(String s){
+        if(!shelves.containsKey(s)) throw new NoSuchElementException("No such self");
+        else return shelves.get(s).toString();
     }
 
     /**
@@ -385,12 +386,15 @@ public class Supermarket {
      */
     public void deleteSolutionProduct(String solution, int index){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        /*
         else {
             String product = solutions.get(solution).deleteProduct(index);
             List<Solution> ss = associatedProductSolutions.get(product);
             Solution s = solutions.get(solution);
             ss.remove(s);
         }
+
+         */
     }
 
     /**

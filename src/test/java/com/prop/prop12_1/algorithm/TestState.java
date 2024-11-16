@@ -40,7 +40,6 @@ public class TestState {
         products.add(new ImmutablePair<>(0, Set.of("A", "B")));
         products.add(new ImmutablePair<>(2, Set.of("E", "F")));
 
-        // Mock the static fields
         State.setShelf(shelfMock);
         State.setSimilarityTable(similarityTableMock);
 
@@ -85,8 +84,10 @@ public class TestState {
         List<State> neighbours = state.generateNeighbours();
 
         assertFalse(neighbours.isEmpty());
-        assertTrue(new ImmutablePair<>(2, Set.of("A", "B")).equals(neighbours.get(0)));
-        assertTrue(new ImmutablePair<>(0, Set.of("A", "B")).equals(neighbours.get(1)));
+        assertTrue(neighbours.stream().anyMatch(neighbour ->
+                neighbour.getSolution().get(0).equals(new ImmutablePair<>(2, Set.of("A", "B"))) &&
+                        neighbour.getSolution().get(1).equals(new ImmutablePair<>(0, Set.of("A", "B")))
+        ));
     }
 
 
@@ -138,8 +139,6 @@ public class TestState {
         State state = new State(solution, products);
         double heuristic = state.calculateHeuristic();
         assertEquals(0.5, heuristic, 0.0001);
-
-
     }
 
     @Test
@@ -176,9 +175,7 @@ public class TestState {
 
     @Test
     public void testGetSolution() {
-
         List<Pair<Integer, Set<String>>> returnedSolution = state.getSolution();
-
 
         assertNotNull(returnedSolution);
         assertEquals(solution, returnedSolution);
@@ -187,7 +184,4 @@ public class TestState {
         assertNull(returnedSolution.get(1).getLeft());
         assertEquals(new ImmutablePair<>(2, Set.of("E", "F")), returnedSolution.get(2));
     }
-
-
-
 }

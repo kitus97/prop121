@@ -149,7 +149,7 @@ public class Solution {
      * @param idx2 El índice del segundo producto.
      * @return La nueva puntuación de la solución después del intercambio.
      */
-    public double checkMarkSwap(int idx1, int idx2){
+    public Double checkMarkSwap(int idx1, int idx2){
         Solution s = copy();
         s.changeProducts(idx1, idx2);
         return s.mark;
@@ -161,7 +161,7 @@ public class Solution {
      * @param index El índice del producto a eliminar.
      * @return La nueva puntuación de la solución después de eliminar el producto.
      */
-    public double checkMarkDelete(int index){
+    public Double checkMarkDelete(int index){
         Solution s = copy();
         s.deleteProduct(index);
         return s.mark;
@@ -174,7 +174,7 @@ public class Solution {
      * @param index El índice donde agregar el producto.
      * @return La nueva puntuación de la solución después de agregar el producto.
      */
-    public double checkMarkAdd(String product, int index){
+    public Double checkMarkAdd(String product, int index){
         Solution s = copy();
         s.addProduct(product, index);
         return s.mark;
@@ -206,16 +206,15 @@ public class Solution {
      * Elimina un producto de la distribución.
      *
      * @param index El índice del producto a eliminar.
-     * @return El nombre del producto eliminado.
      * @throws IndexOutOfBoundsException Si el índice está fuera de rango.
      */
-    public String deleteProduct(int index){
+    public void deleteProduct(int index){
         if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
         Pair<Product, Set<String>> pair = distribution.get(index);
         distribution.set(index, Pair.of(null, pair.getRight()));
         updateMark(getSimilarityTable());
-        return pair.getLeft().getName();
     }
+
 
     /**
      * Agrega un producto a la distribución.
@@ -286,21 +285,41 @@ public class Solution {
      * <p>
      * - La puntuación calculada para la solución.
      * <p>
-     * - La validez de la solución.
+     */
+    @Override
+    public String toString() {
+        return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
+        + mark + "}\n";
+    }
+
+    /**
+     * Devuelve una representación en forma de string de la solución.
+     *
+     * @return La representación en forma de string de la solución, indicando:
+     * <p>
+     * - El nombre de la solución.
+     * <p>
+     * - El identificador del catálogo.
+     * <p>
+     * - El identificador de la estantería.
+     * <p>
+     * - La heurística utilizada en la solución.
+     * <p>
+     * - El algoritmo utilizado en la solución.
+     * <p>
+     * - La puntuación calculada para la solución.
      * <p>
      * - La distribución de productos en la estantería junto con sus restricciones, si existen.
      * <p>
      */
-    @Override
-    public String toString() {
+    public String toString1() {
         StringBuilder distributionString = new StringBuilder("[");
-        int i = 0;
         for (Pair<Product, Set<String>> pair : distribution) {
             String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
             String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
-            distributionString.append(i).append(" - (").append(productName)
-                    .append(", ").append(restrictions).append("), ");
-            i++;
+            distributionString.append("(Product: ").append(productName)
+                    .append(", Restrictions: ").append(restrictions).append("), ");
         }
         if (!distribution.isEmpty()) {
             distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
@@ -308,7 +327,8 @@ public class Solution {
         distributionString.append("]");
 
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Punctuation: "
-                + mark + ", Valid: " + valid + "\n >> Distribution: " + distributionString + "}\n";
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
+                + mark + ", Distribution: " + distributionString + "}\n";
     }
+
 }
