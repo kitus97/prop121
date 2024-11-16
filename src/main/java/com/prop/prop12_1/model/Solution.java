@@ -133,7 +133,7 @@ public class Solution {
         if(s1.getRight().equals(s2.getRight())) {
             distribution.set(idx1, s2);
             distribution.set(idx2, s1);
-            updateMark();
+            updateMark(getSimilarityTable());
         }
         else throw new NotInterchangeableException("The products selected can't be swapped");
 
@@ -143,7 +143,7 @@ public class Solution {
         if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
         Pair<Product, Set<String>> pair = distribution.get(index);
         distribution.set(index, Pair.of(null, pair.getRight()));
-        updateMark();
+        updateMark(getSimilarityTable());
     }
 
     public void addProduct(String product, int index){
@@ -153,20 +153,18 @@ public class Solution {
         Pair<Product, Set<String>> pair = distribution.get(index);
         if(p.getRestrictions().equals(pair.getRight())) {
             distribution.set(index, Pair.of(p, pair.getRight()));
-            updateMark();
+            updateMark(getSimilarityTable());
         }
         else throw new InvalidProductRestrictionException("The product does not meet the required restrictions of the cell");
     }
 
-    public void updateMark(){
-        if(heuristic.equals("Generated")){
-            List<List<Double>> similaritytable = ctrlProd.generateSimilarityTable();
-            mark = calculateHeuristic(similaritytable);
-        }
-        else{
-            mark = calculateHeuristic(ctrlProd.getSimilarityTable());
+    public void updateMark(List<List<Double>> similarityTable){
+        mark = calculateHeuristic(similarityTable);
+    }
 
-        }
+    private List<List<Double>> getSimilarityTable(){
+        if(heuristic.equals("Generated")) return ctrlProd.generateSimilarityTable();
+        else return ctrlProd.getSimilarityTable();
     }
 
     private Double calculateHeuristic(List<List<Double>> similarityTable) {

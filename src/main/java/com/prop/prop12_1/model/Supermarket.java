@@ -256,9 +256,12 @@ public class Supermarket {
         else solutions.get(solution).addProduct(product, index);
     }
 
-    public void updateSolutionMark(){
-        for(String solution : solutions.keySet()){
-            if(solutions.get(solution).getHeuristic().equals("Defined")) solutions.get(solution).updateMark();
+    public void updateSolutionMark(String product1, List<List<Double>> similarityTable){
+        if(associatedProductSolutions.containsKey(product1)){
+            List<Solution> ss = associatedProductSolutions.get(product1);
+            for(Solution s : ss){
+                 s.updateMark(similarityTable);
+            }
         }
     }
 
