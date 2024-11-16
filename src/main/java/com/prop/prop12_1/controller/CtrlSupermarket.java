@@ -146,6 +146,24 @@ public class CtrlSupermarket {
         supermarkets.get(supermarket).changeSolutionProducts(indx1, indx2, solution);
     }
 
+    public void updateSolutionMarks(){
+        for(Supermarket m : supermarkets.values()){
+            m.updateSolutionMark();
+        }
+    }
+
+    public Double checkDeleteSolutionProduct(String supermarket, String solution, int index){
+        return supermarkets.get(supermarket).checkDeleteSolutionProduct(solution, index);
+    }
+
+    public Double checkAddSolutionProduct(String supermarket, String solution, String product, int index){
+        return supermarkets.get(supermarket).checkAddSolutionProduct(solution, product, index);
+    }
+
+    public Double checkSwapSolution(String supermarket, String solution, int index1, int index2){
+        return supermarkets.get(supermarket).checkSwapSolution(solution, index1, index2);
+    }
+
 
     public List<String> listProdsCatalogue(String supermarket, String catalogueName) {
         return supermarkets.get(supermarket).listProdsCatalogue(catalogueName);
