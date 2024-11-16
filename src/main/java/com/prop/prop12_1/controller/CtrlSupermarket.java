@@ -146,9 +146,9 @@ public class CtrlSupermarket {
         supermarkets.get(supermarket).changeSolutionProducts(indx1, indx2, solution);
     }
 
-    public void updateSolutionMarks(String product1, List<List<Double>> similarityTable){
+    public void updateSolutionMarks(String product1, List<List<Double>> similarityTable, Boolean generated){
         for(Supermarket m : supermarkets.values()){
-            m.updateSolutionMark(product1, similarityTable);
+            m.updateSolutionMark(product1, similarityTable, generated);
         }
     }
 

@@ -256,14 +256,21 @@ public class Supermarket {
         else solutions.get(solution).addProduct(product, index);
     }
 
-    public void updateSolutionMark(String product1, List<List<Double>> similarityTable){
+    public void updateSolutionMark(String product1, List<List<Double>> similarityTable, Boolean generated){
         if(associatedProductSolutions.containsKey(product1)){
             List<Solution> ss = associatedProductSolutions.get(product1);
             for(Solution s : ss){
-                 s.updateMark(similarityTable);
+                if(generated){
+                    if(s.getHeuristic().equals("Generated")) s.updateMark(similarityTable);
+                }
+                else{
+                    if(s.getHeuristic().equals("Defined")) s.updateMark(similarityTable);
+                }
+
             }
         }
     }
+
 
     public double checkDeleteSolutionProduct(String solution, int index){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
