@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-/*
+
 @Component
 public class CtrlDomain {
     private CtrlSupermarket ctrlSupermarket;
@@ -77,6 +77,7 @@ public class CtrlDomain {
 
     public void modifySimilarity(String productName1, String productName2, Double newValue) {
         ctrlProd.modifySimilarity(productName1, productName2, newValue);
+        ctrlSupermarket.updateSolutionMarks(productName1, ctrlProd.getSimilarityTable(),false);
     }
 
     public Double checkProductsSimilarity(String productName1, String productName2) {
@@ -93,12 +94,14 @@ public class CtrlDomain {
 
     public void addCharacteristicProduct(String characteristicName, String productName) {
         ctrlProd.addCharacteristicProduct(characteristicName, productName);
-        ctrlSupermarket.invalidateProductSolution(productName);
+        //ctrlSupermarket.invalidateProductSolution(productName);
+        ctrlSupermarket.updateSolutionMarks(productName, ctrlProd.generateSimilarityTable(),true);
     }
 
     public void removeCharacteristicProduct(String characteristicName, String productName) {
         ctrlProd.removeCharacteristicProduct(characteristicName, productName);
-        ctrlSupermarket.invalidateProductSolution(productName);
+        //ctrlSupermarket.invalidateProductSolution(productName);
+        ctrlSupermarket.updateSolutionMarks(productName, ctrlProd.generateSimilarityTable(),true);
     }
 
     public void addRestrictionProduct(String restrictionName, String productName) {
@@ -184,5 +187,5 @@ public class CtrlDomain {
 
 
 
+
 }
-*/
