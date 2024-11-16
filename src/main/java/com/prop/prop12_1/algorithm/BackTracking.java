@@ -6,7 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Implementación del algoritmo de Backtracking para encontrar soluciones de distribución.
+ * Busca todas las combinaciones posibles para encontrar la mejor distribución de productos
+ * en estanterías respetando restricciones y maximizando la similitud en un tiempo reducido.
+ */
 public class BackTracking {
+
     private List<Set<String>> shelf;
     private List<Pair<Integer, Set<String>>> products;
     private double maxScore;
@@ -14,8 +20,19 @@ public class BackTracking {
     private long startTime;
     private long timeLimit;
 
+    /**
+     * Constructor por defecto.
+     */
     public BackTracking() {}
 
+    /**
+     * Genera la mejor solución posible utilizando el algoritmo de Backtracking.
+     *
+     * @param shelf           una lista de conjuntos que representan las restricciones de las estanterías
+     * @param products        una lista de pares, donde cada par contiene un identificador y un conjunto de restricciones del producto
+     * @param similarityTable una tabla de similitudes entre los productos
+     * @return un par donde el primer elemento es la puntuación máxima obtenida y el segundo es la mejor distribución encontrada
+     */
     public Pair<Double, List<Pair<Integer, Set<String>>>> generateSolution(
             List<Set<String>> shelf,
             List<Pair<Integer, Set<String>>> products,
@@ -24,36 +41,47 @@ public class BackTracking {
         this.products = products;
         this.maxScore = 0.0;
         this.bestDistribution = null;
-        this.timeLimit = 80000;
+        this.timeLimit = 30000;
 
+        // Configurar las restricciones y la tabla de similitudes en el estado
         State.setShelf(shelf);
         State.setSimilarityTable(similarityTable);
+
+        // Inicializar el tiempo y la solución inicial
         this.startTime = System.currentTimeMillis();
         List<Pair<Integer, Set<String>>> initialSolution = new ArrayList<>();
         for (int i = 0; i < shelf.size(); i++) {
             initialSolution.add(Pair.of(null, shelf.get(i)));
         }
 
-
+        // Ejecutar el algoritmo de Backtracking
         backTracking(0, initialSolution, new ArrayList<>(products));
 
+        // Si no se encuentra una solución, generar una distribución vacía
         if (bestDistribution == null) {
             bestDistribution = new ArrayList<>();
             for (int i = 0; i < shelf.size(); i++) {
                 bestDistribution.add(Pair.of(null, shelf.get(i)));
             }
         }
-
-        System.out.println("Mejor puntuación encontrada: " + maxScore);
         return Pair.of(maxScore, bestDistribution);
     }
 
+    /**
+     * Método recursivo que implementa el algoritmo de Backtracking.
+     *
+     * @param index             el índice actual de la estantería
+     * @param currentSolution   la solución parcial en construcción
+     * @param remainingProducts los productos restantes por asignar
+     */
     private void backTracking(int index, List<Pair<Integer, Set<String>>> currentSolution, List<Pair<Integer, Set<String>>> remainingProducts) {
+        // Comprobar límite de tiempo
         if (System.currentTimeMillis() - startTime > timeLimit) {
             return;
         }
-        if (index == shelf.size()) {
 
+        // Si se han asignado todas las estanterías, calcular la heurística
+        if (index == shelf.size()) {
             State currentState = new State(currentSolution, remainingProducts);
             double currentScore = currentState.calculateHeuristic();
             if (currentScore >= maxScore) {
@@ -62,31 +90,35 @@ public class BackTracking {
             }
             return;
         }
+
+        // Obtener las restricciones de la estantería actual
         Set<String> currentRestrictions = shelf.get(index);
-        boolean trobat = false;
+        boolean assigned = false;
+
+        // Probar cada producto restante
         for (int i = 0; i < remainingProducts.size(); i++) {
             Pair<Integer, Set<String>> product = remainingProducts.get(i);
 
+            // Verificar si el producto cumple con las restricciones
             if (currentRestrictions.equals(product.getRight())) {
                 currentSolution.set(index, product);
                 remainingProducts.remove(i);
-                trobat = true;
+                assigned = true;
+
+                // Llamada recursiva para la siguiente estantería
                 backTracking(index + 1, currentSolution, remainingProducts);
+
+                // Deshacer los cambios para explorar otras posibilidades
                 remainingProducts.add(i, product);
-                currentSolution.set(index, Pair.of(null,currentRestrictions));
+                currentSolution.set(index, Pair.of(null, currentRestrictions));
             }
         }
-        if (!trobat) {
+
+        // Si ningún producto cumple las restricciones, avanzar sin asignar producto
+        if (!assigned) {
             backTracking(index + 1, currentSolution, remainingProducts);
         }
     }
 
-    private double computeSimilarity(Pair<Integer, Set<String>> product, List<Pair<Integer, Set<String>>> currentSolution, int index) {
-        if (index > 0 && currentSolution.get(index - 1).getLeft() != null) {
-            int previousProduct = currentSolution.get(index - 1).getLeft();
-            int currentProduct = product.getLeft();
-            return State.getSimilarity(previousProduct, currentProduct);
-        }
-        return 0.0;
-    }
+
 }

@@ -114,11 +114,11 @@ public class TestCtrlProd {
 
     @Test
     public void testGetCharacteristics_Success() {
-        Characteristics characteristic1 = new Characteristics(1, "Color");
-        Characteristics characteristic2 = new Characteristics(2, "Size");
+        Characteristics characteristic1 = new Characteristics(1, "char 1");
+        Characteristics characteristic2 = new Characteristics(2, "char 2");
 
-        characteristicsMap.put("Color", characteristic1);
-        characteristicsMap.put("Size", characteristic2);
+        characteristicsMap.put("char 1", characteristic1);
+        characteristicsMap.put("char 2", characteristic2);
 
         Map<String, Characteristics> result = ctrlProd.getCharacteristics();
 
@@ -153,22 +153,7 @@ public class TestCtrlProd {
     public void testGetCharacteristicsProducts_ProductNotFound() {
         assertThrows(ProductNotFoundException.class, () -> ctrlProd.getCharacteristicsProducts("Nonexistent Product"));
     }
-    public void testGetCharacteristicsProducts_Success() {
-        Product productMock = mock(Product.class);
-        Characteristics characteristic1 = new Characteristics(1, "char 1");
-        Characteristics characteristic2 = new Characteristics(2, "char 2");
 
-        Set<Characteristics> characteristicsSet = new HashSet<>(Arrays.asList(characteristic1, characteristic2));
-        when(productMock.getCharacteristics()).thenReturn(characteristicsSet);
-
-        productsMap.put("Test Product", productMock);
-
-        List<String> result = ctrlProd.getCharacteristicsProducts("Test Product");
-
-        assertEquals(2, result.size());
-        assertTrue(result.contains("char 1"));
-        assertTrue(result.contains("char 2"));
-    }
 
 
     @Test
