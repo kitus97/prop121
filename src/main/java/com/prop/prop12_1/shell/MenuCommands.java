@@ -30,6 +30,7 @@ public class MenuCommands {
     public String login(
             @ShellOption(help = "Username") String username,
             @ShellOption(help = "Password") String password) {
+        System.out.println("Hola");
         ctrlDomain.login(username, password);
         return "User logged in successfully.";
     }

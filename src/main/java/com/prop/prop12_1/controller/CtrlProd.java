@@ -427,8 +427,8 @@ public class CtrlProd {
      */
     public List<String> listCharacteristics() {
         return characteristics.values().stream()
-                .map(Characteristics::toString)
-                .collect(Collectors.toList());
+                                       .map(Characteristics::getName)
+                                       .collect(Collectors.toList());
     }
 
     /**
@@ -439,8 +439,8 @@ public class CtrlProd {
      */
     public List<String> listProducts() {
         return products.values().stream()
-                .map(Product::getName)
-                .collect(Collectors.toList());
+                                .map(Product::getName)
+                                .collect(Collectors.toList());
     }
 
     /**
@@ -572,8 +572,6 @@ public class CtrlProd {
     public String getProductName(int id) {
         return mapProductsId.get(id);
     }
-
-
 
 
 }

@@ -1,10 +1,15 @@
 package com.prop.prop12_1.shell;
 
 import com.prop.prop12_1.controller.CtrlDomain;
+import com.prop.prop12_1.exceptions.CharacteristicNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ShellComponent
 public class AdminCommands {
@@ -86,8 +91,73 @@ public class AdminCommands {
     public String addProduct(
             @ShellOption(help = "Product name") String productName
     ) {
+        Set<String> systemCharacteristics = new HashSet<>(ctrlDomain.listCharacteristics());
+        Set<String> characteristics = new HashSet<>();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Do you want to add a characterístic to the product? (Y/N) ");
+
+        String confirmation = scanner.nextLine().trim().toUpperCase();
+
+        while (confirmation.equals("Y")) {
+            System.out.print("\nEnter the name of the characteristic: ");
+            String newCharacteristic = scanner.nextLine();
+            if (!systemCharacteristics.contains(newCharacteristic)) {
+                System.err.println("Characteristic with name '" + newCharacteristic + "' was not found");
+            } else {
+                if (!characteristics.add(newCharacteristic)) {
+                    System.err.println("Characteristic with name '" + newCharacteristic + "' was already added");
+                } else {
+                    System.out.println("Characteristic '" + newCharacteristic + "' added.");
+                }
+            }
+
+            System.out.print("\nDo you want to add another characteristic to the product? (Y/N) ");
+            confirmation = scanner.nextLine().trim().toUpperCase();
+        }
+
         ctrlDomain.addProduct(productName);
-        return "Product was added successfully to the system.";
+        characteristics.forEach(characteristicName -> ctrlDomain.addCharacteristicProduct(characteristicName, productName));
+        System.out.println("Product was added successfully to the system with characteristics: " + characteristics + "\n");
+
+        List<String> products = ctrlDomain.listProducts();
+        if (products.size() == 1) {
+            return "";
+        }
+
+        System.out.print("Do you want to add the similarities with other products manually? (Y/N) ");
+        confirmation = scanner.nextLine().trim().toUpperCase();
+
+        while (true) {
+            if (confirmation.equals("Y")) {
+                List<Double> similarities = new ArrayList<>();
+
+                products.forEach(product -> {
+                    System.out.print("Enter the similarity value with product '" + product + "': ");
+
+                    double value = Double.parseDouble(scanner.nextLine());
+
+                    while (value < 0.0 || value > 1.0) {
+                        System.err.println("Similarity value must be between 0.0 and 1.0");
+
+                        System.out.print("Enter the similarity value with product '" + product + "': ");
+                        value = Double.parseDouble(scanner.nextLine());
+                    }
+
+                    similarities.addLast(value);
+                });
+
+                Double[] result = similarities.toArray(Double[]::new);
+                ctrlDomain.setSimilarities(result);
+                return "Product '" + productName + "' was added successfully to the system.";
+            } else if (confirmation.equals("N")) {
+                ctrlDomain.setSimilarities(null);
+                return "Product '" + productName + "' was added successfully to the system.";
+            } else {
+                System.out.print("Do you want to add the similarities with other products manually? (Y/N)");
+                confirmation = scanner.nextLine().trim().toUpperCase();
+            }
+        }
     }
 
     @ShellMethod(value = "Modify a product by adding or removing a characteristic", key = {"modify-product", "mod-prod"},
@@ -97,13 +167,67 @@ public class AdminCommands {
             @ShellOption(help = "Characteristic to modify") String characteristicName,
             @ShellOption(value = {"-r","--remove"}, arity = 0, help = "Remove the characteristic", defaultValue = "false") boolean remove
     ) {
-
         if (!remove) {
             ctrlDomain.addCharacteristicProduct(characteristicName, productName);
-            return "Characteristic '" + characteristicName + "' added to product '" + productName + "'.";
+            System.out.println("Characteristic '" + characteristicName + "' added to product '" + productName + "'.");
         } else {
             ctrlDomain.removeCharacteristicProduct(characteristicName, productName);
-            return "Characteristic '" + characteristicName + "' removed from product '" + productName + "'.";
+            System.out.println("Characteristic '" + characteristicName + "' removed from product '" + productName + "'.");
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        List<String> products = ctrlDomain.listProducts();
+        if (products.size() == 1) {
+            return "";
+        }
+
+        System.out.print("Do you want to update the similarities of the modified product? (Y/N) ");
+        String confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
+
+        while (!confirmation.equals("Y")) {
+            if (confirmation.equals("N")) {
+                return "Product '" + productName + "' was modified successfully.";
+            } else {
+                System.out.println("Only Y or N accepted.");
+                System.out.print("Do you want to update the similarities of the modified product? (Y/N) ");
+                confirmation = scanner.nextLine().trim().toUpperCase();
+            }
+        }
+
+        System.out.print("Do you want to add the similarities with other products manually? (Y/N) ");
+        confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
+
+        while (true) {
+            if (confirmation.equals("Y")) {
+                List<Double> similarities = new ArrayList<>();
+
+                products.forEach(product -> {
+                    System.out.print("Enter the similarity value with product '" + product + "': ");
+
+                    double value = Double.parseDouble(scanner.nextLine());
+
+                    while (value < 0.0 || value > 1.0) {
+                        System.err.println("Similarity value must be between 0.0 and 1.0");
+
+                        System.out.print("Enter the similarity value with product '" + product + "': ");
+                        value = Double.parseDouble(scanner.nextLine());
+                    }
+
+                    similarities.addLast(value);
+                });
+
+                Double[] result = similarities.toArray(Double[]::new);
+                ctrlDomain.modifyProductSimilarities(productName, result);
+                return "Product '" + productName + "' was modified successfully.";
+            } else if (confirmation.equals("N")) {
+                ctrlDomain.modifyProductSimilarities(productName, null);
+                return "Product '" + productName + "' was modified successfully.";
+            } else {
+                System.out.println("Only Y or N accepted.");
+                System.out.print("Do you want to add the similarities with other products manually? (Y/N)");
+                confirmation = scanner.nextLine().trim().toUpperCase();
+            }
         }
     }
 
