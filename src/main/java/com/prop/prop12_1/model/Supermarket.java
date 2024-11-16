@@ -34,6 +34,31 @@ public class Supermarket {
         associatedShelfSolutions = new HashMap<>();
     }
 
+    public void setShelves(Map<String, Shelf> shelves) {
+        this.shelves = shelves;
+    }
+
+    public void setCatalogs(Map<String, Catalogue> catalogs) {
+        this.catalogs = catalogs;
+    }
+
+
+    public void setSolutions(Map<String, Solution> solutions) {
+        this.solutions = solutions;
+    }
+
+    public void setAssociatedCatalogSolutions(Map<String, List<Solution>> associatedCatalogSolutions) {
+        this.associatedCatalogSolutions = associatedCatalogSolutions;
+    }
+
+    public void setAssociatedProductSolutions(Map<String, List<Solution>> associatedProductSolutions) {
+        this.associatedProductSolutions = associatedProductSolutions;
+    }
+
+    public void setAssociatedShelfSolutions(Map<String, List<Solution>> associatedShelfSolutions) {
+        this.associatedShelfSolutions = associatedShelfSolutions;
+    }
+
     public String getName() {
         return name;
     }
@@ -62,7 +87,7 @@ public class Supermarket {
         Catalogue cat = catalogs.get(catalog);
         if(cat == null) throw new NoSuchElementException("No such catalog");
 
-        List<Set<String>> distribution = sh.getDistribution();;
+        List<Set<String>> distribution = sh.getDistribution();
         List<Pair<Integer, Set<String>>> products = cat.getProductsArray();
 
         if(solutions.containsKey(name)) throw new SolutionAlreadyAddedException("Name: " + name + " is already used as a solution name.");
@@ -89,18 +114,24 @@ public class Supermarket {
 
     }
 
-    public void invalidateCatalogSolution(String catalog){
+    private void invalidateCatalogSolution(String catalog){
         List<Solution> solutions = associatedCatalogSolutions.get(catalog);
         for (int i = 0; i < solutions.size(); i++) {
-            if(solutions.get(i).deleted()) solutions.remove(i);
+            if(solutions.get(i).deleted()){
+                solutions.remove(i);
+                --i;
+            }
             else solutions.get(i).setValid(false);
         }
     }
 
-    public void invalidateShelfSolution(String shelf){
+    private void invalidateShelfSolution(String shelf){
         List<Solution> solutions = associatedShelfSolutions.get(shelf);
         for (int i = 0; i < solutions.size(); i++) {
-            if(solutions.get(i).deleted()) solutions.remove(i);
+            if(solutions.get(i).deleted()) {
+                solutions.remove(i);
+                --i;
+            }
             else solutions.get(i).setValid(false);
         }
 
@@ -109,7 +140,10 @@ public class Supermarket {
     public void invalidateProductSolution(String product){
         List<Solution> solutions = associatedProductSolutions.get(product);
         for (int i = 0; i < solutions.size(); i++) {
-            if(solutions.get(i).deleted()) solutions.remove(i);
+            if(solutions.get(i).deleted()){
+                solutions.remove(i);
+                --i;
+            }
             else solutions.get(i).setValid(false);
         }
     }
@@ -221,6 +255,38 @@ public class Supermarket {
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
         else solutions.get(solution).addProduct(product, index);
     }
+
+    public void updateSolutionMark(String product1, List<List<Double>> similarityTable, Boolean generated){
+        if(associatedProductSolutions.containsKey(product1)){
+            List<Solution> ss = associatedProductSolutions.get(product1);
+            for(Solution s : ss){
+                if(generated){
+                    if(s.getHeuristic().equals("Generated")) s.updateMark(similarityTable);
+                }
+                else{
+                    if(s.getHeuristic().equals("Defined")) s.updateMark(similarityTable);
+                }
+
+            }
+        }
+    }
+
+
+    public double checkDeleteSolutionProduct(String solution, int index){
+        if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        else return solutions.get(solution).checkMarkDelete(index);
+    }
+
+    public double checkAddSolutionProduct(String solution, String product, int index){
+        if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        else return solutions.get(solution).checkMarkAdd(product, index);
+    }
+
+    public double checkSwapSolution(String solution, int idx1, int idx2){
+        if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
+        else return solutions.get(solution).checkMarkSwap(idx1, idx2);
+    }
+
 
     @Override
     public String toString() {
