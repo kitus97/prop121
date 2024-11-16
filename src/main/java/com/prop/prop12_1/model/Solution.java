@@ -55,7 +55,7 @@ public class Solution {
         this.valid = valid;
     }
 
-    public double getMark() {
+    public Double getMark() {
         return mark;
     }
 
@@ -69,6 +69,13 @@ public class Solution {
 
     public String getSolutionName() {
         return solutionName;
+    }
+
+    public String getHeuristic() {
+        return heuristic;
+    }
+    public String getAlgorithm() {
+        return algorithm;
     }
 
 
@@ -168,8 +175,20 @@ public class Solution {
     }
 
     public String toString1() {
+        StringBuilder distributionString = new StringBuilder("[");
+        for (Pair<Product, Set<String>> pair : distribution) {
+            String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
+            String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
+            distributionString.append("(Product: ").append(productName)
+                    .append(", Restrictions: ").append(restrictions).append("), ");
+        }
+        if (!distribution.isEmpty()) {
+            distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
+        }
+        distributionString.append("]");
+
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
                 ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + distribution.toString() + "}\n";
+                + mark + ", Distribution: " + distributionString + "}\n";
     }
 }

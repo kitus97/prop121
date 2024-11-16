@@ -1,112 +1,277 @@
 package com.prop.prop12_1.model;
-import com.prop.prop12_1.model.Product;
-import com.prop.prop12_1.model.Solution;
+
+import com.prop.prop12_1.controller.CtrlProd;
+import com.prop.prop12_1.exceptions.InvalidProductRestrictionException;
 import com.prop.prop12_1.exceptions.NotInterchangeableException;
+import com.prop.prop12_1.exceptions.ProductNotFoundException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.lang.reflect.Field;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 class TestSolution {
-
     private Solution solution;
+    private Product productMock1;
+    private Product productMock2;
+    private CtrlProd ctrlProdMock;
 
     @BeforeEach
-    void setUp() {
-        List<Pair<Product, Set<String>>> distribution = new ArrayList<>();
-        Product product1 = new Product(0, "Product1");
-        Product product2 = new Product(1, "Product2");
-        Product product3 = new Product(2, "Product3");
+    void setUp() throws NoSuchFieldException, IllegalAccessException {
+        productMock1 = mock(Product.class);
+        productMock2 = mock(Product.class);
+        ctrlProdMock = mock(CtrlProd.class);
 
-        distribution.add(Pair.of(product1, Set.of("Restriction1")));
-        distribution.add(Pair.of(product2, Set.of("Restriction1")));
-        distribution.add(Pair.of(product3, Set.of("Restriction1")));
 
-        solution = new Solution("TestSolution", "Catalog1", "Shelf1", "Generated", "Algorithm1", 5.0, new ArrayList<>());
-        solution.setDistribution(distribution);
+        Field ctrlProdField = Solution.class.getDeclaredField("ctrlProd");
+        ctrlProdField.setAccessible(true);
+
+        ctrlProdField.set(null, ctrlProdMock);
+
+        when(ctrlProdMock.findProduct("Product1")).thenReturn(productMock1);
+        when(ctrlProdMock.findProduct("NonExistentProduct")).thenReturn(null);
+        when(ctrlProdMock.generateSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.5),
+                List.of(0.5, 1.0)
+        ));
+        when(ctrlProdMock.getSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.8),
+                List.of(0.8, 1.0)
+        ));
+
+        List<Pair<Product, Set<String>>> initialDistribution = new ArrayList<>();
+        initialDistribution.add(Pair.of(productMock1, Set.of("restriction1")));
+        initialDistribution.add(Pair.of(productMock2, Set.of("restriction1")));
+        initialDistribution.add(Pair.of(null, Set.of("restriction2")));
+        solution = new Solution(
+                "TestSolution",
+                "Catalog1",
+                "Shelf1",
+                "Generated",
+                "Algorithm1",
+                5.0,
+                new ArrayList<>()
+        );
+        solution.setDistribution(initialDistribution);
     }
 
     @Test
-    void testGetDistribution() {
-        List<Pair<Product, Set<String>>> distribution = solution.getDistribution();
-        assertEquals(3, distribution.size());
-        assertEquals("Product1", distribution.get(0).getLeft().getName());
-    }
-
-    @Test
-    void testSetValid() {
+    void testGetAndSetValid() {
+        assertTrue(solution.getValid());
         solution.setValid(false);
         assertFalse(solution.getValid());
     }
 
     @Test
-    void testDelete() {
-        solution.delete();
-        assertTrue(solution.deleted());
-        assertNull(solution.getSolutionName());
-        assertNull(solution.getIdCatalog());
-    }
-
-    @Test
-    void testChangeProductsSuccess() {
-        solution.changeProducts(0, 1);
-
-        List<Pair<Product, Set<String>>> distribution = solution.getDistribution();
-        assertEquals("Product2", distribution.get(0).getLeft().getName());
-        assertEquals("Product1", distribution.get(1).getLeft().getName());
-    }
-
-    @Test
-    void testChangeProductsDifferentRestrictions() {
-        List<Pair<Product, Set<String>>> newDistribution = new ArrayList<>(solution.getDistribution());
-        newDistribution.set(0, Pair.of(newDistribution.get(0).getLeft(), Set.of("Restriction2")));
-        solution.setDistribution(newDistribution);
-
-        assertThrows(NotInterchangeableException.class, () -> solution.changeProducts(0, 1));
+    void testGetAndSetMark() {
+        assertEquals(5.0, solution.getMark(), 0.001);
+        solution.setMark(8.5);
+        assertEquals(8.5, solution.getMark(), 0.001);
     }
 
 
-    @Test
-    void testDeleteProduct() {
-        solution.deleteProduct(1);
 
-        assertNull(solution.getDistribution().get(1).getLeft());
+    @Test
+    void testGetIdShelf() {
+        assertEquals("Shelf1", solution.getIdShelf());
     }
 
     @Test
-    void testSetSolutionName() {
+    void testGetIdCatalog() {
+        assertEquals("Catalog1", solution.getIdCatalog());
+    }
+
+    @Test
+    void testGetAndSetSolutionName() {
+        assertEquals("TestSolution", solution.getSolutionName());
         solution.setSolutionName("NewSolutionName");
         assertEquals("NewSolutionName", solution.getSolutionName());
     }
 
     @Test
-    void testSetMark() {
-        solution.setMark(10.0);
-        assertEquals(10.0, solution.getMark());
+    void testChangeProductsSuccess() {
+        solution.changeProducts(0, 1);
+        assertEquals(productMock2, solution.getDistribution().get(0).getLeft());
+        assertEquals(productMock1, solution.getDistribution().get(1).getLeft());
     }
 
+    @Test
+    void testChangeProductsIndexOutOfBounds() {
+        assertThrows(IndexOutOfBoundsException.class, () -> solution.changeProducts(0, 5));
+        assertThrows(IndexOutOfBoundsException.class, () -> solution.changeProducts(3, 1));
+    }
+
+
+    @Test
+    void testChangeProductsNotInterchangeable() {
+        List<Pair<Product, Set<String>>> newDist = new ArrayList<>();
+        newDist.add(Pair.of(productMock1, Set.of("restriction1")));
+        newDist.add(Pair.of(productMock2, Set.of("restriction2")));
+        solution.setDistribution(newDist);
+        assertThrows(NotInterchangeableException.class, () -> solution.changeProducts(0, 1));
+    }
+
+    @Test
+    void testUpdateMarkWithGeneratedHeuristic() {
+        when(ctrlProdMock.generateSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 1.0, 0.0),
+                List.of(1.0, 1.0, 0.0),
+                List.of(0.0,0.0,1.0)
+        ));
+
+        solution.updateMark();
+
+        assertEquals(1.0, solution.getMark(), 0.01);
+    }
+
+    @Test
+    void testUpdateMarkDifferentCalculate() {
+        List<Pair<Product, Set<String>>> initialDistribution = new ArrayList<>();
+        initialDistribution.add(Pair.of(productMock1, Set.of("restriction1")));
+        initialDistribution.add(Pair.of(null, Set.of("restriction2")));
+        initialDistribution.add(Pair.of(productMock2, Set.of("restriction1")));
+        solution.setDistribution(initialDistribution);
+        when(ctrlProdMock.getSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 0.0,1.0),
+                List.of(0.0, 1.0,0.0),
+                List.of(1.0, 0.0,1.0)
+        ));
+        solution.updateMark();
+
+        assertEquals(1.0, solution.getMark(), 0.01);
+    }
+
+    @Test
+    void testUpdateMarkWithNonGeneratedHeuristic() throws Exception {
+        when(ctrlProdMock.getSimilarityTable()).thenReturn(List.of(
+                List.of(1.0, 1.0,0.0),
+                List.of(1.0, 1.0,0.0),
+                List.of(0.0, 0.0,1.0)
+        ));
+
+        Field heuristicField = Solution.class.getDeclaredField("heuristic");
+        heuristicField.setAccessible(true);
+        heuristicField.set(solution, "Custom");
+
+        solution.updateMark();
+
+        assertEquals(1.0, solution.getMark(), 0.01);
+    }
+
+
+    @Test
+    void testDeleteProductSuccess() {
+        solution.deleteProduct(0);
+        assertNull(solution.getDistribution().get(0).getLeft());
+        assertEquals(Set.of("restriction1"), solution.getDistribution().get(0).getRight());
+    }
+
+    @Test
+    void testDeleteProductIndexOutOfBounds() {
+        assertThrows(IndexOutOfBoundsException.class, () -> solution.deleteProduct(5));
+        assertThrows(IndexOutOfBoundsException.class, () -> solution.deleteProduct(-1));
+    }
+
+    @Test
+    void testAddProductSuccess() {
+        when(ctrlProdMock.findProduct("Product1")).thenReturn(productMock1);
+        when(ctrlProdMock.findProduct("NonExistentProduct")).thenReturn(null);
+
+        when(productMock1.getRestrictions()).thenReturn(Set.of("restriction1"));
+        when(productMock2.getRestrictions()).thenReturn(Set.of("restriction2"));
+
+        solution.addProduct("Product1", 0);
+
+        assertEquals(productMock1, solution.getDistribution().get(0).getLeft());
+        assertEquals(Set.of("restriction1"), solution.getDistribution().get(0).getRight());
+    }
+
+
+    @Test
+    void testAddProductIndexOutOfBounds() {
+        assertThrows(IndexOutOfBoundsException.class, () -> solution.addProduct("Product1", 5));
+        assertThrows(IndexOutOfBoundsException.class, () -> solution.addProduct("Product1", -1));
+    }
+
+    @Test
+    void testAddProductNotFound() {
+        assertThrows(ProductNotFoundException.class, () -> solution.addProduct("NonExistentProduct", 0));
+    }
+
+    @Test
+    void testAddProductWithNullRestrictions() {
+        List<Pair<Product, Set<String>>> newDist = new ArrayList<>();
+        newDist.add(Pair.of(null, null));
+        solution.setDistribution(newDist);
+
+        when(ctrlProdMock.findProduct("Product1")).thenReturn(productMock1);
+        when(productMock1.getRestrictions()).thenReturn(Set.of("restriction1"));
+
+        assertThrows(InvalidProductRestrictionException.class, () -> solution.addProduct("Product1", 0));
+    }
+
+
+    @Test
+    void testAddProductInvalidRestrictions() {
+        assertThrows(InvalidProductRestrictionException.class, () -> solution.addProduct("Product1", 1));
+    }
+
+    @Test
+    void testDelete() {
+        solution.delete();
+
+        assertNull(solution.getSolutionName());
+        assertNull(solution.getIdCatalog());
+        assertNull(solution.getIdShelf());
+        assertNull(solution.getHeuristic());
+        assertNull(solution.getAlgorithm());
+        assertNull(solution.getMark());
+        assertNull(solution.getValid());
+        assertNull(solution.getDistribution());
+    }
+
+    @Test
+    void testDeletedReturnsFalse() {
+        assertFalse(solution.deleted());
+    }
+
+    @Test
+    void testDeletedReturnsTrueAfterDelete() {
+        solution.delete();
+        assertTrue(solution.deleted());
+    }
     @Test
     void testToString() {
         String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Puntuation: 5.0}\n";
         assertEquals(expected, solution.toString());
     }
-    /*
+
     @Test
-    void testToStringWithDistribution() {
-        String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Puntuation: 5.0" +
-                "[{name='Product1', characteristics=[], restrictions=[]}, {name='Product2', characteristics=[], restrictions=[]}, {name='Product3', characteristics=[], restrictions=[]}]}\n";
+    void testToString1() {
+        when(productMock1.getName()).thenReturn("Product1");
+        when(productMock2.getName()).thenReturn("Product2");
+
+        List<Pair<Product, Set<String>>> newDist = new ArrayList<>();
+        newDist.add(Pair.of(productMock1, Set.of("restriction1")));
+        newDist.add(Pair.of(null, Set.of("restriction2")));
+        newDist.add(Pair.of(productMock2, null));
+        solution.setDistribution(newDist);
+
+        String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Puntuation: 5.0, Distribution: [(Product: Product1, Restrictions: [restriction1]), (Product: null, Restrictions: [restriction2]), (Product: Product2, Restrictions: null)]}\n";
         assertEquals(expected, solution.toString1());
     }
-    */
-    @Test
-    void testDeleted() {
-        assertFalse(solution.deleted());
-        solution.delete();
-        assertTrue(solution.deleted());
-    }
+
+
+
 }
+

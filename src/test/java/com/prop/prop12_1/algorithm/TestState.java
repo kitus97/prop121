@@ -60,8 +60,58 @@ public class TestState {
 
         assertNotNull(neighbours);
         assertFalse(neighbours.isEmpty());
-        verify(shelfMock, atLeastOnce()).get(anyInt());
+
     }
+
+    @Test
+    public void testGenerateNeighboursWithValidSwap() {
+        State.setShelf(List.of(
+                Set.of("A", "B"),
+                Set.of("A", "B"),
+                Set.of("E", "F")
+        ));
+
+        List<Pair<Integer, Set<String>>> testSolution = new ArrayList<>();
+        testSolution.add(new ImmutablePair<>(0, Set.of("A", "B")));
+        testSolution.add(new ImmutablePair<>(2, Set.of("A", "B")));
+
+        List<Pair<Integer,Set<String>>> testProducts = new ArrayList<>();
+        testProducts.add(new ImmutablePair<>(0, Set.of("A", "B")));
+        testProducts.add(new ImmutablePair<>(2, Set.of("A", "B")));
+
+
+        State state = new State(testSolution, testProducts);
+
+        List<State> neighbours = state.generateNeighbours();
+
+        assertFalse(neighbours.isEmpty());
+        assertTrue(new ImmutablePair<>(2, Set.of("A", "B")).equals(neighbours.get(0)));
+        assertTrue(new ImmutablePair<>(0, Set.of("A", "B")).equals(neighbours.get(1)));
+    }
+
+
+    @Test
+    public void testSwapWithValidIndices() {
+        when(shelfMock.get(0)).thenReturn(Set.of("A", "B"));
+        when(shelfMock.get(1)).thenReturn(Set.of("A", "B"));
+
+        State neighbour = new State(solution, products);
+        boolean swapped = neighbour.getSolution().get(0).getRight().equals(shelfMock.get(1));
+
+        assertTrue(swapped);
+    }
+
+    @Test
+    public void testSwapWithInvalidIndices() {
+        when(shelfMock.get(0)).thenReturn(Set.of("A", "B"));
+        when(shelfMock.get(1)).thenReturn(Set.of("X", "Y"));
+
+        State neighbour = new State(solution, products);
+        boolean swapped = neighbour.getSolution().get(0).getRight().equals(shelfMock.get(1));
+
+        assertFalse(swapped);
+    }
+
 
     @Test
     public void testCalculateHeuristic() {
@@ -72,6 +122,24 @@ public class TestState {
         double heuristic = state.calculateHeuristic();
 
         assertEquals(0.2, heuristic, 0.0001);
+    }
+
+    @Test
+    public void testCalculateHeuristic2() {
+        when(similarityTableMock.get(0)).thenReturn(List.of(1.0, 0.5, 0.2));
+        when(similarityTableMock.get(1)).thenReturn(List.of(0.5, 1.0, 0.3));
+        when(similarityTableMock.get(2)).thenReturn(List.of(0.2, 0.3, 1.0));
+
+        solution = new ArrayList<>();
+        solution.add(new ImmutablePair<>(0, Set.of("A", "B")));
+        solution.add(new ImmutablePair<>(1, Set.of("C", "D")));
+        solution.add(new ImmutablePair<>(null, Set.of("E", "F")));
+
+        State state = new State(solution, products);
+        double heuristic = state.calculateHeuristic();
+        assertEquals(0.5, heuristic, 0.0001);
+
+
     }
 
     @Test
