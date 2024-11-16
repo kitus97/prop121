@@ -1,5 +1,5 @@
 package com.prop.prop12_1.cli;
-
+/*
 import com.prop.prop12_1.controller.CtrlDomain;
 import com.prop.prop12_1.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,3 +69,4 @@ public class ProductManagementCommands {
     }
 
 }
+*/

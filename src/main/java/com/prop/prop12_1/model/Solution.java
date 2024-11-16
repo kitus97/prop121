@@ -47,6 +47,12 @@ public class Solution {
         return distribution;
     }
 
+    private Solution copy(){
+        Solution s = new Solution(solutionName, idCatalog, idShelf, heuristic, algorithm, mark, new ArrayList<>());
+        s.distribution = new ArrayList<>(distribution);
+        return s;
+    }
+
     public Boolean getValid() {
         return valid;
     }
@@ -55,7 +61,7 @@ public class Solution {
         this.valid = valid;
     }
 
-    public double getMark() {
+    public Double getMark() {
         return mark;
     }
 
@@ -69,6 +75,13 @@ public class Solution {
 
     public String getSolutionName() {
         return solutionName;
+    }
+
+    public String getHeuristic() {
+        return heuristic;
+    }
+    public String getAlgorithm() {
+        return algorithm;
     }
 
 
@@ -100,6 +113,24 @@ public class Solution {
         return this.solutionName == null;
     }
 
+    public Double checkMarkSwap(int idx1, int idx2){
+        Solution s = copy();
+        s.changeProducts(idx1, idx2);
+        return s.mark;
+    }
+
+    public Double checkMarkDelete(int index){
+        Solution s = copy();
+        s.deleteProduct(index);
+        return s.mark;
+    }
+
+    public Double checkMarkAdd(String product, int index){
+        Solution s = copy();
+        s.addProduct(product, index);
+        return s.mark;
+    }
+
     public void changeProducts(int idx1, int idx2) {
         if(idx1 >= distribution.size() || idx2 >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
 
@@ -109,6 +140,7 @@ public class Solution {
         if(s1.getRight().equals(s2.getRight())) {
             distribution.set(idx1, s2);
             distribution.set(idx2, s1);
+            updateMark(getSimilarityTable());
         }
         else throw new NotInterchangeableException("The products selected can't be swapped");
 
@@ -118,6 +150,7 @@ public class Solution {
         if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
         Pair<Product, Set<String>> pair = distribution.get(index);
         distribution.set(index, Pair.of(null, pair.getRight()));
+        updateMark(getSimilarityTable());
     }
 
     public void addProduct(String product, int index){
@@ -127,19 +160,18 @@ public class Solution {
         Pair<Product, Set<String>> pair = distribution.get(index);
         if(p.getRestrictions().equals(pair.getRight())) {
             distribution.set(index, Pair.of(p, pair.getRight()));
+            updateMark(getSimilarityTable());
         }
         else throw new InvalidProductRestrictionException("The product does not meet the required restrictions of the cell");
     }
 
-    public void updateMark(){
-        if(heuristic == "Generated"){
-            List<List<Double>> similaritytable = ctrlProd.generateSimilarityTable();
-            mark = calculateHeuristic(similaritytable);
-        }
-        else{
-            mark = calculateHeuristic(ctrlProd.getSimilarityTable());
+    public void updateMark(List<List<Double>> similarityTable){
+        mark = calculateHeuristic(similarityTable);
+    }
 
-        }
+    private List<List<Double>> getSimilarityTable(){
+        if(heuristic.equals("Generated")) return ctrlProd.generateSimilarityTable();
+        else return ctrlProd.getSimilarityTable();
     }
 
     private Double calculateHeuristic(List<List<Double>> similarityTable) {
@@ -160,6 +192,10 @@ public class Solution {
         return Math.round(totalSimilarity * 1e5) / 1e5;
     }
 
+    public String getHeuristic(){
+        return heuristic;
+    }
+
     @Override
     public String toString() {
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
@@ -168,8 +204,20 @@ public class Solution {
     }
 
     public String toString1() {
+        StringBuilder distributionString = new StringBuilder("[");
+        for (Pair<Product, Set<String>> pair : distribution) {
+            String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
+            String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
+            distributionString.append("(Product: ").append(productName)
+                    .append(", Restrictions: ").append(restrictions).append("), ");
+        }
+        if (!distribution.isEmpty()) {
+            distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
+        }
+        distributionString.append("]");
+
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
                 ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + distribution.toString() + "}\n";
+                + mark + ", Distribution: " + distributionString + "}\n";
     }
 }
