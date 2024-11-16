@@ -97,7 +97,8 @@ public class Supermarket {
             String alg;
             String heu;
             if(algorithm == 0) alg = "BT";
-            else alg = "HC";
+            else if(algorithm == 1) alg = "HC";
+            else alg = "Greedy";
             if(heuristic) heu = "Generated";
             else heu = "Defined";
             Pair<Double, List<Pair<Integer, Set<String>>>> res = new CtrlAlgorithm().getSolution(distribution, products, algorithm, heuristic);
