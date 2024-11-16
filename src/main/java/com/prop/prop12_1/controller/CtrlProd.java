@@ -25,6 +25,7 @@ public class CtrlProd {
     private static Map<Integer,String> mapProductsId = new HashMap<>();
 
     public CtrlProd() {
+
     }
 
     public void addCharacteristic(String characteristicName) {
@@ -93,7 +94,7 @@ public class CtrlProd {
             Product newProduct = new Product(products.size(), productName);
             products.put(productName, newProduct);
             int size = products.size();
-            mapProductsId.put(size-1,productName);
+            mapProductsId.put(size,productName);
         }
         else {
             throw new ProductAlreadyAddedException("Product with name '" + productName + "' was already added");

@@ -69,14 +69,17 @@ public class Greedy {
                     }
                 }
             }
-            if (idAct != -1) solution.set(i, products.get(idAct));
+            if (idAct != -1){
+                solution.set(i, products.get(idAct));
+                products.remove(idAct);
+            }
             else solution.set(i, Pair.of(null, shelf.get(i)));
 
         }
         State s = new State(solution, products);
 
 
-        System.out.println("Mejor puntuación encontrada: " + maxScore);
+        System.out.println("Mejor puntuación encontrada: " + s.calculateHeuristic());
         return Pair.of(s.calculateHeuristic(), solution);
     }
 }
