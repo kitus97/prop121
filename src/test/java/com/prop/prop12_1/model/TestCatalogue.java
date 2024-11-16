@@ -17,9 +17,6 @@ public class TestCatalogue {
     private Catalogue catalogue;
 
     @Mock
-    private CtrlProd mockCtrlProd;
-
-    @Mock
     private Product productMock;
 
     @Mock
@@ -29,7 +26,7 @@ public class TestCatalogue {
     public void setUpBeforeTest(){
         MockitoAnnotations.openMocks(this);
 
-        Map<String, Product> mockProducts = new HashMap<>();
+        Map<String, Product> allProducts = new HashMap<>();
 
         when(productMock.getId()).thenReturn(1);
         when(productMock.getRestrictions()).thenReturn(Set.of("Fragile"));
@@ -39,12 +36,11 @@ public class TestCatalogue {
         when(productMock2.getRestrictions()).thenReturn(Set.of("Heavy", "Flammable"));
         when(productMock2.getName()).thenReturn("Product2");
 
-        //intent de simular allproducts amb productMock i productMock2 afegits
-        mockProducts.put("Product1", productMock);
-        mockProducts.put("Product2", productMock2);
-        when(mockCtrlProd.getProducts()).thenReturn(mockProducts);
+        allProducts.put("Product1", productMock);
+        allProducts.put("Product2", productMock2);
 
         catalogue = new Catalogue("Test Catalogue");
+        catalogue.setAllProducts(allProducts);
     }
 
     @Test
@@ -55,7 +51,7 @@ public class TestCatalogue {
     @Test
     public void testSetName() {
         catalogue.setName("Updated Catalogue");
-        assertEquals("Update Catalogue", catalogue.getName());
+        assertEquals("Updated Catalogue", catalogue.getName());
     }
 
     @Test
