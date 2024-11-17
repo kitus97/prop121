@@ -7,12 +7,9 @@ import com.prop.prop12_1.exceptions.UserNotFoundException;
 import com.prop.prop12_1.model.*;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class CtrlDomain {
@@ -46,7 +43,6 @@ public class CtrlDomain {
 
     public void login(String username, String password) {
         User user = users.get(username);
-        System.out.println(user.toString());
         if (user == null) {
             throw new UserNotFoundException("User '" + username + "' not found");
         } else if (!user.getPassword().equals(password)) {

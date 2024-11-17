@@ -1,8 +1,9 @@
 package com.prop.prop12_1.shell;
 
 import com.prop.prop12_1.controller.CtrlDomain;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -15,26 +16,33 @@ public class AuthenticationAspect {
         this.ctrlDomain = ctrlDomain;
     }
 
-    @Before("@annotation(org.springframework.shell.standard.ShellMethod) && !execution(* org.springframework.shell.standard.commands.Help.*(..))"
+    @Around("@annotation(org.springframework.shell.standard.ShellMethod) && !execution(* org.springframework.shell.standard.commands.Help.*(..))"
             + "&& !execution(* com.prop.prop12_1.shell.MenuCommands.login(..)) && !execution(* com.prop.prop12_1.shell.MenuCommands.addUser(..))"
-            + "&& !execution(* org.springframework.shell.standard.commands.Script.*(..))")
-    public void checkAuthentication() {
+            + "&& !execution(* org.springframework.shell.standard.commands.Script.*(..)) && !execution(* com.prop.prop12_1.shell.MenuCommands.stop())")
+    public Object checkAuthentication(ProceedingJoinPoint joinPoint) throws Throwable {
         if (ctrlDomain.getLoggedUser() == null) {
-            throw new IllegalStateException("You must log in to execute this command.");
+            System.out.print("Error: You must log in to execute this command.");
+            return null;
         }
+        return joinPoint.proceed();
     }
 
-    @Before("within(com.prop.prop12_1.shell.UserCommands) && !execution(* com.prop.prop12_1.shell.UserCommands.selectSupermarket(..))")
-    public void checkSupermarketSelected() {
+    @Around("within(com.prop.prop12_1.shell.UserCommands) && !execution(* com.prop.prop12_1.shell.UserCommands.selectSupermarket(..))"
+            + "&& !execution(* com.prop.prop12_1.shell.UserCommands.getSimilarityTable())")
+    public Object checkSupermarketSelected(ProceedingJoinPoint joinPoint) throws Throwable {
         if (ctrlDomain.getSelectedSupermarket().isEmpty()) {
-            throw new IllegalStateException("You must select a supermarket.");
+            System.out.print("Error: You must select a supermarket.");
+            return null;
         }
+        return joinPoint.proceed();
     }
 
-    @Before("within(com.prop.prop12_1.shell.AdminCommands)")
-    public void checkUserIsAdmin() {
+    @Around("within(com.prop.prop12_1.shell.AdminCommands)")
+    public Object checkUserIsAdmin(ProceedingJoinPoint joinPoint) throws Throwable {
         if (!ctrlDomain.getLoggedUser().isAdmin()) {
-            throw new IllegalStateException("You do not have admin privileges.");
+            System.out.print("Error: You do not have admin privileges.");
+            return null;
         }
+        return joinPoint.proceed();
     }
 }

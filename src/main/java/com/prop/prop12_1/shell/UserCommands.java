@@ -19,25 +19,38 @@ public class UserCommands {
         this.ctrlDomain = ctrlDomain;
     }
 
-    @ShellMethod(value = "Select a supermarket", key = {"select-supermarket", "select-super"})
+    @ShellMethod(value = "Select a supermarket", key = {"select-supermarket", "select-super"},
+                 group = "User Supermarket Management")
     public String selectSupermarket(
             @ShellOption(help = "Supermarket name") String supermarketName
     ) {
-        ctrlDomain.setSelectedSupermarket(supermarketName);
-        return "Supermarket '" + supermarketName + "' was selected.";
+        try {
+            ctrlDomain.setSelectedSupermarket(supermarketName);
+            return "Supermarket '" + supermarketName + "' was selected.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
-    @ShellMethod(value = "Check the supermarket you are working on", key = {"check-supermarket", "chk-super"})
+    @ShellMethod(value = "Check the supermarket you are working on", key = {"check-supermarket", "chk-super"},
+            group = "User Supermarket Management")
     public String checkSupermarket() {
         return ctrlDomain.getSelectedSupermarket();
     }
 
-    @ShellMethod(value = "Changes the selected supermarket", key = {"change-supermarket", "change-super"})
+    @ShellMethod(value = "Changes the selected supermarket", key = {"change-supermarket", "change-super"},
+            group = "User Supermarket Management")
     public String changeSupermarket(
             @ShellOption(help = "New supermarket") String supermarketName
     ) {
-        ctrlDomain.setSelectedSupermarket(supermarketName);
-        return "Supermarket was changed to '" + supermarketName + "'.";
+        try {
+            ctrlDomain.setSelectedSupermarket(supermarketName);
+            return "Supermarket was changed to '" + supermarketName + "'.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "List all the shelves of the supermarket", key = {"show-similarities", "sh-sim"})
@@ -50,13 +63,33 @@ public class UserCommands {
         return "";
     }
 
+    @ShellMethod(value = "Check the similarity between two products", key = {"check-products-similarity", "chk-prods-sim"},
+                 group = "Similarity Management")
+    public String checkProductsSimilarity(
+            @ShellOption(help = "Product 1 name") String product1Name,
+            @ShellOption(help = "Product 2 name") String product2Name
+    ) {
+        try {
+            double value = ctrlDomain.checkProductsSimilarity(product1Name, product2Name);
+            return "Similarity between '" + product1Name + "' and '" + product2Name + "': " + value;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
     @ShellMethod(value = "Adds a new catalogue to the supermarket", key = {"add-catalogue", "add-cat"},
             group = "Catalogue Management")
     public String createCatalogue(
             @ShellOption(help = "Catalogue name") String catalogueName
     ) {
-        ctrlDomain.addCatalogue(catalogueName);
-        return "Catalogue '" + catalogueName + "' was added.";
+        try {
+            ctrlDomain.addCatalogue(catalogueName);
+            return "Catalogue '" + catalogueName + "' was added.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Removes an existing catalogue of the supermarket", key = {"delete-catalogue", "rm-cat"},
@@ -64,8 +97,13 @@ public class UserCommands {
     public String deleteCatalogue(
             @ShellOption(help = "Catalogue name") String catalogueName
     ) {
-        ctrlDomain.removeCatalogue(catalogueName);
-        return "Catalogue '" + catalogueName + "' was removed.";
+        try {
+            ctrlDomain.removeCatalogue(catalogueName);
+            return "Catalogue '" + catalogueName + "' was removed.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Modifies a catalogue of the supermarket by adding or removing a product", key = {"modify-catalogue", "mod-cat"},
@@ -75,13 +113,18 @@ public class UserCommands {
             @ShellOption(help = "Product name") String productName,
             @ShellOption(value = {"-r","--remove"}, arity = 0, help = "Remove the product", defaultValue = "false") boolean remove
     ) {
-        if (!remove) {
-            ctrlDomain.addProductToCatalogue(catalogueName, productName);
-            return "Product '" + productName + "' was added to the catalogue '" + catalogueName + "'.";
-        } else {
-            ctrlDomain.removeProductCatalogue(catalogueName, productName);
-            return "Product '" + productName + "' was removed from the catalogue '" + catalogueName + "'.";
+        try {
+            if (!remove) {
+                ctrlDomain.addProductToCatalogue(catalogueName, productName);
+                return "Product '" + productName + "' was added to the catalogue '" + catalogueName + "'.";
+            } else {
+                ctrlDomain.removeProductCatalogue(catalogueName, productName);
+                return "Product '" + productName + "' was removed from the catalogue '" + catalogueName + "'.";
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+        return "";
     }
 
     @ShellMethod(value = "Lists all the catalogues of the supermarket", key = {"list-catalogues", "ls-cats"},
@@ -95,7 +138,12 @@ public class UserCommands {
     public String listCatalogueProducts(
             @ShellOption(help = "Catalogue name") String catalogueName
     ) {
-        return String.format("List of products of catalogue '[%s]':\n [%s]", catalogueName, ctrlDomain.listProdsCatalogue(catalogueName));
+        try {
+            return String.format("List of products of catalogue '[%s]':\n [%s]", catalogueName, ctrlDomain.listProdsCatalogue(catalogueName));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Adds a new shelf to the supermarket", group = "Shelf Management")
@@ -103,8 +151,13 @@ public class UserCommands {
             @ShellOption(help = "Shelf name") String shelfName,
             @ShellOption(help = "Shelf size") int shelfSize
     ) {
-        ctrlDomain.addShelf(shelfName, shelfSize);
-        return "Shelf '" + shelfName + "' was added.";
+        try {
+            ctrlDomain.addShelf(shelfName, shelfSize);
+            return "Shelf '" + shelfName + "' was added.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Removes an existing shelf of the supermarket", key = {"remove-shelf", "rm-shelf"},
@@ -112,8 +165,13 @@ public class UserCommands {
     public String removeShelf(
             @ShellOption (help = "Shelf name") String shelfName
     ) {
-        ctrlDomain.removeShelf(shelfName);
-        return "Shelf '" + shelfName + "' was removed.";
+        try {
+            ctrlDomain.removeShelf(shelfName);
+            return "Shelf '" + shelfName + "' was removed.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Add a restriction to an existing shelf of the supermarket", key = {"add-restriction", "add-rest"},
@@ -123,8 +181,13 @@ public class UserCommands {
             @ShellOption(help = "Restriction name") String restrictionName,
             @ShellOption(help = "Shelf index") int idx
     ) {
-        ctrlDomain.addRestrictionToShelf(restrictionName, shelfName, idx);
-        return "Restriction '" + restrictionName + "' was added to the shelf '" + shelfName + "' at index '" + idx + "'.";
+        try {
+            ctrlDomain.addRestrictionToShelf(restrictionName, shelfName, idx);
+            return "Restriction '" + restrictionName + "' was added to the shelf '" + shelfName + "' at index '" + idx + "'.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Remove a restriction from an existing shelf of the supermarket", key = {"remove-restriction", "rm-rest"},
@@ -133,8 +196,13 @@ public class UserCommands {
             @ShellOption(help = "Shelf name") String shelfName,
             @ShellOption(help = "Shelf index") int idx
     ) {
-        ctrlDomain.removeRestrictionsFromShelf(shelfName, idx);
-        return "Restriction was removed from the shelf '" + shelfName + "' at index '" + idx + "'.";
+        try {
+            ctrlDomain.removeRestrictionsFromShelf(shelfName, idx);
+            return "Restriction was removed from the shelf '" + shelfName + "' at index '" + idx + "'.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Resize an existing shelf of the supermarket", key = {"resize-shelf", "rs-shelf"},
@@ -143,8 +211,13 @@ public class UserCommands {
             @ShellOption(help = "Shelf name") String shelfName,
             @ShellOption(help = "New shelf size") int size
     ) {
-        ctrlDomain.resizeShelf(shelfName, size);
-        return "Shelf '" + shelfName + "' was resized.";
+        try {
+            ctrlDomain.resizeShelf(shelfName, size);
+            return "Shelf '" + shelfName + "' was resized.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Check an existing shelf of the supermarket", key = {"check-shelf", "chk-shelf"},
@@ -152,7 +225,12 @@ public class UserCommands {
     public String checkShelf(
             @ShellOption(help = "Shelf name") String shelfName
     ) {
-        return ctrlDomain.getShelf(shelfName);
+        try {
+            return ctrlDomain.getShelf(shelfName);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "List all the shelves of the supermarket", key = {"list-shelves", "ls-shelves"},
@@ -178,15 +256,27 @@ public class UserCommands {
         if (algorithm.equals("Backtracking")) algorithmID = 0;
         else if (algorithm.equals("HillClimbing")) algorithmID = 1;
         else if (algorithm.equals("Greedy")) algorithmID = 2;
-        else throw new IllegalArgumentException("Unsupported algorithm: Algorithm must be Backtracking, HillClimbing or Greedy. Written: " + algorithm);
+        else {
+            System.out.println("Error: Unsupported algorithm: Algorithm must be Backtracking, HillClimbing or Greedy. Written: " + algorithm);
+            return "";
+        }
 
         boolean heuristicBool;
         if (heuristic == 1) heuristicBool = true;
         else if (heuristic == 2) heuristicBool = false;
-        else throw new IllegalArgumentException("Heuristic must be 1 or 2. Written: " + heuristic);
+        else {
+            System.out.println("Error: Heuristic must be 1 or 2. Written: " + heuristic);
+            return "";
+        }
 
-        ctrlDomain.generateSolution(solutionName, shelfName, catalogueName, algorithmID, heuristicBool);
-        return "Solution '" + solutionName + "' was generated.";
+
+        try {
+            ctrlDomain.generateSolution(solutionName, shelfName, catalogueName, algorithmID, heuristicBool);
+            return "Solution '" + solutionName + "' was generated.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Modifies a solution by interchanging the products of two positions", key = {"swap-positions-solution", "swap-pos"},
@@ -196,21 +286,27 @@ public class UserCommands {
             @ShellOption(help = "Position 1") int position1,
             @ShellOption(help = "Position 2") int position2
     ) {
-        double newMark = ctrlDomain.checkSwapSolution(solutionName, position1, position2);
-        System.out.println("New mark after the modification: " + newMark);
+        try {
+            double newMark = ctrlDomain.checkSwapSolution(solutionName, position1, position2);
+            System.out.println("New mark after the modification: " + newMark);
 
-        String confirmation;
 
-        do {
-            System.out.print("Do you want to keep the changes) (Y/N): ");
-            confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
-            if ("Y".equals(confirmation)) {
-                ctrlDomain.changeSolutionProducts(position1, position2, solutionName);
-                return "Solution '" + solutionName + "' was changed.";
-            } else if ("N".equals(confirmation)) {
-                return "Solution '" + solutionName + "' was not changed.";
-            }
-        } while (true);
+            String confirmation;
+
+            do {
+                System.out.print("Do you want to keep the changes) (Y/N): ");
+                confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
+                if ("Y".equals(confirmation)) {
+                    ctrlDomain.changeSolutionProducts(position1, position2, solutionName);
+                    return "Solution '" + solutionName + "' was changed.";
+                } else if ("N".equals(confirmation)) {
+                    return "Solution '" + solutionName + "' was not changed.";
+                }
+            } while (true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Adds a product to an existing solution at the index of the shelf", key = {"add-product-solution", "add-prod-sol"},
@@ -220,21 +316,16 @@ public class UserCommands {
             @ShellOption(help = "Product name") String productName,
             @ShellOption(help = "Shelf index") int shelfIndex
     ) {
-        double newMark = ctrlDomain.checkAddSolutionProduct(solutionName, productName, shelfIndex);
-        System.out.println("New mark after the modification: " + newMark);
+        try {
+            double newMark = ctrlDomain.checkAddSolutionProduct(solutionName, productName, shelfIndex);
+            System.out.println("New mark after the modification: " + newMark);
 
-        String confirmation;
-
-        do {
-            System.out.print("Do you want to keep the changes) (Y/N): ");
-            confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
-            if ("Y".equals(confirmation)) {
-                ctrlDomain.addSolutionProduct(solutionName, productName, shelfIndex);
-                return "Solution '" + solutionName + "' was changed.";
-            } else if ("N".equals(confirmation)) {
-                return "Solution '" + solutionName + "' was not changed.";
-            }
-        } while (true);
+            ctrlDomain.addSolutionProduct(solutionName, productName, shelfIndex);
+            return "Solution '" + solutionName + "' was changed.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Removes a product of an existing solution from the index of the shelf", key = {"remove-product-solution", "rm-prod-sol"},
@@ -243,21 +334,26 @@ public class UserCommands {
             @ShellOption(help = "Solution name") String solutionName,
             @ShellOption(help = "Shelf index") int shelfIndex
     ) {
-        double newMark = ctrlDomain.checkDeleteSolutionProduct(solutionName, shelfIndex);
-        System.out.println("New mark after the modification: " + newMark);
+        try {
+            double newMark = ctrlDomain.checkDeleteSolutionProduct(solutionName, shelfIndex);
+            System.out.println("New mark after the modification: " + newMark);
 
-        String confirmation;
+            String confirmation;
 
-        do {
-            System.out.print("Do you want to keep the changes) (Y/N): ");
-            confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
-            if ("Y".equals(confirmation)) {
-                ctrlDomain.deleteSolutionProduct(solutionName, shelfIndex);
-                return "Solution '" + solutionName + "' was changed.";
-            } else if ("N".equals(confirmation)) {
-                return "Solution '" + solutionName + "' was not changed.";
-            }
-        } while (true);
+            do {
+                System.out.print("Do you want to keep the changes) (Y/N): ");
+                confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
+                if ("Y".equals(confirmation)) {
+                    ctrlDomain.deleteSolutionProduct(solutionName, shelfIndex);
+                    return "Solution '" + solutionName + "' was changed.";
+                } else if ("N".equals(confirmation)) {
+                    return "Solution '" + solutionName + "' was not changed.";
+                }
+            } while (true);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Removes an existing solution from the supermarket", key = {"remove-solution", "rm-sol"},
@@ -265,8 +361,13 @@ public class UserCommands {
     public String removeSolution(
             @ShellOption(help = "Solution name") String solutionName
     ) {
-        ctrlDomain.deleteSolution(solutionName);
-        return "Solution '" + solutionName + "' was deleted.";
+        try {
+            ctrlDomain.deleteSolution(solutionName);
+            return "Solution '" + solutionName + "' was deleted.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Lists all the solutions from the supermarket", key = {"list-solutions", "ls-sols"},
@@ -280,6 +381,11 @@ public class UserCommands {
     public String checkSolution(
             @ShellOption(help = "Solution name") String solutionName
     ) {
-        return ctrlDomain.checkSolution(solutionName);
+        try {
+            return ctrlDomain.checkSolution(solutionName);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 }

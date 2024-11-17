@@ -451,7 +451,12 @@ public class CtrlProd {
      */
     public String printProduct(String productName) {
         Product product = findProduct(productName);
-        return product != null ? product.toString() : "Product not found";
+
+        if (product == null) {
+            throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
+        }
+
+        return product.toString();
     }
 
     /**

@@ -22,17 +22,26 @@ public class MenuCommands {
             @ShellOption(help = "Password") String password,
             @ShellOption(help = "Role") String role
     ) {
-        ctrlDomain.addUser(username, password, role);
-        return "User added successfully.";
+        try {
+            ctrlDomain.addUser(username, password, role);
+            return "User added successfully.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod("Login as a user")
     public String login(
             @ShellOption(help = "Username") String username,
             @ShellOption(help = "Password") String password) {
-        System.out.println("Hola");
-        ctrlDomain.login(username, password);
-        return "User logged in successfully.";
+        try {
+            ctrlDomain.login(username, password);
+            return "User logged in successfully.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod("Logout the current user")
@@ -44,6 +53,12 @@ public class MenuCommands {
     @ShellMethod(value = "List all users", key = {"list-users","ls-users"})
     public String listUsers() {
         return ctrlDomain.listUsers();
+    }
+
+    @ShellMethod("Exit the program")
+    public String stop() {
+        System.exit(0);
+        return "";
     }
 
 }
