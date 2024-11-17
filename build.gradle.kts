@@ -23,6 +23,10 @@ repositories {
 	mavenCentral()
 }
 
+configurations.all {
+	exclude(group = "commons-logging", module = "commons-logging")
+}
+
 dependencies {
 	implementation("com.google.guava:guava:33.3.1-jre")
 	implementation ("org.apache.commons:commons-lang3:3.17.0")
