@@ -17,14 +17,15 @@ public class AuthenticationAspect {
 
     @Before("@annotation(org.springframework.shell.standard.ShellMethod) && !execution(* org.springframework.shell.standard.commands.Help.*(..))"
             + "&& !execution(* com.prop.prop12_1.shell.MenuCommands.login(..)) && !execution(* com.prop.prop12_1.shell.MenuCommands.addUser(..))"
-            + "&& !execution(* org.springframework.shell.standard.commands.Script.*(..))")
+            + "&& !execution(* org.springframework.shell.standard.commands.Script.*(..)) && !execution(com.prop.prop12_1.shell.MenuCommands.stop())")
     public void checkAuthentication() {
         if (ctrlDomain.getLoggedUser() == null) {
             throw new IllegalStateException("You must log in to execute this command.");
         }
     }
 
-    @Before("within(com.prop.prop12_1.shell.UserCommands) && !execution(* com.prop.prop12_1.shell.UserCommands.selectSupermarket(..))")
+    @Before("within(com.prop.prop12_1.shell.UserCommands) && !execution(* com.prop.prop12_1.shell.UserCommands.selectSupermarket(..))"
+            + "&& !execution(* com.prop.prop12_1.shell.UserCommands.getSimilarityTable())")
     public void checkSupermarketSelected() {
         if (ctrlDomain.getSelectedSupermarket().isEmpty()) {
             throw new IllegalStateException("You must select a supermarket.");

@@ -46,4 +46,10 @@ public class MenuCommands {
         return ctrlDomain.listUsers();
     }
 
+    @ShellMethod("Exit the program")
+    public String stop() {
+        System.exit(0);
+        return "";
+    }
+
 }

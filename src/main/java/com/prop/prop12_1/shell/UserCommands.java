@@ -50,6 +50,16 @@ public class UserCommands {
         return "";
     }
 
+    @ShellMethod(value = "Check the similarity between two products", key = {"check-products-similarity", "chk-prods-sim"},
+            group = "Similarity Management")
+    public String checkProductsSimilarity(
+            @ShellOption(help = "Product 1 name") String product1Name,
+            @ShellOption(help = "Product 2 name") String product2Name
+    ) {
+        double value = ctrlDomain.checkProductsSimilarity(product1Name, product2Name);
+        return "Similarity between '" + product1Name + "' and '" + product2Name + "': " + value;
+    }
+
     @ShellMethod(value = "Adds a new catalogue to the supermarket", key = {"add-catalogue", "add-cat"},
             group = "Catalogue Management")
     public String createCatalogue(
