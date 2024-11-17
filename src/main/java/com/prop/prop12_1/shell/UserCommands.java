@@ -6,6 +6,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import java.util.List;
 import java.util.Scanner;
 
 @ShellComponent
@@ -37,6 +38,16 @@ public class UserCommands {
     ) {
         ctrlDomain.setSelectedSupermarket(supermarketName);
         return "Supermarket was changed to '" + supermarketName + "'.";
+    }
+
+    @ShellMethod(value = "List all the shelves of the supermarket", key = {"show-similarities", "sh-sim"})
+    public String getSimilarityTable() {
+        List<List<Double>> mat = ctrlDomain.getSimilarityTable();
+        System.out.println("Similarities:");
+        for (List<Double> row : mat) {
+            System.out.println(row);
+        }
+        return "";
     }
 
     @ShellMethod(value = "Adds a new catalogue to the supermarket", key = {"add-catalogue", "add-cat"},

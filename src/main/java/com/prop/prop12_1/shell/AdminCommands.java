@@ -123,7 +123,10 @@ public class AdminCommands {
         System.out.println("Product characteristics: " + characteristics + "\n");
 
         List<String> products = ctrlDomain.listProducts();
-        if (products.size() == 1) {
+        products.removeLast();
+        if (products.isEmpty()) {
+            Double [] x = {0.0};
+            ctrlDomain.setSimilarities(x);
             return "";
         }
 

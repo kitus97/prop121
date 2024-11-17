@@ -259,6 +259,10 @@ public class CtrlDomain {
         }
     }
 
+    public List<List<Double>> getSimilarityTable(){
+        return ctrlProd.getSimilarityTable();
+    }
+
     public User getLoggedUser() {
         return loggedUser;
     }
