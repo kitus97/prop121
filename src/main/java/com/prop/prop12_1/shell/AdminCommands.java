@@ -120,7 +120,7 @@ public class AdminCommands {
 
 
         characteristics.forEach(characteristicName -> ctrlDomain.addCharacteristicProduct(characteristicName, productName));
-        System.out.println("Characteristics added: " + characteristics + "\n");
+        System.out.println("Product characteristics: " + characteristics + "\n");
 
         List<String> products = ctrlDomain.listProducts();
         if (products.size() == 1) {
