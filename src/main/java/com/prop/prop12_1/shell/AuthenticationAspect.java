@@ -28,9 +28,9 @@ public class AuthenticationAspect {
     }
 
     @Around("within(com.prop.prop12_1.shell.UserCommands) && !execution(* com.prop.prop12_1.shell.UserCommands.selectSupermarket(..))"
-            + "&& !execution(* com.prop.prop12_1.shell.UserCommands.getSimilarityTable())")
+            + "&& !execution(* com.prop.prop12_1.shell.UserCommands.getSimilarityTable()) && !execution(* com.prop.prop12_1.shell.UserCommands.checkSimilarity(..))")
     public Object checkSupermarketSelected(ProceedingJoinPoint joinPoint) throws Throwable {
-        if (ctrlDomain.getSelectedSupermarket().isEmpty()) {
+        if (ctrlDomain.getSelectedSupermarket() == null || ctrlDomain.getSelectedSupermarket().isEmpty()) {
             System.out.print("Error: You must select a supermarket.");
             return null;
         }

@@ -7,7 +7,9 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @ShellComponent
 public class UserCommands {
@@ -53,25 +55,30 @@ public class UserCommands {
         return "";
     }
 
-    @ShellMethod(value = "List all the shelves of the supermarket", key = {"show-similarities", "sh-sim"})
+    @ShellMethod(value = "List all the shelves of the supermarket", key = {"show-similarities", "sh-sim"},
+                group = "Similarity Management")
     public String getSimilarityTable() {
         List<List<Double>> mat = ctrlDomain.getSimilarityTable();
         System.out.println("Similarities:");
         for (List<Double> row : mat) {
-            System.out.println(row);
+            String formattedNumbers = row.stream()
+                    .map(number -> String.format(Locale.US, "[%.2f]", number))
+                    .collect(Collectors.joining(""));
+
+            System.out.println(formattedNumbers);
         }
         return "";
     }
 
-    @ShellMethod(value = "Check the similarity between two products", key = {"check-products-similarity", "chk-prods-sim"},
-                 group = "Similarity Management")
-    public String checkProductsSimilarity(
+    @ShellMethod(value = "Check the similarity between two existing products", key = {"check-similarity", "chk-sim"},
+            group = "Similarity Management")
+    public String checkSimilarity(
             @ShellOption(help = "Product 1 name") String product1Name,
             @ShellOption(help = "Product 2 name") String product2Name
     ) {
         try {
-            double value = ctrlDomain.checkProductsSimilarity(product1Name, product2Name);
-            return "Similarity between '" + product1Name + "' and '" + product2Name + "': " + value;
+            return "Similarity between '" + product1Name + "' and '" + product2Name + "' is: "
+                    + ctrlDomain.checkProductsSimilarity(product1Name, product2Name);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

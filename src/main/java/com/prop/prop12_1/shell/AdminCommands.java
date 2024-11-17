@@ -40,21 +40,6 @@ public class AdminCommands {
         return "List of characteristics:\n" + ctrlDomain.listCharacteristics();
     }
 
-    @ShellMethod(value = "Check the similarity between two existing products", key = {"check-similarity", "chk-sim"},
-            group = "Admin Similarity Management")
-    public String checkSimilarity(
-            @ShellOption(help = "Product 1 name") String product1Name,
-            @ShellOption(help = "Product 2 name") String product2Name
-    ) {
-        try {
-            return "Similarity between '" + product1Name + "' and '" + product2Name + "' is: "
-                    + ctrlDomain.checkProductsSimilarity(product1Name, product2Name);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return "";
-    }
-
     @ShellMethod(value = "Modify the similarity between two existing products", key = {"modify-similarity", "mod-sim"},
             group = "Admin Similarity Management")
     public String modifySimilarity(
