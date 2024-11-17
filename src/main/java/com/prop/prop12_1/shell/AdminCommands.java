@@ -1,15 +1,12 @@
 package com.prop.prop12_1.shell;
 
 import com.prop.prop12_1.controller.CtrlDomain;
-import com.prop.prop12_1.exceptions.CharacteristicNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @ShellComponent
 public class AdminCommands {
