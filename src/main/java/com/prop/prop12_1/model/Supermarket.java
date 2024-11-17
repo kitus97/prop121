@@ -386,7 +386,7 @@ public class Supermarket {
      */
     public void deleteSolutionProduct(String solution, int index){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("No such solution.");
-        /*
+
         else {
             String product = solutions.get(solution).deleteProduct(index);
             List<Solution> ss = associatedProductSolutions.get(product);
@@ -394,7 +394,7 @@ public class Supermarket {
             ss.remove(s);
         }
 
-         */
+
     }
 
     /**
@@ -413,9 +413,8 @@ public class Supermarket {
         }
         else{
             solutions.get(solution).addProduct(product, index);
-            List<Solution> ss = associatedProductSolutions.get(product);
-            Solution s = solutions.get(solution);
-            ss.add(s);
+            associatedProductSolutions.computeIfAbsent(solution, k -> new ArrayList<>()).add(solutions.get(solution));
+
         }
     }
 

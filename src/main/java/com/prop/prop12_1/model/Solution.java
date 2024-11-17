@@ -208,11 +208,12 @@ public class Solution {
      * @param index El índice del producto a eliminar.
      * @throws IndexOutOfBoundsException Si el índice está fuera de rango.
      */
-    public void deleteProduct(int index){
+    public String deleteProduct(int index){
         if(index >= distribution.size()) throw new IndexOutOfBoundsException("Invalid index");
         Pair<Product, Set<String>> pair = distribution.get(index);
         distribution.set(index, Pair.of(null, pair.getRight()));
         updateMark(getSimilarityTable());
+        return pair.getLeft().getName();
     }
 
     /**
