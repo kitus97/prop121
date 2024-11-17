@@ -94,6 +94,8 @@ public class AdminCommands {
         Set<String> systemCharacteristics = new HashSet<>(ctrlDomain.listCharacteristics());
         Set<String> characteristics = new HashSet<>();
         Scanner scanner = new Scanner(System.in);
+        ctrlDomain.addProduct(productName);
+        System.out.println("Product was added successfully\n");
 
         System.out.print("Do you want to add a characterístic to the product? (Y/N) ");
 
@@ -116,9 +118,9 @@ public class AdminCommands {
             confirmation = scanner.nextLine().trim().toUpperCase();
         }
 
-        ctrlDomain.addProduct(productName);
+
         characteristics.forEach(characteristicName -> ctrlDomain.addCharacteristicProduct(characteristicName, productName));
-        System.out.println("Product was added successfully to the system with characteristics: " + characteristics + "\n");
+        System.out.println("Characteristics added: " + characteristics + "\n");
 
         List<String> products = ctrlDomain.listProducts();
         if (products.size() == 1) {
