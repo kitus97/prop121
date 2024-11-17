@@ -26,7 +26,7 @@ public class Shelf{
      * @throws IndexOutOfBoundsException si el tamaño especificado es negativo.
      */
     public Shelf(String n, int t) {
-        if(t < 0) throw new IndexOutOfBoundsException("Invalid size");
+        if(t <= 0) throw new IndexOutOfBoundsException("Invalid size");
         name = n;
         distribution = new ArrayList<Set<String>>();
         for (int i = 0; i < t; ++i) {
