@@ -167,6 +167,7 @@ public class AdminCommands {
             @ShellOption(help = "Characteristic to modify") String characteristicName,
             @ShellOption(value = {"-r","--remove"}, arity = 0, help = "Remove the characteristic", defaultValue = "false") boolean remove
     ) {
+
         if (!remove) {
             ctrlDomain.addCharacteristicProduct(characteristicName, productName);
             System.out.println("Characteristic '" + characteristicName + "' added to product '" + productName + "'.");
