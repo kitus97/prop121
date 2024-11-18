@@ -307,8 +307,8 @@ class TestSolution {
         newDist.add(Pair.of(null, Set.of("restriction2")));
         newDist.add(Pair.of(productMock2, null));
         solution.setDistribution(newDist);
-
-        String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Mark: 5.0, Valid: true, Distribution: [(Product: Product1, Restrictions: [restriction1]), (Product: null, Restrictions: [restriction2]), (Product: Product2, Restrictions: null)]}\n";
+        String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Mark: 5.0, Valid: true\n" +
+                "Distribution: (Product1, [restriction1]), (null, [restriction2]), (Product2, null)}\n\n";
         assertEquals(expected, solution.toString());
     }
 
