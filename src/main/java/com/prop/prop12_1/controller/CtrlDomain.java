@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -168,6 +169,9 @@ public class CtrlDomain {
     public void addRestrictionToShelf(String restriction, String shelfName, int index) {
         if (ctrlProd.findCharacteristic(restriction) != null) {
             ctrlSupermarket.addRestriction(selectedSupermarket, shelfName, restriction, index);
+        }
+        else{
+            throw new NoSuchElementException("No such restriction");
         }
     }
 
