@@ -1,6 +1,7 @@
 package com.prop.prop12_1.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.prop.prop12_1.controller.CtrlProd;
 import com.prop.prop12_1.exceptions.ProductAlreadyAddedException;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class Catalogue {
     private static Map<String, Product> allProducts = new CtrlProd().getProducts();
+    private static Map <Integer, String> idToString = new CtrlProd().getMapProductsId();
     private String name;
     private Map<String, Product> products;
 
@@ -44,6 +46,21 @@ public class Catalogue {
      */
     public List<String> getProductNames() {
         return new ArrayList<>(products.keySet());
+    }
+
+    /**
+     * Devuelve una lista de nombres de los productos obtenidos a traves de sus id.
+     *
+     * @param solution Contiene los id a traducir.
+     * @return Una lista de nombres de productos.
+     */
+    public List<String> getProductNamesAuxiliar(List<Pair<Integer, Set<String>>> solution) {
+        List<Integer> productIDs = solution.stream().map(Pair::getLeft).toList();
+        List <String> productNames = new ArrayList<>();
+        for(Integer i : productIDs) {
+            productNames.add(idToString.get(i));
+        }
+        return productNames;
     }
 
     /**
