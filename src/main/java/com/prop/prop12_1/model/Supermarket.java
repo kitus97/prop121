@@ -361,7 +361,7 @@ public class Supermarket {
      * @return Una lista de representaciones en forma de string de las soluciones.
      */
     public List<String> getSolutions(){
-        return solutions.values().stream().map(Solution::toString).collect(Collectors.toList());
+        return solutions.values().stream().map(Solution::toString1).collect(Collectors.toList());
     }
 
     /**

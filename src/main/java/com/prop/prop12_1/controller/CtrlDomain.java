@@ -134,16 +134,17 @@ public class CtrlDomain {
 
     public void modifyProductSimilarities(String productName, Double[] similarities) {
         ctrlProd.modifyProductSimilarities(productName, similarities);
+        ctrlSupermarket.updateSolutionMarks(productName, ctrlProd.getSimilarityTable(),false);
     }
 
     public void addCharacteristicProduct(String characteristicName, String productName) {
         ctrlProd.addCharacteristicProduct(characteristicName, productName);
-        ctrlSupermarket.invalidateProductSolution(productName);
+        ctrlSupermarket.updateSolutionMarks(productName, ctrlProd.generateSimilarityTable(),true);
     }
 
     public void removeCharacteristicProduct(String characteristicName, String productName) {
         ctrlProd.removeCharacteristicProduct(characteristicName, productName);
-        ctrlSupermarket.invalidateProductSolution(productName);
+        ctrlSupermarket.updateSolutionMarks(productName, ctrlProd.generateSimilarityTable(),true);
     }
 
     public void addRestrictionProduct(String restrictionName, String productName) {

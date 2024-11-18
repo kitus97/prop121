@@ -305,7 +305,33 @@ public class Solution {
 
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
                 ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + ", Distribution: " + distributionString + "}\n";
+                + mark + ", Válido: "+ valid + ", Distribution: " + distributionString + "}\n";
+    }
+
+    /**
+     * Devuelve una representación en forma de string de la solución.
+     *
+     * @return La representación en forma de string de la solución, indicando:
+     * <p>
+     * - El nombre de la solución.
+     * <p>
+     * - El identificador del catálogo.
+     * <p>
+     * - El identificador de la estantería.
+     * <p>
+     * - La heurística utilizada en la solución.
+     * <p>
+     * - El algoritmo utilizado en la solución.
+     * <p>
+     * - La puntuación calculada para la solución.
+     * <p>
+     * - La validez de la solucón.
+     * <p>
+     */
+    public String toString1() {
+        return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
+                + mark + ", Válido: "+ valid + "}\n";
     }
 
 }
