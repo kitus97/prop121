@@ -249,6 +249,55 @@ public class AdminCommands {
         }
     }
 
+    @ShellMethod(value = "Modify the similarities of a product", key = {"modify-product-similarities", "mod-prod-sim"},
+            group = "Admin Product Management")
+    public String modifyProductSimilarities(
+            @ShellOption (help = "Product Name") String productName,
+            @ShellOption (defaultValue = "", help = "Similarities", value = {"-s"}) String similarities
+    ) {
+        try {
+            List<String> products = ctrlDomain.listProducts();
+            if (!products.contains(productName)) {
+                System.out.println("Error: Product '" + productName + "' does not exist.");
+                return "";
+            }
+
+            if (products.size() == 1) {
+                ctrlDomain.modifyProductSimilarities(productName, new Double[0]);
+                return "Product similarities were added successfully to the system.";
+            }
+
+            if (!similarities.isEmpty()) {
+                List<Double> similaritiesList = new ArrayList<>(Arrays.stream(similarities.split(","))
+                        .map(Double::parseDouble)
+                        .toList());
+
+                if (products.size() - 1 != similaritiesList.size()) {
+                    System.out.println("Error: Incorrect similarity list size. Size must be: " + (products.size()-1));
+                    return "";
+                }
+
+                for (int i = 0; i < similaritiesList.size(); i++) {
+                    double value = similaritiesList.get(i);
+                    if (value < 0.0 || value > 1.0) {
+                        System.out.println("Error: Similarity value must be between 0.0 and 1.0");
+                        System.out.println("Error: Default value: 0.0");
+                        similaritiesList.set(i, 0.0);
+                    }
+                }
+
+                Double[] result = similaritiesList.toArray(Double[]::new);
+                ctrlDomain.modifyProductSimilarities(productName,result);
+            } else {
+                ctrlDomain.modifyProductSimilarities(productName,null);
+            }
+            return "Product similarities were added successfully to the system.";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
+    }
+
     @ShellMethod(value = "Add a restriction to an existing product", key = {"add-product-restriction", "add-prod-rest"},
             group = "Admin Product Management")
     public String addProductRestriction(

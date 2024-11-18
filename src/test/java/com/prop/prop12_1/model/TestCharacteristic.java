@@ -54,6 +54,7 @@ public class TestCharacteristic {
         assertEquals("Char 1", characteristics.getName());
     }
 
+
     @Test
     public void testToString() {
         assertEquals("Char 1", characteristics.toString());
