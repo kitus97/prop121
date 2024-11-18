@@ -97,7 +97,7 @@ public class UserCommands {
     @ShellMethod(value = "Lists all the catalogues of the supermarket", key = {"list-catalogues", "ls-cats"},
             group = "Catalogue Management")
     public String listCatalogues() {
-        return String.format("List of catalogues:\n [%s]", ctrlDomain.listCatalogues());
+        return String.format("List of catalogues:\n %s", ctrlDomain.listCatalogues());
     }
 
     @ShellMethod(value = "Lists all the products of a catalogue of the supermarket", key = {"list-catalogue-products", "ls-cat-prods"},
