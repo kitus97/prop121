@@ -218,7 +218,10 @@ public class Supermarket {
      */
     public void deleteShelf(String shelf){
         if (shelves.remove(shelf) == null) throw new NoSuchElementException("No such shelf.");
-        else associatedShelfSolutions.remove(shelf);
+        else {
+            invalidateShelfSolution(shelf);
+            associatedShelfSolutions.remove(shelf);
+        }
     }
 
     /**
@@ -323,7 +326,11 @@ public class Supermarket {
      */
     public void deleteCatalogue(String catalog){
         if (catalogs.remove(catalog) == null) throw new NoSuchElementException("Error: No such catalog.");
-        else associatedCatalogSolutions.remove(catalog);
+        else {
+            invalidateCatalogSolution(catalog);
+            associatedCatalogSolutions.remove(catalog);
+        }
+
     }
 
     /**
