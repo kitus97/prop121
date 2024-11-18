@@ -305,7 +305,7 @@ public class Solution {
 
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
                 ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + "\nDistribution: " + distributionString + "}\n\n";
+                + mark + ", Valid: "+ valid + "\nDistribution: " + distributionString + "}\n\n";
     }
 
     /**

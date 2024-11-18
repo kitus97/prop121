@@ -23,8 +23,6 @@ public class Characteristics {
         this.name = name;
     }
 
-
-
     /**
      * Obtiene el identificador de la característica.
      *
