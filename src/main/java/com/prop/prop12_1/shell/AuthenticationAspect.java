@@ -4,6 +4,7 @@ import com.prop.prop12_1.controller.CtrlDomain;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -37,7 +38,8 @@ public class AuthenticationAspect {
         return joinPoint.proceed();
     }
 
-    @Around("within(com.prop.prop12_1.shell.AdminCommands)")
+    @Around("within(com.prop.prop12_1.shell.AdminCommands) && !execution(* com.prop.prop12_1.shell.AdminCommands.listProducts())"
+                        + "&& !execution(* com.prop.prop12_1.shell.AdminCommands.listProductCharacteristics())")
     public Object checkUserIsAdmin(ProceedingJoinPoint joinPoint) throws Throwable {
         if (!ctrlDomain.getLoggedUser().isAdmin()) {
             System.out.print("Error: You do not have admin privileges.");
@@ -45,4 +47,5 @@ public class AuthenticationAspect {
         }
         return joinPoint.proceed();
     }
+
 }

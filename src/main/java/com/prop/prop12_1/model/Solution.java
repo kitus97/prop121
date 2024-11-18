@@ -288,12 +288,24 @@ public class Solution {
      * - La distribución de productos en la estantería junto con sus restricciones, si existen.
      * <p>
      */
+
     @Override
     public String toString() {
-        return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Mark: "
-                + mark + ", Valid: "+ valid + "}\n";
+        StringBuilder distributionString = new StringBuilder();
+        for (Pair<Product, Set<String>> pair : distribution) {
+            String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
+            String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
+            distributionString.append("(").append(productName)
+                    .append(", ").append(restrictions).append("), ");
+        }
+        if (!distribution.isEmpty()) {
+            distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
+        }
 
+
+        return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
+                + mark + "\nDistribution: " + distributionString + "}\n\n";
     }
 
     /**
@@ -317,21 +329,9 @@ public class Solution {
      * <p>
      */
     public String toString1() {
-        StringBuilder distributionString = new StringBuilder("[");
-        for (Pair<Product, Set<String>> pair : distribution) {
-            String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
-            String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
-            distributionString.append("(Product: ").append(productName)
-                    .append(", Restrictions: ").append(restrictions).append("), ");
-        }
-        if (!distribution.isEmpty()) {
-            distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
-        }
-        distributionString.append("]");
-
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + ", Distribution: " + distributionString + "}\n";
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Mark: "
+                + mark + ", Valid: "+ valid + "}\n";
     }
 
 }

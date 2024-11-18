@@ -314,19 +314,8 @@ public class UserCommands {
             double newMark = ctrlDomain.checkSwapSolution(solutionName, position1, position2);
             System.out.println("New mark after the modification: " + newMark);
 
-
-            String confirmation;
-
-            do {
-                System.out.print("Do you want to keep the changes) (Y/N): ");
-                confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
-                if ("Y".equals(confirmation)) {
-                    ctrlDomain.changeSolutionProducts(position1, position2, solutionName);
-                    return "Solution '" + solutionName + "' was changed.";
-                } else if ("N".equals(confirmation)) {
-                    return "Solution '" + solutionName + "' was not changed.";
-                }
-            } while (true);
+            ctrlDomain.changeSolutionProducts(position1, position2, solutionName);
+            return "Solution '" + solutionName + "' was changed.";
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -362,18 +351,8 @@ public class UserCommands {
             double newMark = ctrlDomain.checkDeleteSolutionProduct(solutionName, shelfIndex);
             System.out.println("New mark after the modification: " + newMark);
 
-            String confirmation;
-
-            do {
-                System.out.print("Do you want to keep the changes) (Y/N): ");
-                confirmation = new Scanner(System.in).nextLine().trim().toUpperCase();
-                if ("Y".equals(confirmation)) {
-                    ctrlDomain.deleteSolutionProduct(solutionName, shelfIndex);
-                    return "Solution '" + solutionName + "' was changed.";
-                } else if ("N".equals(confirmation)) {
-                    return "Solution '" + solutionName + "' was not changed.";
-                }
-            } while (true);
+            ctrlDomain.deleteSolutionProduct(solutionName, shelfIndex);
+            return "Solution '" + solutionName + "' was changed.";
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
