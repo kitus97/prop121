@@ -16,6 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class Catalogue {
     private static Map<String, Product> allProducts = new CtrlProd().getProducts();
+    private static Map <Integer, String> idToString = new CtrlProd().getMapProductsId();
     private String name;
     private Map<String, Product> products;
 
@@ -58,6 +59,17 @@ public class Catalogue {
         }
         return ret;
     }
+
+    public List<String> getProductNamesAuxiliar(List<Pair<Integer, Set<String>>> solution) {
+        List<Integer> productIDs = solution.stream().map(Pair::getLeft).toList();
+        List <String> productNames = new ArrayList<>();
+        for(Integer i : productIDs) {
+            productNames.add(idToString.get(i));
+        }
+        return productNames;
+    }
+
+
 
     public void setProducts(Map<String, Product> products) {
         this.products = products;

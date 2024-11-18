@@ -54,7 +54,7 @@ public class Greedy {
             for (int j = 0; j < products.size(); ++j) {
                 if (products.get(j).getRight().equals(shelf.get(i))) {
                     if (idAnt == -1) {
-                        idAct = products.get(j).getLeft();
+                        idAct = j;
                         break;
                     } else {
                         if (maxsim <= similarityTable.get(idAnt).get(products.get(j).getLeft())) {

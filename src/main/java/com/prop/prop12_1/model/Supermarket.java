@@ -139,12 +139,13 @@ public class Supermarket {
             solutions.put(name, s);
             associatedShelfSolutions.get(shelf).add(s);
             associatedCatalogSolutions.get(catalog).add(s);
-            List<String> associatedProducts = cat.getProductNames();
+            List<String> associatedProducts = cat.getProductNamesAuxiliar(res.getRight());
             for(int i = 0; i < associatedProducts.size(); i++){
                 String product = associatedProducts.get(i);
                 associatedProductSolutions.computeIfAbsent(product, k -> new ArrayList<>()).add(s);
 
             }
+
         }
     }
 
