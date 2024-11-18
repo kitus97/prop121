@@ -109,8 +109,6 @@ public class Characteristics {
      */
     @Override
     public String toString() {
-        return "Characteristics{" +
-                "name='" + name + '\'' +
-                '}';
+        return name;
     }
 }
