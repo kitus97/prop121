@@ -32,7 +32,8 @@ public class AuthenticationAspect {
         }
     }
 
-    @Before("within(com.prop.prop12_1.shell.AdminCommands)")
+    @Before("within(com.prop.prop12_1.shell.AdminCommands) && !execution(* com.prop.prop12_1.shell.AdminCommands.listProducts())"
+            + "&& !execution(* com.prop.prop12_1.shell.AdminCommands.listProductCharacteristics())")
     public void checkUserIsAdmin() {
         if (!ctrlDomain.getLoggedUser().isAdmin()) {
             throw new IllegalStateException("You do not have admin privileges.");
