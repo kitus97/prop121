@@ -148,6 +148,11 @@ public class Supermarket {
         }
     }
 
+    /**
+     * Invalida las soluciones que usan este catálogo
+     * @param catalog
+     */
+
     private void invalidateCatalogSolution(String catalog){
         List<Solution> solutions = associatedCatalogSolutions.get(catalog);
         if (solutions == null) return;
@@ -160,6 +165,10 @@ public class Supermarket {
         }
     }
 
+    /**
+     * invalida las soluciones que usan la estantería
+     * @param shelf
+     */
     private void invalidateShelfSolution(String shelf){
         List<Solution> solutions = associatedShelfSolutions.get(shelf);
         if (solutions == null) return;
