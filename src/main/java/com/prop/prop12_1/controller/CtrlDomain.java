@@ -19,7 +19,6 @@ public class CtrlDomain {
 
     private CtrlSupermarket ctrlSupermarket;
     private CtrlProd ctrlProd;
-    private CtrlAlgorithm ctrlAlgorithm;
     private final UserPersistence userPersistence;
 
     private Map<String, User> users;
@@ -32,7 +31,6 @@ public class CtrlDomain {
     public CtrlDomain() {
         this.ctrlSupermarket = new CtrlSupermarket();
         this.ctrlProd = new CtrlProd();
-        this.ctrlAlgorithm = new CtrlAlgorithm();
 
         this.userPersistence = new UserPersistence();
         users = userPersistence.loadUsers();
