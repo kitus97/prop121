@@ -304,8 +304,8 @@ public class Solution {
         distributionString.append("]");
 
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + ", Válido: "+ valid + ", Distribution: " + distributionString + "}\n";
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Mark: "
+                + mark + ", Valid: "+ valid + ", Distribution: " + distributionString + "}\n";
     }
 
     /**
@@ -330,8 +330,8 @@ public class Solution {
      */
     public String toString1() {
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + ", Válido: "+ valid + "}\n";
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Mark: "
+                + mark + ", Valid: "+ valid + "}\n";
     }
 
 }

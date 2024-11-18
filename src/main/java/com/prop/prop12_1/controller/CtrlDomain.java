@@ -118,6 +118,7 @@ public class CtrlDomain {
 
     public void modifySimilarity(String productName1, String productName2, Double newValue) {
         ctrlProd.modifySimilarity(productName1, productName2, newValue);
+        ctrlSupermarket.updateSolutionMarks(productName1, ctrlProd.getSimilarityTable(),false);
     }
 
     public Double checkProductsSimilarity(String productName1, String productName2) {

@@ -5,13 +5,14 @@ import com.prop.prop12_1.model.Catalogue;
 import com.prop.prop12_1.model.Supermarket;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 public class CtrlSupermarket {
 
-    private static HashMap<String, Supermarket> supermarkets = new HashMap<>();
+    private static Map<String, Supermarket> supermarkets = new HashMap<>();
 
     public CtrlSupermarket() {
 
