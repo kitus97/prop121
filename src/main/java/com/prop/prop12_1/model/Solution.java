@@ -293,22 +293,24 @@ public class Solution {
      */
     @Override
     public String toString() {
-        StringBuilder distributionString = new StringBuilder("[");
+        StringBuilder distributionString = new StringBuilder();
         for (Pair<Product, Set<String>> pair : distribution) {
             String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
             String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
-            distributionString.append("(Product: ").append(productName)
-                    .append(", Restrictions: ").append(restrictions).append("), ");
+            distributionString.append("(").append(productName)
+                    .append(", ").append(restrictions).append("), ");
         }
         if (!distribution.isEmpty()) {
             distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
         }
-        distributionString.append("]");
+
 
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Mark: "
-                + mark + ", Valid: "+ valid + ", Distribution: " + distributionString + "}\n";
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
+                + mark + ", Distribution: " + distributionString + "}\n\n";
     }
+
+
 
     /**
      * Devuelve una representación en forma de string de la solución.

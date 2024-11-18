@@ -126,7 +126,7 @@ public class State {
     private void changeProducts(Pair<Integer, Set<String>> product1, Pair<Integer, Set<String>> product2, Integer j) {
         products.remove(product1);
         products.add(product2);
-        solution.add(j, product1);
+        solution.set(j, product1);
     }
 
     /**
