@@ -11,7 +11,7 @@ import java.util.Set;
  * Busca todas las combinaciones posibles para encontrar la mejor distribución de productos
  * en estanterías respetando restricciones y maximizando la similitud en un tiempo reducido.
  */
-public class BackTracking {
+public class BackTracking implements Algorithm {
 
     private List<Set<String>> shelf;
     private List<Pair<Integer, Set<String>>> products;
@@ -33,6 +33,7 @@ public class BackTracking {
      * @param similarityTable una tabla de similitudes entre los productos
      * @return un par donde el primer elemento es la puntuación máxima obtenida y el segundo es la mejor distribución encontrada
      */
+    @Override
     public Pair<Double, List<Pair<Integer, Set<String>>>> generateSolution(
             List<Set<String>> shelf,
             List<Pair<Integer, Set<String>>> products,

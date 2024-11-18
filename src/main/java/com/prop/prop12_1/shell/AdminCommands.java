@@ -74,6 +74,7 @@ public class AdminCommands {
             @ShellOption(help = "Supermarket name") String supermarketName
     ) {
         ctrlDomain.removeSupermarket(supermarketName);
+        ctrlDomain.setSelectedSupermarket("");
         return "Supermarket was removed successfully from the system.";
     }
 

@@ -105,7 +105,7 @@ public class UserCommands {
     public String listCatalogueProducts(
             @ShellOption(help = "Catalogue name") String catalogueName
     ) {
-        return String.format("List of products of catalogue '[%s]':\n [%s]", catalogueName, ctrlDomain.listProdsCatalogue(catalogueName));
+        return String.format("List of products of catalogue '[%s]':\n %s", catalogueName, ctrlDomain.listProdsCatalogue(catalogueName));
     }
 
     @ShellMethod(value = "Adds a new shelf to the supermarket", group = "Shelf Management")

@@ -43,7 +43,6 @@ public class CtrlDomain {
 
     public void login(String username, String password) {
         User user = users.get(username);
-        System.out.println(user.toString());
         if (user == null) {
             throw new UserNotFoundException("User '" + username + "' not found");
         } else if (!user.getPassword().equals(password)) {
