@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+
 /**
  * Clase que implementa un algoritmo Greedy para la generación de soluciones
  * relacionadas con la disposición de productos en un estante.
  */
-public class Greedy {
+public class Greedy implements Algorithm {
     private List<Set<String>> shelf;  // Lista de restricciones para cada posición del estante.
     private List<Pair<Integer, Set<String>>> products;  // Lista de productos disponibles y sus características.
     private double maxScore;  // Puntuación máxima alcanzada por la solución.
@@ -34,6 +35,10 @@ public class Greedy {
      *                 donde cada pair contiene el índice del producto y su conjunto de restricciones asociado.</li>
      *         </ul>
      */
+
+
+    @Override
+
     public Pair<Double, List<Pair<Integer, Set<String>>>> generateSolution(
             List<Set<String>> shelf,
             List<Pair<Integer, Set<String>>> products,
