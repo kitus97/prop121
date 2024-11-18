@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Greedy {
+public class Greedy implements Algorithm{
     private List<Set<String>> shelf;
     private List<Pair<Integer, Set<String>>> products;
     private double maxScore;
@@ -16,6 +16,7 @@ public class Greedy {
     public Greedy() {
     }
 
+    @Override
     public Pair<Double, List<Pair<Integer, Set<String>>>> generateSolution(
             List<Set<String>> shelf,
             List<Pair<Integer, Set<String>>> products,

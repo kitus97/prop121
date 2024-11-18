@@ -1,5 +1,6 @@
 package com.prop.prop12_1.controller;
 
+import com.prop.prop12_1.algorithm.Algorithm;
 import com.prop.prop12_1.algorithm.BackTracking;
 import com.prop.prop12_1.algorithm.Greedy;
 import com.prop.prop12_1.algorithm.HillClimbing;
@@ -43,19 +44,19 @@ public class CtrlAlgorithm {
         } else {
             similarityTable = new CtrlProd().getSimilarityTable();
         }
-
+        Algorithm alg = null;
         // Seleccionar y ejecutar el algoritmo adecuado
         if (algorithm == 0) {
-            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new BackTracking().generateSolution(shelf, products, similarityTable);
-            return solution;
+            alg = new BackTracking();
         } else if (algorithm == 1) {
-            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new HillClimbing().generateSolution(shelf, products, similarityTable);
-            return solution;
+            alg = new HillClimbing();
         } else if (algorithm == 2) {
-            Pair<Double, List<Pair<Integer, Set<String>>>> solution = new Greedy().generateSolution(shelf, products, similarityTable);
-            return solution;
+            alg = new Greedy();
         }
 
+        if (alg != null) {
+            return alg.generateSolution(shelf, products, similarityTable);
+        }
         // Retornar null si no se selecciona un algoritmo válido
         return null;
     }
