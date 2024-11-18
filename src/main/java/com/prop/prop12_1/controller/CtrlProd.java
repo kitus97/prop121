@@ -81,6 +81,9 @@ public class CtrlProd {
         } else if (product2 == null) {
             throw new ProductNotFoundException("Product with name '" + productName2 + "' was not found");
         }
+        else if (product1 == product2) {
+            throw new sameProductException("Both are product " + productName1);
+        }
 
         similarityTable.get(product1.getId()).set(product2.getId(), newValue);
         similarityTable.get(product2.getId()).set(product1.getId(), newValue);
@@ -104,6 +107,9 @@ public class CtrlProd {
             throw new ProductNotFoundException("Product with name '" + productName1 + "' was not found");
         } else if (product2 == null) {
             throw new ProductNotFoundException("Product with name '" + productName2 + "' was not found");
+        }
+        else if (product1 == product2) {
+            throw new sameProductException("Both are product " + productName1);
         }
 
         return similarityTable.get(product1.getId()).get(product2.getId());
@@ -277,7 +283,6 @@ public class CtrlProd {
                     throw new RestrictionAlreadyAddedToProductException("Restriction with name '" + restrictionName + "' was already added to product");
                 } else {
                     p.addRestriction(c);
-                    c.addAssociatedProduct(p);
                 }
             } else {
                 throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -332,7 +337,6 @@ public class CtrlProd {
                     throw new CharacteristicAlreadyAddedToProductException("Characteristic with name '" + characteristicName + "' was already added");
                 } else {
                     p.addCharacteristic(c);
-                    c.addAssociatedProduct(p);
                 }
             } else {
                 throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -358,7 +362,6 @@ public class CtrlProd {
             if (p != null) {
                 if (p.getCharacteristics().contains(c)) {
                     p.removeCharacteristic(c);
-                    c.removeAssociatedProduct(p);
                 } else {
                     throw new CharacteristicNotFoundInProductException("Characteristic with name '" + characteristicName + "' was not found in product");
                 }

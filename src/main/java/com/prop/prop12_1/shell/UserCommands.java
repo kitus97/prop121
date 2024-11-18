@@ -85,6 +85,16 @@ public class UserCommands {
         return "";
     }
 
+    @ShellMethod(value = "Check the similarity between two products", key = {"check-products-similarity", "chk-prods-sim"},
+            group = "Similarity Management")
+    public String checkProductsSimilarity(
+            @ShellOption(help = "Product 1 name") String product1Name,
+            @ShellOption(help = "Product 2 name") String product2Name
+    ) {
+        double value = ctrlDomain.checkProductsSimilarity(product1Name, product2Name);
+        return "Similarity between '" + product1Name + "' and '" + product2Name + "': " + value;
+    }
+
     @ShellMethod(value = "Adds a new catalogue to the supermarket", key = {"add-catalogue", "add-cat"},
             group = "Catalogue Management")
     public String createCatalogue(
@@ -137,7 +147,7 @@ public class UserCommands {
     @ShellMethod(value = "Lists all the catalogues of the supermarket", key = {"list-catalogues", "ls-cats"},
             group = "Catalogue Management")
     public String listCatalogues() {
-        return String.format("List of catalogues:\n [%s]", ctrlDomain.listCatalogues());
+        return String.format("List of catalogues:\n %s", ctrlDomain.listCatalogues());
     }
 
     @ShellMethod(value = "Lists all the products of a catalogue of the supermarket", key = {"list-catalogue-products", "ls-cat-prods"},
@@ -146,7 +156,7 @@ public class UserCommands {
             @ShellOption(help = "Catalogue name") String catalogueName
     ) {
         try {
-            return String.format("List of products of catalogue '[%s]':\n [%s]", catalogueName, ctrlDomain.listProdsCatalogue(catalogueName));
+            return String.format("List of products of catalogue '[%s]':\n %s", catalogueName, ctrlDomain.listProdsCatalogue(catalogueName));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

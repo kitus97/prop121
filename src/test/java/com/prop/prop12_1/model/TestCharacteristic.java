@@ -54,47 +54,9 @@ public class TestCharacteristic {
         assertEquals("Char 1", characteristics.getName());
     }
 
-    @Test
-    public void testAddAssociatedProduct() {
-        characteristics.addAssociatedProduct(product);
-        List<Product> associatedProducts = characteristics.getAssociatedProducts();
-        assertEquals(1, associatedProducts.size());
-        assertTrue(associatedProducts.contains(product));
-    }
-
-    @Test
-    public void testRemoveAssociatedProduct_Success() {
-        characteristics.addAssociatedProduct(product);
-        characteristics.removeAssociatedProduct(product);
-        List<Product> associatedProducts = characteristics.getAssociatedProducts();
-        assertTrue(associatedProducts.isEmpty());
-    }
-
-    @Test
-    public void testRemoveAssociatedProduct_NotPresent() {
-        characteristics.addAssociatedProduct(product);
-        characteristics.removeAssociatedProduct(product2);
-        List<Product> associatedProducts = characteristics.getAssociatedProducts();
-        assertEquals(1, associatedProducts.size());
-        assertTrue(associatedProducts.contains(product));
-    }
-
-    @Test
-    public void testSetAssociatedProducts() {
-        List<Product> products = new ArrayList<>();
-        products.add(product);
-        products.add(product2);
-
-        characteristics.setAssociatedProducts(products);
-
-        List<Product> associatedProducts = characteristics.getAssociatedProducts();
-        assertEquals(2, associatedProducts.size());
-        assertTrue(associatedProducts.contains(product));
-        assertTrue(associatedProducts.contains(product2));
-    }
 
     @Test
     public void testToString() {
-        assertEquals("Characteristics{name='Char 1'}", characteristics.toString());
+        assertEquals("Char 1", characteristics.toString());
     }
 }

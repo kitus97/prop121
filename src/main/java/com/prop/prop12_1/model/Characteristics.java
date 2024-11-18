@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Representa una característica que puede estar asociada a uno o más productos.
- * Cada característica tiene un identificador, un nombre y una lista
- * que contiene todos los productos con dicha característica.
+ * Representa una característica que puede estar asociada a productos.
+ * Cada característica tiene un identificador y un nombre.
  */
 public class Characteristics {
 
     private int id;
     private String name;
-    private List<Product> associatedProducts = new ArrayList<>();
 
     /**
      * Constructor que inicializa la característica con un identificador y un nombre.
@@ -25,10 +23,7 @@ public class Characteristics {
         this.name = name;
     }
 
-    /**
-     * Constructor por defecto.
-     */
-    public Characteristics() {}
+
 
     /**
      * Obtiene el identificador de la característica.
@@ -64,42 +59,6 @@ public class Characteristics {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Obtiene la lista de productos asociados a la característica.
-     *
-     * @return una lista de productos asociados
-     */
-    public List<Product> getAssociatedProducts() {
-        return associatedProducts;
-    }
-
-    /**
-     * Establece la lista de productos asociados a la característica.
-     *
-     * @param associatedProducts la nueva lista de productos asociados
-     */
-    public void setAssociatedProducts(List<Product> associatedProducts) {
-        this.associatedProducts = associatedProducts;
-    }
-
-    /**
-     * Añade un producto a la lista de productos asociados.
-     *
-     * @param product el producto a asociar
-     */
-    public void addAssociatedProduct(Product product) {
-        associatedProducts.add(product);
-    }
-
-    /**
-     * Elimina un producto de la lista de productos asociados.
-     *
-     * @param product el producto a eliminar de la lista de asociados
-     */
-    public void removeAssociatedProduct(Product product) {
-        associatedProducts.remove(product);
     }
 
     /**

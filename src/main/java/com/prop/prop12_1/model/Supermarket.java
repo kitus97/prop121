@@ -139,7 +139,7 @@ public class Supermarket {
             solutions.put(name, s);
             associatedShelfSolutions.get(shelf).add(s);
             associatedCatalogSolutions.get(catalog).add(s);
-            List<String> associatedProducts = cat.getProductNames();
+            List<String> associatedProducts = cat.getProductNamesAuxiliar(res.getRight());
             for(int i = 0; i < associatedProducts.size(); i++){
                 String product = associatedProducts.get(i);
                 associatedProductSolutions.computeIfAbsent(product, k -> new ArrayList<>()).add(s);
@@ -147,6 +147,11 @@ public class Supermarket {
             }
         }
     }
+
+    /**
+     * Invalida las soluciones que usan este catálogo
+     * @param catalog
+     */
 
     private void invalidateCatalogSolution(String catalog){
         List<Solution> solutions = associatedCatalogSolutions.get(catalog);
@@ -160,6 +165,10 @@ public class Supermarket {
         }
     }
 
+    /**
+     * invalida las soluciones que usan la estantería
+     * @param shelf
+     */
     private void invalidateShelfSolution(String shelf){
         List<Solution> solutions = associatedShelfSolutions.get(shelf);
         if (solutions == null) return;
@@ -351,7 +360,7 @@ public class Supermarket {
     public String getSolution(String solution){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("Error: No such solution.");
         else{
-            return solutions.get(solution).toString1();
+            return solutions.get(solution).toString();
         }
     }
 
@@ -361,7 +370,7 @@ public class Supermarket {
      * @return Una lista de representaciones en forma de string de las soluciones.
      */
     public List<String> getSolutions(){
-        return solutions.values().stream().map(Solution::toString).collect(Collectors.toList());
+        return solutions.values().stream().map(Solution::toString1).collect(Collectors.toList());
     }
 
     /**

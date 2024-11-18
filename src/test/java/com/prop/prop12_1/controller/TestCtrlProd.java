@@ -123,10 +123,10 @@ public class TestCtrlProd {
         Map<String, Characteristics> result = ctrlProd.getCharacteristics();
 
         assertEquals(2, result.size());
-        assertTrue(result.containsKey("Color"));
-        assertTrue(result.containsKey("Size"));
-        assertEquals(characteristic1, result.get("Color"));
-        assertEquals(characteristic2, result.get("Size"));
+        assertTrue(result.containsKey("char 1"));
+        assertTrue(result.containsKey("char 2"));
+        assertEquals(characteristic1, result.get("char 1"));
+        assertEquals(characteristic2, result.get("char 2"));
     }
 
 
@@ -165,7 +165,6 @@ public class TestCtrlProd {
         ctrlProd.addRestrictionProduct("Restriction 1", "Product 1");
 
         verify(productMock).addRestriction(characteristicMock);
-        verify(characteristicMock).addAssociatedProduct(productMock);
     }
 
     @Test
@@ -220,7 +219,6 @@ public class TestCtrlProd {
         ctrlProd.addCharacteristicProduct("Characteristic 1", "Product 1");
 
         verify(productMock).addCharacteristic(characteristicMock);
-        verify(characteristicMock).addAssociatedProduct(productMock);
     }
 
     @Test
@@ -255,7 +253,6 @@ public class TestCtrlProd {
         ctrlProd.removeCharacteristicProduct("Characteristic 1", "Product 1");
 
         verify(productMock).removeCharacteristic(characteristicMock);
-        verify(characteristicMock).removeAssociatedProduct(productMock);
     }
 
     @Test
@@ -315,8 +312,8 @@ public class TestCtrlProd {
 
         assertEquals(2, result.size());
 
-        assertTrue(result.contains("Characteristics{name='Characteristic 1'}"));
-        assertTrue(result.contains("Characteristics{name='Characteristic 2'}"));
+        assertTrue(result.contains("Characteristic 1"));
+        assertTrue(result.contains("Characteristic 2"));
     }
 
     // Test para listProducts

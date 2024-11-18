@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
+
 /**
  * Representa una solución generada para la distribución de productos en una estantería dentro de un supermercado.
  * <p>
@@ -100,6 +102,7 @@ public class Solution {
     public String getHeuristic() {
         return heuristic;
     }
+
     public String getAlgorithm() {
         return algorithm;
     }
@@ -285,12 +288,26 @@ public class Solution {
      * <p>
      * - La puntuación calculada para la solución.
      * <p>
+     * - La distribución de productos en la estantería junto con sus restricciones, si existen.
+     * <p>
      */
     @Override
     public String toString() {
+        StringBuilder distributionString = new StringBuilder("[");
+        for (Pair<Product, Set<String>> pair : distribution) {
+            String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
+            String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
+            distributionString.append("(Product: ").append(productName)
+                    .append(", Restrictions: ").append(restrictions).append("), ");
+        }
+        if (!distribution.isEmpty()) {
+            distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
+        }
+        distributionString.append("]");
+
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-        + mark + "}\n";
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Mark: "
+                + mark + ", Valid: "+ valid + ", Distribution: " + distributionString + "}\n";
     }
 
     /**
@@ -310,25 +327,13 @@ public class Solution {
      * <p>
      * - La puntuación calculada para la solución.
      * <p>
-     * - La distribución de productos en la estantería junto con sus restricciones, si existen.
+     * - La validez de la solucón.
      * <p>
      */
     public String toString1() {
-        StringBuilder distributionString = new StringBuilder("[");
-        for (Pair<Product, Set<String>> pair : distribution) {
-            String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
-            String restrictions = (pair.getRight() != null) ? pair.getRight().toString() : "null";
-            distributionString.append("(Product: ").append(productName)
-                    .append(", Restrictions: ").append(restrictions).append("), ");
-        }
-        if (!distribution.isEmpty()) {
-            distributionString.setLength(distributionString.length() - 2); // Remove last comma and space
-        }
-        distributionString.append("]");
-
         return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-                + mark + ", Distribution: " + distributionString + "}\n";
+                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Mark: "
+                + mark + ", Valid: "+ valid + "}\n";
     }
 
 }

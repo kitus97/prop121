@@ -83,6 +83,7 @@ public class AdminCommands {
     ) {
         try {
             ctrlDomain.removeSupermarket(supermarketName);
+            ctrlDomain.setSelectedSupermarket("");
             return "Supermarket was removed successfully from the system.";
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -182,6 +183,8 @@ public class AdminCommands {
         return "";
     }
 
+    @ShellMethod(value = "Modify the similarities of a product", key = {"modify-product-similarities", "mod-prod-sim"},
+            group = "Admin Product Management")
     public String modifyProductSimilarities(
             @ShellOption (help = "Product Name") String productName,
             @ShellOption (defaultValue = "", help = "Similarities", value = {"-s"}) String similarities
@@ -194,7 +197,7 @@ public class AdminCommands {
             }
 
             if (products.size() == 1) {
-                ctrlDomain.setSimilarities(new Double[0]);
+                ctrlDomain.modifyProductSimilarities(productName, new Double[0]);
                 return "Product similarities were added successfully to the system.";
             }
 
@@ -218,9 +221,9 @@ public class AdminCommands {
                 }
 
                 Double[] result = similaritiesList.toArray(Double[]::new);
-                ctrlDomain.setSimilarities(result);
+                ctrlDomain.modifyProductSimilarities(productName,result);
             } else {
-                ctrlDomain.setSimilarities(null);
+                ctrlDomain.modifyProductSimilarities(productName,null);
             }
             return "Product similarities were added successfully to the system.";
         } catch (Exception e) {
