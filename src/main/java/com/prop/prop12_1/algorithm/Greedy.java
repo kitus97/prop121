@@ -67,7 +67,7 @@ public class Greedy implements Algorithm {
         State s = new State(solution, products);
 
 
-        System.out.println("Mejor puntuación encontrada: " + s.calculateHeuristic());
+
         return Pair.of(s.calculateHeuristic(), solution);
     }
 
