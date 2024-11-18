@@ -136,14 +136,27 @@ public class AdminCommands {
 
                 products.forEach(product -> {
                     System.out.print("Enter the similarity value with product '" + product + "': ");
+                    Boolean valid = false;
+                    double value = -0.1;
 
-                    double value = Double.parseDouble(scanner.nextLine());
+                    while(!valid) {
+                        try {
+                            value = Double.parseDouble(scanner.nextLine());
+                            valid = true;
+                        } catch (NumberFormatException e) {
+                            System.err.println("Similarity value must be a double");
+                        }
+                    }
 
                     while (value < 0.0 || value > 1.0) {
                         System.err.println("Similarity value must be between 0.0 and 1.0");
 
                         System.out.print("Enter the similarity value with product '" + product + "': ");
-                        value = Double.parseDouble(scanner.nextLine());
+                        try {
+                            value = Double.parseDouble(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.err.println("Similarity value must be a double");
+                        }
                     }
 
                     similarities.addLast(value);
@@ -160,6 +173,7 @@ public class AdminCommands {
                 confirmation = scanner.nextLine().trim().toUpperCase();
             }
         }
+
     }
 
     @ShellMethod(value = "Modify a product by adding or removing a characteristic", key = {"modify-product", "mod-prod"},
