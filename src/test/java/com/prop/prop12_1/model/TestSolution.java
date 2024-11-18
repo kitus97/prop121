@@ -299,6 +299,12 @@ class TestSolution {
 
     @Test
     void testToString() {
+        String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Mark: 5.0, Valid: true}\n";
+        assertEquals(expected, solution.toString());
+    }
+
+    @Test
+    void testToString1() {
         when(productMock1.getName()).thenReturn("Product1");
         when(productMock2.getName()).thenReturn("Product2");
 
@@ -308,16 +314,9 @@ class TestSolution {
         newDist.add(Pair.of(productMock2, null));
         solution.setDistribution(newDist);
 
-        String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Mark: 5.0, Valid: true, Distribution: [(Product: Product1, Restrictions: [restriction1]), (Product: null, Restrictions: [restriction2]), (Product: Product2, Restrictions: null)]}\n";
-        assertEquals(expected, solution.toString());
-    }
-
-    @Test
-    void testToString1() {
-        String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Mark: 5.0, Valid: true}\n";
+        String expected = "{TestSolution, Catalog: Catalog1, Shelf: Shelf1, Heuristic: Generated, Algorithm: Algorithm1, Puntuation: 5.0, Distribution: [(Product: Product1, Restrictions: [restriction1]), (Product: null, Restrictions: [restriction2]), (Product: Product2, Restrictions: null)]}\n";
         assertEquals(expected, solution.toString1());
     }
-
 
 
 

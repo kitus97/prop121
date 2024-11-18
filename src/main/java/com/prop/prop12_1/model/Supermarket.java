@@ -145,6 +145,7 @@ public class Supermarket {
                 associatedProductSolutions.computeIfAbsent(product, k -> new ArrayList<>()).add(s);
 
             }
+
         }
     }
 
