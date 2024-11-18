@@ -97,8 +97,8 @@ public class HillClimbing implements Algorithm {
                     initialSolution.add(product);
                     products.remove(product);
                     assigned = true;
-                    break;
                 }
+                break;
             }
             // Si no se asignó un producto, agregar un valor nulo
             if (!assigned) {
