@@ -55,7 +55,7 @@ public class TestCatalogue {
     @Test
     public void testSetName() {
         catalogue.setName("Updated Catalogue");
-        assertEquals("Update Catalogue", catalogue.getName());
+        assertEquals("Updated Catalogue", catalogue.getName());
     }
 
     @Test

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
+
 /**
  * Representa una solución generada para la distribución de productos en una estantería dentro de un supermercado.
  * <p>
