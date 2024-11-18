@@ -12,10 +12,6 @@ import java.util.Set;
  * relacionadas con la disposición de productos en un estante.
  */
 public class Greedy implements Algorithm {
-    private List<Set<String>> shelf;  // Lista de restricciones para cada posición del estante.
-    private List<Pair<Integer, Set<String>>> products;  // Lista de productos disponibles y sus características.
-    private double maxScore;  // Puntuación máxima alcanzada por la solución.
-    private List<Pair<Integer, Set<String>>> bestDistribution;  // Mejor distribución encontrada.
     /**
      * Constructor por defecto de la clase Greedy.
      */
@@ -44,10 +40,6 @@ public class Greedy implements Algorithm {
             List<Pair<Integer, Set<String>>> products,
             List<List<Double>> similarityTable) {
 
-        this.shelf = shelf;
-        this.products = products;
-        this.maxScore = 0.0;
-        this.bestDistribution = null;
 
 
         State.setShelf(shelf);
@@ -75,10 +67,10 @@ public class Greedy implements Algorithm {
             int idAnt = -1;
             int idAct = -1;
             if (solution.get(i - 1).getLeft() != null) idAnt = solution.get(i - 1).getLeft();
-            for (int j = 0; j < products.size(); ++j) {
+            for (int j = 0; j < products.size(); j++) {
                 if (products.get(j).getRight().equals(shelf.get(i))) {
                     if (idAnt == -1) {
-                        idAct = products.get(j).getLeft();
+                        idAct = j;
                         break;
                     } else {
                         if (maxsim <= similarityTable.get(idAnt).get(products.get(j).getLeft())) {
