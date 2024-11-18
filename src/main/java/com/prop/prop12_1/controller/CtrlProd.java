@@ -277,7 +277,6 @@ public class CtrlProd {
                     throw new RestrictionAlreadyAddedToProductException("Restriction with name '" + restrictionName + "' was already added to product");
                 } else {
                     p.addRestriction(c);
-                    c.addAssociatedProduct(p);
                 }
             } else {
                 throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -332,7 +331,6 @@ public class CtrlProd {
                     throw new CharacteristicAlreadyAddedToProductException("Characteristic with name '" + characteristicName + "' was already added");
                 } else {
                     p.addCharacteristic(c);
-                    c.addAssociatedProduct(p);
                 }
             } else {
                 throw new ProductNotFoundException("Product with name '" + productName + "' was not found");
@@ -358,7 +356,6 @@ public class CtrlProd {
             if (p != null) {
                 if (p.getCharacteristics().contains(c)) {
                     p.removeCharacteristic(c);
-                    c.removeAssociatedProduct(p);
                 } else {
                     throw new CharacteristicNotFoundInProductException("Characteristic with name '" + characteristicName + "' was not found in product");
                 }
