@@ -26,7 +26,7 @@ public class Shelf{
      * @throws IndexOutOfBoundsException si el tamaño especificado es negativo.
      */
     public Shelf(String n, int t) {
-        if(t <= 0) throw new IndexOutOfBoundsException("Invalid size");
+        if(t <= 0) throw new IndexOutOfBoundsException("Error: Invalid size");
         name = n;
         distribution = new ArrayList<Set<String>>();
         for (int i = 0; i < t; ++i) {
@@ -53,7 +53,7 @@ public class Shelf{
      * @throws IndexOutOfBoundsException si el índice especificado está fuera de rango.
      */
     public void setRestriction(String restriction, int t){
-        if(distribution.size() <= t) throw new IndexOutOfBoundsException("The index is out of range");
+        if(distribution.size() <= t) throw new IndexOutOfBoundsException("Error: The index is out of range");
         else distribution.get(t).add(restriction);
     }
 
@@ -64,7 +64,7 @@ public class Shelf{
      * @throws IndexOutOfBoundsException si el índice especificado está fuera de rango.
      */
     public void deleteRestrictions(int t){
-        if(distribution.size() <= t) throw new IndexOutOfBoundsException("The index is out of range");
+        if(distribution.size() <= t) throw new IndexOutOfBoundsException("Error: The index is out of range");
         else distribution.get(t).clear();
     }
 
@@ -79,7 +79,7 @@ public class Shelf{
      * @throws IndexOutOfBoundsException si el tamaño especificado es negativo.
      */
     public void resizeShelf(int t) {
-        if (t < 0) throw new IndexOutOfBoundsException("Invalid size");
+        if (t < 0) throw new IndexOutOfBoundsException("Error: Invalid size");
 
         else {
             if (distribution.size() < t) {

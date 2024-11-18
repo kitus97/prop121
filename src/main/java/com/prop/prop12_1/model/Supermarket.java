@@ -86,7 +86,7 @@ public class Supermarket {
     }
 
     public String getShelf(String s){
-        if(!shelves.containsKey(s)) throw new NoSuchElementException("No such self");
+        if(!shelves.containsKey(s)) throw new NoSuchElementException("Error: No such self");
         else return shelves.get(s).toString();
     }
 
@@ -227,7 +227,7 @@ public class Supermarket {
      * @throws NoSuchElementException si no existe la estantería con el nombre proporcionado.
      */
     public void deleteShelf(String shelf){
-        if (shelves.remove(shelf) == null) throw new NoSuchElementException("No such shelf.");
+        if (shelves.remove(shelf) == null) throw new NoSuchElementException("Error: No such shelf.");
         else {
             invalidateShelfSolution(shelf);
             associatedShelfSolutions.remove(shelf);
@@ -258,7 +258,7 @@ public class Supermarket {
      */
     public void addRestriction(String shelf, String restriction, int index){
         Shelf sh = shelves.get(shelf);
-        if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
+        if(sh == null) throw new NoSuchElementException("Error: The shelf " + shelf + " does not exist.");
         else{
             sh.setRestriction(restriction, index);
             invalidateShelfSolution(shelf);
@@ -274,7 +274,7 @@ public class Supermarket {
      */
     public void deleteRestrictions(String shelf, int index){
         Shelf sh = shelves.get(shelf);
-        if(sh == null) throw new NoSuchElementException("The shelf " + shelf + " does not exist.");
+        if(sh == null) throw new NoSuchElementException("Error: The shelf " + shelf + " does not exist.");
         else{
             sh.deleteRestrictions(index);
             invalidateShelfSolution(shelf);
