@@ -45,6 +45,7 @@ public class TestCatalogue {
         when(mockCtrlProd.getProducts()).thenReturn(mockProducts);
 
         catalogue = new Catalogue("Test Catalogue");
+        catalogue.setAllProducts(mockProducts);
     }
 
     @Test

@@ -79,6 +79,9 @@ public class Catalogue {
     public void setProducts(Map<String, Product> products) {
         this.products = products;
     }
+    public void setAllProducts(Map<String, Product> AllProducts) {
+        this.allProducts = AllProducts;
+    }
 
     public Map<String, Product> getProducts() {
         return products;
