@@ -352,7 +352,7 @@ public class Supermarket {
     public String getSolution(String solution){
         if (!solutions.containsKey(solution)) throw new NoSuchElementException("Error: No such solution.");
         else{
-            return solutions.get(solution).toString1();
+            return solutions.get(solution).toString();
         }
     }
 

@@ -100,6 +100,7 @@ public class Solution {
     public String getHeuristic() {
         return heuristic;
     }
+
     public String getAlgorithm() {
         return algorithm;
     }
@@ -285,35 +286,11 @@ public class Solution {
      * <p>
      * - La puntuación calculada para la solución.
      * <p>
-     */
-    @Override
-    public String toString() {
-        return "{" + solutionName + ", Catalog: " + idCatalog + ", Shelf: " + idShelf +
-                ", Heuristic: " + heuristic + ", Algorithm: " + algorithm + ", Puntuation: "
-        + mark + "}\n";
-    }
-
-    /**
-     * Devuelve una representación en forma de string de la solución.
-     *
-     * @return La representación en forma de string de la solución, indicando:
-     * <p>
-     * - El nombre de la solución.
-     * <p>
-     * - El identificador del catálogo.
-     * <p>
-     * - El identificador de la estantería.
-     * <p>
-     * - La heurística utilizada en la solución.
-     * <p>
-     * - El algoritmo utilizado en la solución.
-     * <p>
-     * - La puntuación calculada para la solución.
-     * <p>
      * - La distribución de productos en la estantería junto con sus restricciones, si existen.
      * <p>
      */
-    public String toString1() {
+    @Override
+    public String toString() {
         StringBuilder distributionString = new StringBuilder("[");
         for (Pair<Product, Set<String>> pair : distribution) {
             String productName = (pair.getLeft() != null) ? pair.getLeft().getName() : "null";
