@@ -91,8 +91,13 @@ public class UserCommands {
             @ShellOption(help = "Product 1 name") String product1Name,
             @ShellOption(help = "Product 2 name") String product2Name
     ) {
-        double value = ctrlDomain.checkProductsSimilarity(product1Name, product2Name);
-        return "Similarity between '" + product1Name + "' and '" + product2Name + "': " + value;
+        try {
+            double value = ctrlDomain.checkProductsSimilarity(product1Name, product2Name);
+            return "Similarity between '" + product1Name + "' and '" + product2Name + "': " + value;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
 
     @ShellMethod(value = "Adds a new catalogue to the supermarket", key = {"add-catalogue", "add-cat"},
@@ -270,12 +275,14 @@ public class UserCommands {
             @ShellOption(help = "Used generated similarity table or manual table | 1 - generated, 2 - manual") int heuristic
     ) {
         int algorithmID;
-        if (algorithm.equals("Backtracking")) algorithmID = 0;
-        else if (algorithm.equals("HillClimbing")) algorithmID = 1;
-        else if (algorithm.equals("Greedy")) algorithmID = 2;
-        else {
-            System.out.println("Error: Unsupported algorithm: Algorithm must be Backtracking, HillClimbing or Greedy. Written: " + algorithm);
-            return "";
+        switch (algorithm) {
+            case "Backtracking" -> algorithmID = 0;
+            case "HillClimbing" -> algorithmID = 1;
+            case "Greedy" -> algorithmID = 2;
+            default -> {
+                System.out.println("Error: Unsupported algorithm: Algorithm must be Backtracking, HillClimbing or Greedy. Written: " + algorithm);
+                return "";
+            }
         }
 
         boolean heuristicBool;
