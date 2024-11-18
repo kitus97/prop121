@@ -1,0 +1,19 @@
+login marc 123
+add-super super1
+select-super super1
+add-prod p1
+add-prod p2
+add-prod p3
+add-prod p4
+add-char c1
+add-char c2
+mod-prod p1 c1
+mod-prod p2 c1
+mod-prod p2 c2
+mod-prod p3 c2
+add-cat cat1
+mod-cat cat1 p1
+mod-cat cat1 p2
+mod-cat cat1 p3
+mod-cat cat1 p4
+add-shelf sh1 4

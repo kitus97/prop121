@@ -1,0 +1,104 @@
+login marc 123
+
+add-super super1
+select-super super1
+
+// Crear productos y añadir características
+add-prod product1
+add-prod product2
+add-prod product3
+add-prod product4
+
+add-char charA
+add-char charB
+add-char charC
+add-char charD
+
+// Asociar características a los productos
+mod-prod product1 charA
+mod-prod product1 charB
+mod-prod product2 charB
+mod-prod product2 charC
+mod-prod product3 charC
+mod-prod product3 charD
+mod-prod product4 charA
+mod-prod product4 charD
+
+// Crear un catálogo y añadir productos
+add-cat catalogue1
+mod-cat catalogue1 product1
+mod-cat catalogue1 product2
+mod-cat catalogue1 product3
+mod-cat catalogue1 product4
+
+// Crear una estantería
+add-shelf shelf1 4
+
+// Generar una distribución con un algoritmo
+generate-solution solution1BT catalogue1 shelf1 Backtracking 1
+generate-solution solution1HC catalogue1 shelf1 HillClimbing 1
+
+ls-sol
+
+// Puntuación esperada:
+// - Similitud entre product1 y product2: 1/3 (charB)
+// - Similitud entre product2 y product3: 1/3 (charC)
+// - Similitud entre product3 y product4: 1/3 (charD)
+// - Similitud entre product4 y product1: 1/3 (charA)
+// Puntuación total: 4 * (1/3) = 1.3333
+
+// Caso 2: Un catálogo con menos productos y más similitudes
+add-prod product5
+add-prod product6
+
+mod-prod product5 charA
+mod-prod product5 charB
+mod-prod product6 charA
+mod-prod product6 charB
+mod-prod product6 charC
+
+add-cat catalogue2
+mod-cat catalogue2 product5
+mod-cat catalogue2 product6
+
+add-shelf shelf2 2
+
+generate-solution solution2BT catalogue2 shelf2 Backtracking 1
+generate-solution solution2HC catalogue2 shelf2 HillClimbing 1
+
+ls-sol
+
+// Puntuación esperada:
+// - Similitud entre product5 y product6: 2/3 (charA, charB)
+// Puntuación total: 2/3 = 0.6667
+
+// Caso 3: Una combinación más compleja con productos, catálogos y una estantería más grande
+add-prod product7
+add-prod product8
+add-prod product9
+
+mod-prod product7 charA
+mod-prod product7 charC
+mod-prod product8 charA
+mod-prod product8 charC
+mod-prod product8 charD
+mod-prod product9 charB
+mod-prod product9 charD
+
+add-cat catalogue3
+mod-cat catalogue3 product7
+mod-cat catalogue3 product8
+mod-cat catalogue3 product9
+
+add-shelf shelf3 3
+
+generate-solution solution3BT catalogue3 shelf3 Backtracking 1
+generate-solution solution3HC catalogue3 shelf3 HillClimbing 1
+
+ls-sol
+
+// Puntuación esperada:
+// - Similitud entre product7 y product8: 2/3 (charA, charC)
+// - Similitud entre product8 y product9: 1/3 (charD)
+// - Similitud entre product9 y product7: 0 (ninguna característica en común)
+// Puntuación total: 2/3 + 1/3 + 0 = 1.0
